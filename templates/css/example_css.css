@@ -1,0 +1,13 @@
+body {
+	background: #eee;
+	font: 11px Helvetica, Arial, sans-serif;
+	color: #282828;
+	padding: 50px;
+	line-height: 22px;
+}
+
+h1 {
+	text-shadow: 0 2px 1px rgba(0,0,0,0.3), 0 0 1px rgba(0,0,0,0.3);
+	color: #fff;
+	font-size: 36px;
+}

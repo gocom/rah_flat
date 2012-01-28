@@ -1,0 +1,5 @@
+h1. rah_flat
+
+p. A plugin for "Textpattern CMS":http://www.textpattern.com. Edit data in database tables (forms, pages) as flat files.
+
+p. Configuration and mapping files is done using XML configuration files. Using these configuration mappings every database table can be turned into flat files, as long as the database table has a primary column.

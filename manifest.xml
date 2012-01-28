@@ -1,0 +1,17 @@
+<manifest>
+
+	<name>rah_flat</name>
+	<description>Edit data database tables as flat files.</description>
+	
+	<version format="0.x">0.1</version>
+	<type public="0" pub-admin="1" library="2" admin-only="3">1</type>
+	
+	<author>Jukka Svahn</author>
+	<uri>http://rahforum.biz</uri>
+	
+	<order>5</order>
+	<flags>0</flags>
+	
+	<help format="textile" file="README.textile" />
+
+</manifest>

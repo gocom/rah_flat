@@ -1,0 +1,137 @@
+<config>
+
+	<!--
+		Global configuration
+	-->
+
+	<options>
+		<enabled>1</enabled>
+		<delete>0</delete>
+		<ignore_empty>1</ignore_empty>
+		
+		<callback_uri>
+			<enabled>1</enabled>
+			<key></key>
+		</callback_uri>
+	</options>
+	
+	<!--
+		Synchronized directories
+	-->
+	
+	<sync>
+	
+		<!--
+			Forms
+		-->
+	
+		<directory>
+			<path>../templates/forms</path>
+			<extension>txp</extension>
+			
+			<enabled>1</enabled>
+			<format>flat</format>
+		
+			<database>
+				<table>txp_form</table>
+				<primary>name</primary>
+				<contents>Form</contents>
+			</database>
+		
+			<filename>
+				<name starts="0" ends="-1" />
+				<type starts="-1" />
+			</filename>
+			
+			<ignore>variables</ignore>
+			
+			<sql>
+				<update></update>
+				<insert></insert>
+			</sql>
+			
+			<disable_event>form</disable_event>
+		</directory>
+		
+		<!--
+			Pages
+		-->
+
+		<directory>
+			<path>../templates/pages</path>
+			<extension>txp</extension>
+			
+			<enabled>1</enabled>
+			<format>flat</format>
+		
+			<database>
+				<table>txp_page</table>
+				<primary>name</primary>
+				<contents>user_html</contents>
+			</database>
+		
+			<filename>
+				<name />
+			</filename>
+			
+			<sql>
+				<update></update>
+				<insert></insert>
+			</sql>
+			
+			<disable_event>page</disable_event>
+		</directory>
+		
+		<!--
+			Styles
+		-->
+		
+		<directory>
+			<path>../templates/css</path>
+			<extension>css</extension>
+			
+			<enabled>1</enabled>
+			<format>flat</format>
+		
+			<database>
+				<table>txp_css</table>
+				<primary>name</primary>
+				<contents>css</contents>
+			</database>
+		
+			<filename>
+				<name />
+			</filename>
+			
+			<disable_event>css</disable_event>
+		</directory>
+		
+		<!--
+			Sections
+		-->
+
+		<directory>
+			<path>../templates/sections</path>
+			<extension>xml</extension>
+			
+			<enabled>1</enabled>
+			<format>xml</format>
+		
+			<database>
+				<table>txp_section</table>
+				<primary>name</primary>
+				<contents>title</contents>
+			</database>
+		
+			<filename>
+				<name />
+			</filename>
+			
+			<ignore>default</ignore>
+			
+			<disable_event>section</disable_event>
+		</directory>
+		
+	</sync>
+
+</config>
