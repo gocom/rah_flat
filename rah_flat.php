@@ -224,7 +224,7 @@ class rah_flat {
 		
 		safe_delete(
 			$database['table'],
-			$database['primary'].' in('. implode(',', $delete ) . ')'
+			$database['primary'].' in('. implode(',', $delete) . ')'
 		);
 	}
 
@@ -238,7 +238,7 @@ class rah_flat {
 
 	protected function collect_items($table, $name, $content) {
 		
-		$this->db_columns = doArray(((array) @getThings('describe '.$table)), 'strtolower');
+		$this->db_columns = doArray((array) @getThings('describe '.$table), 'strtolower');
 		
 		$rs = 
 			safe_rows(
@@ -384,6 +384,9 @@ class rah_flat_files {
 	 */
 
 	public function write($dir, $files) {
+		
+		if(strpos($dir, '../') === 0 || strpos($dir, './') === 0)
+			$dir = txpath.'/'.$dir;
 		
 		$dir = rtrim($dir, '\\/') . '/';
 		
