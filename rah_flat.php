@@ -64,7 +64,6 @@ class rah_flat {
 			
 				$this->sync[] = $this->lAtts(array(
 					'enabled' => 1,
-					'exportable' => 1,
 					'path' => NULL,
 					'extension' => 'txp',
 					'database' => array('table' => '', 'primary' => '', 'contents' => ''),
@@ -227,37 +226,6 @@ class rah_flat {
 			$database['table'],
 			$database['primary'].' in('. implode(',', $delete ) . ')'
 		);
-	}
-
-	/**
-	 * Exports database rows as static files
-	 * @todo Unimplemented
-	 */
-
-	protected function export() {
-		
-		$name = '';
-		
-		$out[$database['contents']] = $d[$database['contents']];
-		
-		if($this->format == 'xml' || $this->format == 'flat_meta') {
-			
-			foreach($d as $name => $value)
-				$out[$name] = '<'.$name.'>'.$value.'</'.$name.'>';
-			
-		}
-		
-		if($this->format == 'flat_meta') {
-			$meta = $out;
-			$out = $out[$database['contents']];
-			unset($meta[$database['contents']]);
-			$file[$name.'.meta'] = implode(n, $meta);
-		}
-		
-		$file[$name] = implode(n, $out);
-		
-		$f = new rah_flat_files();
-		$f->write($dir, $file);
 	}
 
 	/**
