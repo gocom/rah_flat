@@ -33,7 +33,7 @@ class rah_flat {
 	 * Initialize importer
 	 */
 
-	public function __construct() {
+	public function __construct($task='import') {
 		
 		$cfg = defined('rah_flat_cfg') ? rah_flat_cfg : txpath . '/rah_flat.config.xml';
 		
@@ -58,8 +58,24 @@ class rah_flat {
 			'callback_uri' => array('key' => '', 'enabled' => 0),
 		), $this->xml_array($r->options));
 		
-		$this->sync = $r->sync;
+		foreach($r->sync->directory as $p) {
 		
+			if(($p = $this->xml_array($p)) && $p && is_array($p)) {
+			
+				$this->sync[] = $this->lAtts(array(
+					'enabled' => 1,
+					'exportable' => 1,
+					'path' => NULL,
+					'extension' => 'txp',
+					'database' => array('table' => '', 'primary' => '', 'contents' => ''),
+					'filename' => array(),
+					'ignore' => array(),
+					'disable_event' => '',
+					'format' => 'flat'
+				), $p);
+			}
+		}
+	
 		if(
 			$this->cfg['enabled'] == 1 ||
 			(
@@ -89,33 +105,17 @@ class rah_flat {
 	 */
 	
 	protected function import($p=NULL) {
-		
+	
 		if($p === NULL) {
-			
-			foreach($this->sync->directory as $p) {
-				
-				if(($p = $this->xml_array($p)) && $p && is_array($p)) {
-					
-					$p = $this->lAtts(array(
-						'enabled' => 1,
-						'exportable' => 1,
-						'path' => NULL,
-						'extension' => 'txp',
-						'database' => array('table' => '', 'primary' => '', 'contents' => ''),
-						'filename' => array(),
-						'ignore' => array(),
-						'disable_event' => '',
-						'format' => 'flat'
-					), $p);
-					
-					$this->import($p);
-				}
+			foreach($this->sync as $p) {
+				$this->import($p);
 			}
-			
 			return;
 		}
-
+		
 		extract($p);
+		
+		$this->format = $format;
 		
 		if(
 			$enabled != 1 || 
@@ -164,7 +164,7 @@ class rah_flat {
 			if(!$status)
 				continue;
 			
-			if($this->format == 'xml') {
+			if($format == 'xml') {
 				$r = new SimpleXMLElement($data, LIBXML_NOCDATA);
 				
 				if(!$r)
@@ -176,7 +176,7 @@ class rah_flat {
 				$d[$database['contents']] = $data;
 			
 			if(
-				$this->format == 'flat_meta' && 
+				$format == 'flat_meta' && 
 				file_exists($file.'.meta') && 
 				is_readable($file.'.meta') && 
 				is_file($file.'.meta')
@@ -336,9 +336,6 @@ class rah_flat {
 				} else
 					$out[$name] = $atts[$name];
 			}
-			
-			if(isset($this->$name)) 
-				$this->$name = $out[$name];
 		}
 
 		return $out;
