@@ -37,16 +37,28 @@ class rah_flat {
 		
 		$cfg = defined('rah_flat_cfg') ? rah_flat_cfg : txpath . '/rah_flat.config.xml';
 		
-		if(
-			empty($cfg) ||
-			!file_exists($cfg) ||
-			!is_readable($cfg) ||
-			!is_file($cfg)
-		)
+		if(empty($cfg) || !file_exists($cfg) || !is_readable($cfg) || !is_file($cfg))
 			return;
 		
 		$this->xml_config = file_get_contents($cfg);
-		$this->parse_config();
+		
+		if(!$this->xml_config)
+			return false;
+		
+		$r = new SimpleXMLElement($this->xml_config);
+		
+		if(!$r || !$r->options->enabled || !$r->sync->directory[0])
+			return false;
+
+		$this->cfg = $this->lAtts(array(
+			'enabled' => 0,
+			'delete' => 0,
+			'create' => 1,
+			'ignore_empty' => 1,
+			'callback_uri' => array('key' => '', 'enabled' => 0),
+		), $this->xml_array($r->options));
+		
+		$this->sync = $r->sync;
 		
 		if(
 			$this->cfg['enabled'] == 1 ||
@@ -56,34 +68,6 @@ class rah_flat {
 			)
 		)
 			$this->import();
-	}
-
-	/**
-	 * Parses configuration file
-	 */
-
-	protected function parse_config() {
-		
-		if(!$this->xml_config)
-			return false;
-		
-		$r = new SimpleXMLElement($this->xml_config);
-		
-		$opt =
-			$r && 
-			$r->options->enabled &&
-			$r->sync->directory[0] ?
-				$this->xml_array($r->options) : array();
-
-		$this->cfg = $this->lAtts(array(
-			'enabled' => 0,
-			'delete' => 0,
-			'create' => 1,
-			'ignore_empty' => 1,
-			'callback_uri' => array('key' => '', 'enabled' => 0),
-		), $opt);
-		
-		$this->sync = $r->sync;
 	}
 
 	/**
