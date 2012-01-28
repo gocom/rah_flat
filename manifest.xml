@@ -7,7 +7,7 @@
 	<type public="0" pub-admin="1" library="2" admin-only="3">1</type>
 	
 	<author>Jukka Svahn</author>
-	<uri>http://rahforum.biz</uri>
+	<author_uri>http://rahforum.biz</author_uri>
 	
 	<order>5</order>
 	<flags>0</flags>
