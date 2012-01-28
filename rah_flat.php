@@ -14,7 +14,7 @@
  * Licensed under GNU Genral Public License version 2
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Requires Textpattern v4.4.1 (or newer) and PHP v5.2 (or newer) 
+ * Requires Textpattern v4.4.1 (or newer) and PHP v5 (or newer) 
  */
 
 	if(@txpinterface == 'public' || @txpinterface == 'admin')

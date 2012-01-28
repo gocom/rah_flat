@@ -2,4 +2,12 @@ h1. rah_flat
 
 p. A plugin for "Textpattern CMS":http://www.textpattern.com. Edit data in database tables (forms, pages) as flat files.
 
-p. Configuration and mapping files is done using XML configuration files. Using these configuration mappings every database table can be turned into flat files, as long as the database table has a primary column.
+p. Configuration and mapping database contents as flat files is done using "XML configuration files":https://github.com/gocom/rah_flat/blob/master/config/rah_flat.config.xml. Using these configuration mappings, every database table can be turned into flat files, as long as the database table has a primary column. The configuration files basically tell the application where to look for content and how to identify the files.
+
+h2. Requirements
+
+p. Rah_flat at minimum requires:
+
+* Textpattern v4.4.1 or newer.
+* PHP 5
+* "SimpleXML":http://www.php.net/manual/en/book.simplexml.php and "libxml":http://www.php.net/manual/en/book.libxml.php PHP extensions.
