@@ -133,7 +133,13 @@ class rah_flat {
 
 		extract($p);
 		
-		if($enabled != 1 || !$path || !$filename || !$extension || !preg_match('/^[a-z0-9]+$/i',$extension))
+		if(
+			$enabled != 1 || 
+			!$path || 
+			!$filename || 
+			!$extension || 
+			!preg_match('/^[a-z0-9]+$/i', $extension)
+		)
 			return;
 		
 		$this->collect_items(
@@ -146,7 +152,7 @@ class rah_flat {
 			return;
 		
 		if($disable_event && txpinterface == 'admin')
-			register_callback(array('rah_flat', 'disable_panel'), $disable_event);
+			unset($GLOBALS['txp_permissions'][$disable_event]);
 
 		$f = new rah_flat_files();
 
@@ -352,16 +358,6 @@ class rah_flat {
 		}
 
 		return $out;
-	}
-	
-	/**
-	 * Disables admin-side interfaces
-	 */
-	
-	static public function disable_panel() {
-		ob_end_clean();
-		pagetop(gTxt('rah_flat'));
-		echo '<p id="warning">'.gTxt('rah_flat_editing_disabled_when_active').'</p>';
 	}
 }
 
