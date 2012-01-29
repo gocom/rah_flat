@@ -12,6 +12,6 @@
 	<order>5</order>
 	<flags>0</flags>
 	
-	<help format="textile" file="./README.textile" />
+	<help file="./README.textile" />
 
 </manifest>
