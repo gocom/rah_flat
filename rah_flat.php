@@ -209,7 +209,12 @@ class rah_flat {
 					implode(',', $sql),
 					$sql[$database['primary']]
 				);
+			
+			$site_updated = true;
 		}
+		
+		if(isset($site_updated))
+			update_lastmod();
 		
 		if($this->cfg['delete'] != 1)
 			return;
