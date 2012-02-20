@@ -53,7 +53,7 @@
 			Set data using rah_flat::row()
 		*/
 		
-		rah_flat::row($data):
+		rah_flat::row($data);
 	}
 
 ?>
