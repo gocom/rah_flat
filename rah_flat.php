@@ -22,6 +22,7 @@
 
 class rah_flat {
 
+	static public $row_data = array();
 	private $cfg = array();
 	private $db_cache = array();
 	private $xml_config = '';
@@ -83,6 +84,19 @@ class rah_flat {
 			)
 		)
 			$this->import();
+	}
+	
+	/**
+	 * Returns and sets row data
+	 * @param array $data
+	 * @return array
+	 */
+	
+	static public function row($data=NULL) {
+		if(is_array($data)) {
+			self::$row_data = $data;
+		}
+		return self::$row_data;
 	}
 
 	/**
@@ -192,9 +206,15 @@ class rah_flat {
 				$d = array_merge((array) $d, $this->xml_array($r));
 			}
 			
+			if(!$d)
+				continue;
+			
+			self::row($d);
+			callback_event('rah_flat.importing', '', '', $database['table']);
+			
 			$sql = array();
 			
-			foreach($d as $name => $value)
+			foreach(self::row() as $name => $value)
 				if(!is_array($value) && in_array(strtolower($name), $this->db_columns))
 					$sql[$name] = "`{$name}`='".doSlash($value)."'";
 			
@@ -215,6 +235,7 @@ class rah_flat {
 				);
 			
 			$site_updated = true;
+			self::row(array());
 		}
 		
 		if(isset($site_updated))
@@ -224,8 +245,10 @@ class rah_flat {
 			return;
 		
 		foreach($this->db_cache[$database['table']] as $name => $md5) {
-			if(($md5 !== false || $this->cfg['ignore_empty'] != 1) && !in_array($name, (array) $ignore))
+			if(($md5 !== false || $this->cfg['ignore_empty'] != 1) && !in_array($name, (array) $ignore)) {
+				callback_event('rah_flat.deleting', '', '', $database['table'], $name);
 				$delete[] = "'".doSlash($name)."'";
+			}
 		}
 		
 		if(!isset($delete))
@@ -235,6 +258,8 @@ class rah_flat {
 			$database['table'],
 			$database['primary'].' in('. implode(',', $delete) . ')'
 		);
+		
+		callback_event('rah_flat.imported');
 	}
 
 	/**
