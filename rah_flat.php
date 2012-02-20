@@ -183,7 +183,7 @@ class rah_flat {
 				)
 					continue;
 			
-				$r = new SimpleXMLElement(file_get_contents($file.'.meta'), LIBXML_NOCDATA);
+				$r = new SimpleXMLElement(file_get_contents($file.'.meta.xml'), LIBXML_NOCDATA);
 				
 				if(!$r)
 					continue;
