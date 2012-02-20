@@ -277,7 +277,7 @@ class rah_flat {
 		$sum = $this->db_cache[$table][$name];
 		unset($this->db_cache[$table][$name]);
 		
-		if($this->format == 'xml')
+		if($this->format == 'xml' || $this->format == 'flat_meta')
 			return 'update';
 		
 		$md5 = trim($content) === '' ? false : md5($content);
