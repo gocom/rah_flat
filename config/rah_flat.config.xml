@@ -132,6 +132,30 @@
 			<disable_event>section</disable_event>
 		</directory>
 		
+		<!--
+			Rah_external_output
+		-->
+		
+		<directory>
+			<path>../templates/rah_external_output</path>
+			<extension>txp</extension>
+			
+			<enabled>1</enabled>
+			<format>flat_meta</format>
+		
+			<database>
+				<table>rah_external_output</table>
+				<primary>name</primary>
+				<contents>code</contents>
+			</database>
+		
+			<filename>
+				<name />
+			</filename>
+			
+			<disable_event>rah_external_output</disable_event>
+		</directory>
+		
 	</sync>
 
 </config>

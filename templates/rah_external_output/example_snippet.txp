@@ -1,0 +1,7 @@
+Hello World! This is example *rah_external_output* snippet.
+
+Each snippet requires two files; "snippet_name.meta.xml" and
+"snippet_name.txp".
+
+Each "*.meta.xml" sets all the extra fields the row needs (content-type, status),
+and "*.txp" contains the actual snippet.
