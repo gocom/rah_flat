@@ -174,12 +174,15 @@ class rah_flat {
 			else
 				$d[$database['contents']] = $data;
 			
-			if(
-				$format == 'flat_meta' && 
-				file_exists($file.'.meta') && 
-				is_readable($file.'.meta') && 
-				is_file($file.'.meta')
-			){
+			if($format == 'flat_meta'){
+			
+				if(
+					!file_exists($file.'.meta') || 
+					!is_readable($file.'.meta') || 
+					!is_file($file.'.meta')
+				)
+					continue;
+			
 				$r = new SimpleXMLElement(file_get_contents($file.'.meta'), LIBXML_NOCDATA);
 				
 				if(!$r)
