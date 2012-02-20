@@ -177,6 +177,7 @@ class rah_flat {
 			if($format == 'flat_meta'){
 			
 				if(
+					substr($file, -9) == '.meta.xml' ||
 					!file_exists($file.'.meta.xml') || 
 					!is_readable($file.'.meta.xml') || 
 					!is_file($file.'.meta.xml')
@@ -187,8 +188,6 @@ class rah_flat {
 				
 				if(!$r)
 					continue;
-				
-				$d = $this->xml_array($r);
 			}
 			
 			$sql = array();
