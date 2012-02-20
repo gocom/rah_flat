@@ -46,7 +46,12 @@ class rah_flat {
 		if(!$this->xml_config)
 			return false;
 		
-		$r = new SimpleXMLElement($this->xml_config);
+		try {
+			@$r = new SimpleXMLElement($this->xml_config);
+		}
+		catch(Exception $e){
+			return false;
+		}
 		
 		if(!$r || !$r->options->enabled || !$r->sync->directory[0])
 			return false;
@@ -178,7 +183,14 @@ class rah_flat {
 				continue;
 			
 			if($format == 'xml') {
-				$r = new SimpleXMLElement($data, LIBXML_NOCDATA);
+
+				try {
+					@$r = new SimpleXMLElement($data, LIBXML_NOCDATA);
+				}
+				catch(Exception $e){
+					trace_add('[rah_flat: Invalid XML document '.$file.']');
+					continue;
+				}
 				
 				if(!$r)
 					continue;
@@ -197,8 +209,14 @@ class rah_flat {
 					!is_file($file.'.meta.xml')
 				)
 					continue;
-			
-				$r = new SimpleXMLElement(file_get_contents($file.'.meta.xml'), LIBXML_NOCDATA);
+				
+				try {
+					@$r = new SimpleXMLElement(file_get_contents($file.'.meta.xml'), LIBXML_NOCDATA);
+				}
+				catch(Exception $e){
+					trace_add('[Rah_flat: Invalid XML document '.$file.'.meta.xml]');
+					return;
+				}
 				
 				if(!$r)
 					continue;
