@@ -169,7 +169,7 @@ class rah_flat {
 				if(!$r)
 					continue;
 				
-				$d = $this->xml_array($r);
+				$d = array_merge((array) $d, $this->xml_array($r));
 			}
 			else
 				$d[$database['contents']] = $data;
