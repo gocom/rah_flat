@@ -188,6 +188,8 @@ class rah_flat {
 				
 				if(!$r)
 					continue;
+				
+				$d = array_merge((array) $d, $this->xml_array($r));
 			}
 			
 			$sql = array();
