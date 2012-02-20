@@ -177,9 +177,9 @@ class rah_flat {
 			if($format == 'flat_meta'){
 			
 				if(
-					!file_exists($file.'.meta') || 
-					!is_readable($file.'.meta') || 
-					!is_file($file.'.meta')
+					!file_exists($file.'.meta.xml') || 
+					!is_readable($file.'.meta.xml') || 
+					!is_file($file.'.meta.xml')
 				)
 					continue;
 			
