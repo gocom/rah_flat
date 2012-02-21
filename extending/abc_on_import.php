@@ -24,11 +24,12 @@
  * @param string $event Callback event.
  * @param string $step Callback step.
  * @param string $table DB table imported to.
+ * @param string $status Taken action. Either "updated" or "insert".
  * @return nothing
  * @see rah_flat::row()  
  */
 
-	function abc_on_import($event='', $step='', $table='') {
+	function abc_on_import($event='', $step='', $table='', $status='') {
 		
 		/*
 			End here if table is something else than txp_form
