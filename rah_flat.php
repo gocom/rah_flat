@@ -228,7 +228,7 @@ class rah_flat {
 				continue;
 			
 			self::row($d);
-			callback_event('rah_flat.importing', '', '', $database['table']);
+			callback_event('rah_flat.importing', '', '', $database['table'], $status);
 			
 			$sql = array();
 			
