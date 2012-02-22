@@ -34,7 +34,7 @@ class rah_flat {
 	 * Initialize importer
 	 */
 
-	public function __construct($task='import') {
+	public function __construct() {
 		
 		$cfg = defined('rah_flat_cfg') ? rah_flat_cfg : txpath . '/rah_flat.config.xml';
 		
@@ -274,7 +274,7 @@ class rah_flat {
 		
 		safe_delete(
 			$database['table'],
-			$database['primary'].' in('. implode(',', $delete) . ')'
+			$database['primary'].' in('.implode(',', $delete).')'
 		);
 		
 		callback_event('rah_flat.imported');
@@ -387,6 +387,7 @@ class rah_flat_files {
 	/**
 	 * Extracts filename's parts as variables
 	 * @param string $filename
+	 * @return array
 	 */
 	
 	public function parse($filename) {
@@ -399,7 +400,7 @@ class rah_flat_files {
 	}
 
 	/**
-	 * Safely read files from a directory
+	 * Safely reads files from a directory
 	 * @param string $dir Directory to read.
 	 * @param string $ext Searched file extension.
 	 * @return array List of files
@@ -430,9 +431,10 @@ class rah_flat_files {
 	}
 
 	/**
-	 * Safely write an array of files
+	 * Safely writes an array of files
 	 * @param $dir string Target directory.
 	 * @param $files array Array of files to write.
+	 * @return bool
 	 */
 
 	public function write($dir, $files) {
