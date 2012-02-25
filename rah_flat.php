@@ -23,72 +23,107 @@
 class rah_flat {
 
 	static public $row_data = array();
-	private $cfg = array();
+	private $cfg = NULL;
+	static public $sync = NULL;
+
 	private $db_cache = array();
-	private $xml_config = '';
-	private $sync = array();
 	private $db_columns = array();
-	private $format = '';
+	private $current;
 
 	/**
 	 * Initialize importer
 	 */
 
-	public function __construct() {
+	public function __construct($task='import') {
 		
-		$cfg = defined('rah_flat_cfg') ? rah_flat_cfg : txpath . '/rah_flat.config.xml';
-		
-		if(empty($cfg) || !file_exists($cfg) || !is_readable($cfg) || !is_file($cfg))
+		if(self::$sync !== NULL) {
 			return;
+		}
 		
-		$this->xml_config = file_get_contents($cfg);
+		self::$sync = array();
 		
-		if(!$this->xml_config)
+		if(!defined('rah_flat_cfg')) {
+			define('rah_flat_cfg', txpath.'/rah_flat.config.xml');
+		}
+		
+		if(!rah_flat_cfg || !file_exists(rah_flat_cfg) || !is_readable(rah_flat_cfg) || !is_file(rah_flat_cfg)) {
+			return;
+		}
+		
+		$cfg = file_get_contents(rah_flat_cfg);
+		
+		if(!$cfg) {
 			return false;
+		}
 		
 		try {
-			@$r = new SimpleXMLElement($this->xml_config);
+			@$r = new SimpleXMLElement($cfg);
 		}
 		catch(Exception $e){
 			return false;
 		}
 		
-		if(!$r || !$r->options->enabled || !$r->sync->directory[0])
+		if(!$r->sync->directory[0]) {
 			return false;
-
+		}
+		
 		$this->cfg = $this->lAtts(array(
-			'enabled' => 0,
-			'delete' => 0,
-			'create' => 1,
-			'ignore_empty' => 1,
+			'enabled' => 1,
 			'callback_uri' => array('key' => '', 'enabled' => 0),
 		), $this->xml_array($r->options));
 		
-		foreach($r->sync->directory as $p) {
-		
-			if(($p = $this->xml_array($p)) && $p && is_array($p)) {
-			
-				$this->sync[] = $this->lAtts(array(
-					'enabled' => 1,
-					'path' => NULL,
-					'extension' => 'txp',
-					'database' => array('table' => '', 'primary' => '', 'contents' => ''),
-					'filename' => array(),
-					'ignore' => array(),
-					'disable_event' => '',
-					'format' => 'flat'
-				), $p);
-			}
-		}
-	
 		if(
-			$this->cfg['enabled'] == 1 ||
+			$this->cfg['enabled'] != 1 &&
 			(
-				$this->cfg['callback_uri']['enabled'] == 1 && 
-				$this->cfg['callback_uri']['key'] == gps('rah_flat')
+				$this->cfg['callback_uri']['enabled'] != 1 || 
+				$this->cfg['callback_uri']['key'] != gps('rah_flat')
 			)
 		)
+			return;
+		
+		foreach($r->sync->directory as $p) {
+
+			$p = $this->lAtts(array(
+				'enabled' => 1,
+				'delete' => 0,
+				'create' => 1,
+				'ignore_empty' => 1,
+				'path' => NULL,
+				'extension' => 'txp',
+				'database' => array('table' => '', 'primary' => '', 'contents' => ''),
+				'filename' => array(),
+				'ignore' => array(),
+				'disable_event' => '',
+				'format' => 'flat',
+			), $this->xml_array($p));
+			
+			if($p['enabled'] != 1 || !$p['path'] || !$p['filename']) {
+				continue;
+			}
+			
+			if(!empty($p->disable_event) && txpinterface == 'admin') {
+				unset($GLOBALS['txp_permissions'][(string) $p->disable_event]);
+			}
+			
+			$filename = array();
+			
+			foreach($p['filename'] as $var => $att) {
+				
+				$att = $this->lAtts(array(
+					'@attributes' => array('starts' => 0, 'ends' => NULL),
+				), $att);
+				
+				$filename[$var] = $att['@attributes'];
+			}
+			
+			$p['filename'] = $filename;
+			
+			self::$sync[] = $p;
+		}
+		
+		if($task == 'import') {
 			$this->import();
+		}
 	}
 	
 	/**
@@ -125,52 +160,38 @@ class rah_flat {
 	protected function import($p=NULL) {
 	
 		if($p === NULL) {
-			foreach($this->sync as $p) {
+			foreach(self::$sync as $p) {
+				$this->current = $p;
 				$this->import($p);
 			}
 			return;
 		}
 		
 		extract($p);
-		
-		$this->format = $format;
-		
-		if(
-			$enabled != 1 || 
-			!$path || 
-			!$filename || 
-			!$extension || 
-			!preg_match('/^[a-z0-9]+$/i', $extension)
-		)
-			return;
-		
+
 		$this->collect_items(
-			$database['table'], 
+			$database['table'],
 			$database['primary'], 
 			$database['contents']
 		);
 		
-		if(!$this->db_columns)
+		if(!$this->db_columns) {
 			return;
-		
-		if($disable_event && txpinterface == 'admin')
-			unset($GLOBALS['txp_permissions'][$disable_event]);
+		}
 
 		$f = new rah_flat_files();
 
 		foreach($filename as $var => $att) {
-			$att = $this->lAtts(array(
-				'@attributes' => array('starts' => NULL, 'ends' => NULL),
-			), $att);
-
-			$f->map($var, $att['@attributes']['starts'], $att['@attributes']['ends']);
+			$f->map($var, $att['starts'], $att['ends']);
 		}
 		
 		foreach($f->read($path, $extension) as $file => $data) {
+			
 			$d = $f->parse($file);
 			
-			if(in_array($d[$database['primary']], (array) $ignore))
+			if(in_array($d[$database['primary']], (array) $ignore)) {
 				continue;
+			}
 
 			$status = 
 				$this->requires_task(
@@ -179,29 +200,16 @@ class rah_flat {
 					$data
 				);
 			
-			if(!$status)
+			if(!$status) {
 				continue;
-			
-			if($format == 'xml') {
-
-				try {
-					@$r = new SimpleXMLElement($data, LIBXML_NOCDATA);
-				}
-				catch(Exception $e){
-					trace_add('[rah_flat: Invalid XML document '.$file.']');
-					continue;
-				}
-				
-				if(!$r)
-					continue;
-				
-				$d = array_merge((array) $d, $this->xml_array($r));
 			}
-			else
+			
+			if($format != 'xml') {
 				$d[$database['contents']] = $data;
+			}
 			
-			if($format == 'flat_meta'){
-			
+			if($format == 'flat_meta') {
+				
 				if(
 					substr($file, -9) == '.meta.xml' ||
 					!file_exists($file.'.meta.xml') || 
@@ -210,74 +218,97 @@ class rah_flat {
 				)
 					continue;
 				
+				$data = file_get_contents($file.'.meta.xml');
+			}
+			
+			/*
+				Parse XML data
+			*/
+			
+			if($format == 'flat_meta' || $format == 'xml') {
+				
 				try {
-					@$r = new SimpleXMLElement(file_get_contents($file.'.meta.xml'), LIBXML_NOCDATA);
-				}
-				catch(Exception $e){
-					trace_add('[Rah_flat: Invalid XML document '.$file.'.meta.xml]');
-					return;
+					@$r = new SimpleXMLElement($data, LIBXML_NOCDATA);
 				}
 				
-				if(!$r)
+				catch(Exception $e){
+					trace_add('[rah_flat: Invalid XML document '.$file.']');
 					continue;
+				}
+				
+				if(!$r) {
+					continue;
+				}
 				
 				$d = array_merge((array) $d, $this->xml_array($r));
 			}
-			
-			if(!$d)
-				continue;
 			
 			self::row($d);
 			callback_event('rah_flat.importing', '', '', $database['table'], $status);
 			
 			$sql = array();
 			
-			foreach(self::row() as $name => $value)
-				if(!is_array($value) && in_array(strtolower($name), $this->db_columns))
+			foreach(self::row() as $name => $value) {
+				if(!is_array($value) && in_array(strtolower($name), $this->db_columns)) {
 					$sql[$name] = "`{$name}`='".doSlash($value)."'";
+				}
+			}
 			
-			if(!$sql)
+			if(!$sql) {
 				continue;
+			}
 
-			if($status == 'insert' && $this->cfg['create'] == 1)
+			if($status == 'insert' && $p['create'] == 1) {
 				safe_insert(
 					$database['table'],
 					implode(',', $sql)
 				);
+			}
 			
-			if($status == 'update')
+			elseif($status == 'update') {
 				safe_update(
 					$database['table'],
 					implode(',', $sql),
 					$sql[$database['primary']]
 				);
+			}
 			
 			$site_updated = true;
 			self::row(array());
 		}
 		
-		if(isset($site_updated))
+		if(isset($site_updated)) {
 			update_lastmod();
+		}
 		
-		if($this->cfg['delete'] != 1)
-			return;
-		
-		foreach($this->db_cache[$database['table']] as $name => $md5) {
-			if(($md5 !== false || $this->cfg['ignore_empty'] != 1) && !in_array($name, (array) $ignore)) {
-				callback_event('rah_flat.deleting', '', '', $database['table'], $name);
-				$delete[] = "'".doSlash($name)."'";
+		if($p['delete'] == 1) {
+			
+			$delete = array();
+
+			foreach($this->db_cache[$database['table']] as $name => $md5) {
+				if(($md5 !== false || $p['ignore_empty'] != 1) && !in_array($name, (array) $ignore)) {
+					callback_event('rah_flat.deleting', '', '', $database['table'], $name);
+					$delete[] = "'".doSlash($name)."'";
+				}
+			}
+			
+			if($delete) {
+				safe_delete(
+					$database['table'],
+					$database['primary'].' in('.implode(',', $delete).')'
+				);
 			}
 		}
 		
-		if(!isset($delete))
-			return;
-		
-		safe_delete(
-			$database['table'],
-			$database['primary'].' in('.implode(',', $delete).')'
-		);
-		
 		callback_event('rah_flat.imported');
+	}
+	
+	/**
+	 * Exports
+	 * @todo unimplemented
+	 */
+	
+	protected function export() {
 	}
 
 	/**
@@ -299,9 +330,10 @@ class rah_flat {
 				'1=1'
 			);
 		
-		foreach($rs as $a)
-			$this->db_cache[$table][$a[$name]] = 
+		foreach($rs as $a) {
+			$this->db_cache[$table][(string) $a[$name]] = 
 				trim($a[$content]) === '' ? false : md5($a[$content]);
+		}
 		
 		return $this->db_cache;
 	}
@@ -321,12 +353,12 @@ class rah_flat {
 		$sum = $this->db_cache[$table][$name];
 		unset($this->db_cache[$table][$name]);
 		
-		if($this->format == 'xml' || $this->format == 'flat_meta')
+		if($this->current['format'] == 'xml' || $this->current['format'] == 'flat_meta')
 			return 'update';
 		
 		$md5 = trim($content) === '' ? false : md5($content);
 		
-		if($md5 === false && $this->cfg['ignore_empty'] == 1)
+		if($md5 === false && $this->current['ignore_empty'] == 1)
 			return false;
 		
 		if($sum === $md5)

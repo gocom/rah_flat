@@ -6,8 +6,6 @@
 
 	<options>
 		<enabled>1</enabled>
-		<delete>0</delete>
-		<ignore_empty>1</ignore_empty>
 
 		<callback_uri>
 			<enabled>0</enabled>
@@ -30,6 +28,10 @@
 			<extension>txp</extension>
 			
 			<enabled>1</enabled>
+			<create>1</create>
+			<delete>0</delete>
+			<ignore_empty>1</ignore_empty>
+			
 			<format>flat</format>
 		
 			<database>
@@ -62,6 +64,10 @@
 			<extension>txp</extension>
 			
 			<enabled>1</enabled>
+			<create>1</create>
+			<delete>0</delete>
+			<ignore_empty>1</ignore_empty>
+
 			<format>flat</format>
 		
 			<database>
@@ -91,6 +97,10 @@
 			<extension>css</extension>
 			
 			<enabled>1</enabled>
+			<create>1</create>
+			<delete>0</delete>
+			<ignore_empty>1</ignore_empty>
+			
 			<format>flat</format>
 		
 			<database>
@@ -115,6 +125,10 @@
 			<extension>xml</extension>
 			
 			<enabled>1</enabled>
+			<create>1</create>
+			<delete>0</delete>
+			<ignore_empty>1</ignore_empty>
+			
 			<format>xml</format>
 		
 			<database>
@@ -141,6 +155,10 @@
 			<extension>txp</extension>
 			
 			<enabled>1</enabled>
+			<create>1</create>
+			<delete>0</delete>
+			<ignore_empty>1</ignore_empty>
+			
 			<format>flat_meta</format>
 		
 			<database>
