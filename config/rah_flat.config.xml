@@ -8,9 +8,9 @@
 		<enabled>1</enabled>
 		<delete>0</delete>
 		<ignore_empty>1</ignore_empty>
-		
+
 		<callback_uri>
-			<enabled>1</enabled>
+			<enabled>0</enabled>
 			<key></key>
 		</callback_uri>
 	</options>
