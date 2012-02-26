@@ -22,13 +22,35 @@
 
 class rah_flat {
 
+	/**
+	 * @var array Current file
+	 */
+
 	static public $row_data = array();
-	private $cfg = NULL;
+	
+	/**
+	 * @var array Synced directories
+	 */
+	
 	static public $sync = NULL;
+	
+	/**
+	 * @var array Currently imported directory
+	 */
+	
+	private $current = NULL;
+	
+	/**
+	 * @var array Global configuration
+	 */
+	
+	private $cfg = array();
+
+	/**
+	 * @var array Database cache containing MD5 checksums
+	 */
 
 	private $db_cache = array();
-	private $db_columns = array();
-	private $current;
 
 	/**
 	 * Initialize importer
@@ -175,7 +197,7 @@ class rah_flat {
 			$database['contents']
 		);
 		
-		if(!$this->db_columns) {
+		if(empty($this->current['db_columns'])) {
 			return;
 		}
 
@@ -249,7 +271,7 @@ class rah_flat {
 			$sql = array();
 			
 			foreach(self::row() as $name => $value) {
-				if(!is_array($value) && in_array(strtolower($name), $this->db_columns)) {
+				if(!is_array($value) && in_array(strtolower($name), $this->current['db_columns'])) {
 					$sql[$name] = "`{$name}`='".doSlash($value)."'";
 				}
 			}
@@ -321,7 +343,7 @@ class rah_flat {
 
 	protected function collect_items($table, $name, $content) {
 		
-		$this->db_columns = doArray((array) @getThings('describe '.$table), 'strtolower');
+		$this->current['db_columns'] = doArray((array) @getThings('describe '.$table), 'strtolower');
 		
 		$rs = 
 			safe_rows(
