@@ -110,6 +110,7 @@ class rah_flat {
 				'delete' => 0,
 				'create' => 1,
 				'ignore_empty' => 1,
+				'exportable' => 1,
 				'path' => NULL,
 				'extension' => 'txp',
 				'database' => array('table' => '', 'primary' => '', 'contents' => ''),
@@ -143,8 +144,9 @@ class rah_flat {
 			self::$sync[] = $p;
 		}
 		
-		if($task == 'import') {
-			$this->import();
+		if($task == 'import' || $task == 'export') {
+			$this->$task();
+			callback_event('rah_flat.'.$task);
 		}
 	}
 	
@@ -177,9 +179,8 @@ class rah_flat {
 	/**
 	 * Converts array to XML
 	 * @param array $array
-	 * @param bool $new_instance
+	 * @param array $out
 	 * @return string
-	 * @todo unimplemented
 	 */
 
 	protected function array_to_xml($array, $out=array()) {
@@ -231,6 +232,7 @@ class rah_flat {
 	/**
 	 * Imports flat static files to the database
 	 * @param array $p Configuration options.
+	 * @return nothing
 	 */
 	
 	protected function import($p=NULL) {
@@ -375,13 +377,12 @@ class rah_flat {
 				);
 			}
 		}
-		
-		callback_event('rah_flat.imported');
 	}
 	
 	/**
-	 * Exports
-	 * @todo unimplemented
+	 * Exports rows to flat files
+	 * @param array $p
+	 * @return nothing
 	 */
 	
 	protected function export($p=NULL) {
@@ -398,24 +399,30 @@ class rah_flat {
 		
 		extract($p);
 		
+		if($exportable != 1)
+			return;
+		
+		$in = implode(',', quote_list($ignore));
+		
 		@$rs = 
 			safe_rows(
 				'*',
 				$database['table'],
-				$database['primary'] . ' not in('.implode(',', quote_list($ignore)) . ')'
+				$in ? $database['primary'] . ' not in('.$in.')' : '1=1'
 			);
 		
-		if(!$rs) {
+		if(!$rs)
 			return;
-		}
 		
 		$write = array();
 		
 		foreach($rs as $a) {
-			
+
 			self::row($a);
-			
-			$name = $out = array();
+			$name = array();
+
+			callback_event('rah_flat.exporting', '', '', $database['table']);
+			$a = self::row();
 			
 			foreach($filename as $var => $att) {
 			
@@ -425,14 +432,14 @@ class rah_flat {
 				}
 			
 				$name[$var] = $a[$var];
+				unset($a[$var]);
 			}
 			
 			if(!$name) {
 				continue;
 			}
 			
-			$name = implode('.', $name).'.'.$extension;	
-			$data = self::row();
+			$name = implode('.', $name).'.'.$extension;
 			
 			if($format == 'flat_meta' || $format == 'flat') {
 				
@@ -441,43 +448,27 @@ class rah_flat {
 				}
 				
 				$write[$name] = $a[$database['contents']];
-			}
-			
-			if($format == 'flat_meta') {
-				$name += '.meta.xml';
+				unset($a[$database['contents']]);
 			}
 			
 			if($format == 'xml' || $format == 'flat_meta') {
 				
-				foreach($data as $name => $value) {
-				
-					if(strpos($value, '<![CDATA[') !== false || strpos($value, ']]>') !== false) {
-						$out = array();
-						trace_add('rah_flat: '.$name.' in '.$database['table'].' contains CDATA and can not be exported.');
-						break;
-					}
-				
-					if(
-						strpos($value, '<') !== false || 
-						strpos($value, '>') !== false || 
-						strpos($value, '&') !== false
-					) {
-						$value = '<![CDATA['.$value.']]>';
-					}
-				
-					$out[] = '	<'.$name.'>'.$value.'</'.$name.'>';
+				if($format == 'flat_meta') {
+					$name += '.meta.xml';
 				}
+			
+				$out = $this->array_to_xml($a);
 				
 				if(!$out) {
 					continue;
 				}
 				
-				$write[$name] = '<item>'.n.implode(n, $out).n.'</item>';
+				$write[$name] = '<item>'.n.$out.n.'</item>';
 			}
 		}
 		
-		//$f = new rah_flat_files();
-		//$f->write($path, $write);
+		$f = new rah_flat_files();
+		$f->write($path, $write);
 	}
 
 	/**
