@@ -122,9 +122,9 @@ class rah_flat {
 			if($p['enabled'] != 1 || !$p['path'] || !$p['filename']) {
 				continue;
 			}
-			
-			if(!empty($p->disable_event) && txpinterface == 'admin') {
-				unset($GLOBALS['txp_permissions'][(string) $p->disable_event]);
+
+			if(!empty($p['disable_event']) && txpinterface == 'admin') {
+				unset($GLOBALS['txp_permissions'][(string) $p['disable_event']]);
 			}
 			
 			$filename = array();
@@ -172,6 +172,60 @@ class rah_flat {
 		foreach((array) $obj as $key => $node)
 			$out[$key] = is_object($node) || is_array($node) ? $this->xml_array($node) : $node;
 		return $out;
+	}
+
+	/**
+	 * Converts array to XML
+	 * @param array $array
+	 * @param bool $new_instance
+	 * @return string
+	 * @todo unimplemented
+	 */
+
+	protected function array_to_xml($array, $out=array()) {
+
+		foreach($array as $name => $value) {
+			
+			if(!$name || is_numeric($name)) {
+				return false;
+			}
+			
+			if(is_array($value)) {
+				$value = $this->array_to_xml($value);
+			}
+			
+			else {
+				
+				if(
+					strpos($value, '<![CDATA[') !== false || 
+					strpos($value, ']]>') !== false ||
+					is_null($value) ||
+					is_bool($value)
+				) {
+					return false;
+				}
+			
+				if(
+					strpos($value, '<') !== false || 
+					strpos($value, '>') !== false || 
+					strpos($value, '&') !== false
+				) {
+					$value = '<![CDATA['.$value.']]>';
+				}
+			}
+			
+			if($value === false) {
+				return 'name';
+			}
+			
+			$out[] = '	<'.$name.'>'.$value.'</'.$name.'>';
+		}
+
+		if(empty($out)) {
+			return;
+		}
+		
+		return implode(n, $out);
 	}
 
 	/**
@@ -330,7 +384,100 @@ class rah_flat {
 	 * @todo unimplemented
 	 */
 	
-	protected function export() {
+	protected function export($p=NULL) {
+		
+		if($p === NULL) {
+			
+			foreach(self::$sync as $p) {
+				$this->current = $p;
+				$this->export($p);
+			}
+			
+			return;
+		}
+		
+		extract($p);
+		
+		@$rs = 
+			safe_rows(
+				'*',
+				$database['table'],
+				$database['primary'] . ' not in('.implode(',', quote_list($ignore)) . ')'
+			);
+		
+		if(!$rs) {
+			return;
+		}
+		
+		$write = array();
+		
+		foreach($rs as $a) {
+			
+			self::row($a);
+			
+			$name = $out = array();
+			
+			foreach($filename as $var => $att) {
+			
+				if(!isset($a[$var])) {
+					$name = array();
+					break;
+				}
+			
+				$name[$var] = $a[$var];
+			}
+			
+			if(!$name) {
+				continue;
+			}
+			
+			$name = implode('.', $name).'.'.$extension;	
+			$data = self::row();
+			
+			if($format == 'flat_meta' || $format == 'flat') {
+				
+				if(!isset($a[$database['contents']])) {
+					continue;
+				}
+				
+				$write[$name] = $a[$database['contents']];
+			}
+			
+			if($format == 'flat_meta') {
+				$name += '.meta.xml';
+			}
+			
+			if($format == 'xml' || $format == 'flat_meta') {
+				
+				foreach($data as $name => $value) {
+				
+					if(strpos($value, '<![CDATA[') !== false || strpos($value, ']]>') !== false) {
+						$out = array();
+						trace_add('rah_flat: '.$name.' in '.$database['table'].' contains CDATA and can not be exported.');
+						break;
+					}
+				
+					if(
+						strpos($value, '<') !== false || 
+						strpos($value, '>') !== false || 
+						strpos($value, '&') !== false
+					) {
+						$value = '<![CDATA['.$value.']]>';
+					}
+				
+					$out[] = '	<'.$name.'>'.$value.'</'.$name.'>';
+				}
+				
+				if(!$out) {
+					continue;
+				}
+				
+				$write[$name] = '<item>'.n.implode(n, $out).n.'</item>';
+			}
+		}
+		
+		//$f = new rah_flat_files();
+		//$f->write($path, $write);
 	}
 
 	/**
