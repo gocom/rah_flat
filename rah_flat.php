@@ -216,14 +216,14 @@ class rah_flat {
 			}
 			
 			if($value === false) {
-				return 'name';
+				return false;
 			}
 			
 			$out[] = '	<'.$name.'>'.$value.'</'.$name.'>';
 		}
 
 		if(empty($out)) {
-			return;
+			return false;
 		}
 		
 		return implode(n, $out);
