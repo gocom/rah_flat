@@ -92,7 +92,7 @@ class rah_flat {
 		$this->cfg = $this->lAtts(array(
 			'enabled' => 1,
 			'callback_uri' => array('key' => '', 'enabled' => 0),
-		), $this->xml_array($r->options));
+		), $this->xml_to_array($r->options));
 		
 		if(
 			$this->cfg['enabled'] != 1 &&
@@ -117,7 +117,7 @@ class rah_flat {
 				'ignore' => array(),
 				'disable_event' => '',
 				'format' => 'flat',
-			), $this->xml_array($p));
+			), $this->xml_to_array($p));
 			
 			if($p['enabled'] != 1 || !$p['path'] || !$p['filename']) {
 				continue;
@@ -168,9 +168,9 @@ class rah_flat {
 	 * @return array
 	 */
 
-	protected function xml_array($obj, $out = array()) {
+	protected function xml_to_array($obj, $out = array()) {
 		foreach((array) $obj as $key => $node)
-			$out[$key] = is_object($node) || is_array($node) ? $this->xml_array($node) : $node;
+			$out[$key] = is_object($node) || is_array($node) ? $this->xml_to_array($node) : $node;
 		return $out;
 	}
 
@@ -316,7 +316,7 @@ class rah_flat {
 					continue;
 				}
 				
-				$d = array_merge((array) $d, $this->xml_array($r));
+				$d = array_merge((array) $d, $this->xml_to_array($r));
 			}
 			
 			self::row($d);
