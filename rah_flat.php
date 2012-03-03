@@ -125,7 +125,7 @@ class rah_flat {
 			}
 
 			if(!empty($p['disable_event']) && txpinterface == 'admin') {
-				unset($GLOBALS['txp_permissions'][(string) $p['disable_event']]);
+				unset($GLOBALS['txp_permissions'][$p['disable_event']]);
 			}
 			
 			$filename = array();
