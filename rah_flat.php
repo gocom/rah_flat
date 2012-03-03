@@ -178,55 +178,78 @@ class rah_flat {
 
 	/**
 	 * Converts array to XML
-	 * @param array $array
-	 * @param array $out
+	 * @param array $input
+	 * @param string $key
+	 * @param int $indent
 	 * @return string
 	 */
 
-	protected function array_to_xml($array, $out=array()) {
-
-		foreach($array as $name => $value) {
-			
-			if(!$name || is_numeric($name)) {
+	protected function array_to_xml($input, $key=NULL, $indent=1) {
+		
+		if($key !== NULL) {
+		
+			if(!$key || is_numeric($key)) {
 				return false;
 			}
-			
-			if(is_array($value)) {
-				$value = $this->array_to_xml($value);
-			}
-			
-			else {
-				
-				if(
-					strpos($value, '<![CDATA[') !== false || 
-					strpos($value, ']]>') !== false ||
-					is_null($value) ||
-					is_bool($value)
-				) {
-					return false;
-				}
-			
-				if(
-					strpos($value, '<') !== false || 
-					strpos($value, '>') !== false || 
-					strpos($value, '&') !== false
-				) {
-					$value = '<![CDATA['.$value.']]>';
-				}
-			}
-			
-			if($value === false) {
-				return false;
-			}
-			
-			$out[] = '	<'.$name.'>'.$value.'</'.$name.'>';
+		
+			return $key;
 		}
-
-		if(empty($out)) {
+		
+		if(is_scalar($input)) {
+			
+			if(
+				strpos($input, '<![CDATA[') !== false || 
+				strpos($input, ']]>') !== false ||
+				is_null($input) ||
+				is_bool($input)
+			) {
+				return false;
+			}
+			
+			if(
+				strpos($input, '<') !== false || 
+				strpos($input, '>') !== false || 
+				strpos($input, '&') !== false
+			) {
+				$input = '<![CDATA['.$input.']]>';
+			}
+			
+			return $input;
+		}
+		
+		elseif(!is_array($input)) {
 			return false;
 		}
 		
-		return implode(n, $out);
+		$out = $tab = array();
+		
+		foreach($input as $name => $value) {
+			
+			$name = $this->array_to_xml(NULL, $name);
+			$value = $this->array_to_xml($value, NULL, $indent+1);
+			
+			if($name === false || $value === false) {
+				return false;
+			}
+			
+			$tab = array();
+			
+			for($i=0; $i < $indent; $i++) {
+				$tab[] = '	';
+			}
+			
+			$out[] = n.implode('', $tab).'<'.$name.'>'.$value.'</'.$name.'>';
+		}
+		
+		if($out) {
+			$out[] = n.implode('', array_slice($tab, 1));
+		}
+		
+		if($indent == 1) {
+			return '<item>'.implode('', $out).'</item>';
+		}
+		
+		return implode('', $out);
 	}
 
 	/**
@@ -463,7 +486,7 @@ class rah_flat {
 					continue;
 				}
 				
-				$write[$name] = '<item>'.n.$out.n.'</item>';
+				$write[$name] = $out;
 			}
 		}
 		
