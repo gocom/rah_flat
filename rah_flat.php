@@ -458,11 +458,13 @@ class rah_flat {
 				unset($a[$var]);
 			}
 			
-			if(!$name) {
+			$name = implode('.', $name);
+			
+			if(!$name || !preg_match('=^[^/?*;:{}\\\\]+$=', $name)) {
 				continue;
 			}
 			
-			$name = implode('.', $name).'.'.$extension;
+			$name = $name.'.'.$extension;
 			
 			if($format == 'flat_meta' || $format == 'flat') {
 				
