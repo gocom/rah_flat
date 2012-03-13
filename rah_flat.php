@@ -635,13 +635,17 @@ class rah_flat_files {
 			!is_dir($dir)
 		)
 			return $this->files;
+
+		$dir = glob($this->glob_escape($dir).'*.'.$ext, GLOB_NOSORT);
 		
-		$dir = $this->glob_escape($dir);
+		if(empty($dir) || !is_array($dir))
+			return $this->files;
 		
-		foreach(glob($dir.'*.'.$ext , GLOB_NOSORT) as $file)
+		foreach($dir as $file) {
 			if(is_file($file) && is_readable($file))
 				$this->files[$file] = file_get_contents($file);
-				
+		}
+		
 		return $this->files;
 	}
 
