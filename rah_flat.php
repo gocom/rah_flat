@@ -17,8 +17,9 @@
  * Requires Textpattern v4.4.1 (or newer) and PHP v5 (or newer) 
  */
 
-	if(@txpinterface == 'public' || @txpinterface == 'admin')
+	if(defined('txpinterface')) {
 		new rah_flat();
+	}
 
 class rah_flat {
 
