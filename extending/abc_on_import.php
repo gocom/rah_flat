@@ -42,7 +42,7 @@
 			Get data using rah_flat::row(). It retuns an array.
 		*/
 		
-		$data = rah_flat::row();
+		$data = rah_flat::get()->row();
 		
 		/*
 			Modify data
@@ -54,7 +54,7 @@
 			Set data using rah_flat::row()
 		*/
 		
-		rah_flat::row($data);
+		rah_flat::get()->row($data);
 	}
 
 ?>

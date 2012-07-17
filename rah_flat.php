@@ -33,7 +33,7 @@ class rah_flat {
 	 * @var array Current file
 	 */
 
-	static public $row_data = array();
+	private $row_data = array();
 	
 	/**
 	 * @var array Synced directories
@@ -166,11 +166,13 @@ class rah_flat {
 	 * @return array
 	 */
 	
-	static public function row($data=NULL) {
+	public function row($data=NULL) {
+		
 		if(is_array($data)) {
-			self::$row_data = $data;
+			self::get()->row_data = $data;
 		}
-		return self::$row_data;
+		
+		return self::get()->row_data;
 	}
 
 	/**
