@@ -169,10 +169,10 @@ class rah_flat {
 	public function row($data=NULL) {
 		
 		if(is_array($data)) {
-			self::get()->row_data = $data;
+			$this->row_data = $data;
 		}
 		
-		return self::get()->row_data;
+		return $this->row_data;
 	}
 
 	/**
