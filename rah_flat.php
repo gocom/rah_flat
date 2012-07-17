@@ -18,10 +18,16 @@
  */
 
 	if(defined('txpinterface')) {
-		new rah_flat();
+		rah_flat::get()->import();
 	}
 
 class rah_flat {
+	
+	/**
+	 * @var obj Stores instances
+	 */
+	
+	static public $instance = NULL;
 
 	/**
 	 * @var array Current file
@@ -57,7 +63,7 @@ class rah_flat {
 	 * Initialize importer
 	 */
 
-	public function __construct($task='import') {
+	public function __construct() {
 		
 		if(self::$sync !== NULL) {
 			return;
@@ -144,11 +150,20 @@ class rah_flat {
 			
 			self::$sync[] = $p;
 		}
+	}
+	
+	/**
+	 * Gets an instance of the class
+	 * @return obj
+	 */
+	
+	static public function get() {
 		
-		if($task == 'import' || $task == 'export') {
-			$this->$task();
-			callback_event('rah_flat.'.$task);
+		if(self::$instance === NULL) {
+			self::$instance = new rah_flat();
 		}
+		
+		return self::$instance;
 	}
 	
 	/**
@@ -259,7 +274,7 @@ class rah_flat {
 	 * @return nothing
 	 */
 	
-	protected function import($p=NULL) {
+	public function import($p=NULL) {
 	
 		if($p === NULL) {
 			foreach(self::$sync as $p) {
@@ -409,7 +424,7 @@ class rah_flat {
 	 * @return nothing
 	 */
 	
-	protected function export($p=NULL) {
+	public function export($p=NULL) {
 		
 		if($p === NULL) {
 			
