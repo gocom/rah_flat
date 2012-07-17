@@ -3,8 +3,8 @@
 	<name>rah_flat</name>
 	<description>Edit data stored in database tables as flat files.</description>
 	
-	<version format="0.x">0.1</version>
-	<type public="0" pub-admin="1" library="2" admin-only="3">1</type>
+	<version>0.1</version>
+	<type>1</type>
 	
 	<author>Jukka Svahn</author>
 	<author_uri>http://rahforum.biz</author_uri>
