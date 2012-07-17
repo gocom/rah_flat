@@ -39,7 +39,7 @@ class rah_flat {
 	 * @var array Synced directories
 	 */
 	
-	static public $sync = NULL;
+	private $sync = array();
 	
 	/**
 	 * @var array Currently imported directory
@@ -64,12 +64,6 @@ class rah_flat {
 	 */
 
 	public function __construct() {
-		
-		if(self::$sync !== NULL) {
-			return;
-		}
-		
-		self::$sync = array();
 		
 		if(!defined('rah_flat_cfg')) {
 			define('rah_flat_cfg', txpath.'/rah_flat.config.xml');
@@ -148,7 +142,7 @@ class rah_flat {
 			
 			$p['filename'] = $filename;
 			
-			self::$sync[] = $p;
+			$this->sync[] = $p;
 		}
 	}
 	
@@ -277,7 +271,7 @@ class rah_flat {
 	public function import($p=NULL) {
 	
 		if($p === NULL) {
-			foreach(self::$sync as $p) {
+			foreach($this->sync as $p) {
 				$this->current = $p;
 				$this->import($p);
 			}
@@ -428,7 +422,7 @@ class rah_flat {
 		
 		if($p === NULL) {
 			
-			foreach(self::$sync as $p) {
+			foreach($this->sync as $p) {
 				$this->current = $p;
 				$this->export($p);
 			}
