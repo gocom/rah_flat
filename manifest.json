@@ -1,0 +1,11 @@
+{
+	"name"        : "rah_flat",
+	"description" : "Edit data stored in database tables as flat files.",
+	"version"     : 0.1,
+	"type"        : 1,
+	"author"      : "Jukka Svahn",
+	"author_uri"  : "http://rahforum.biz",
+	"order"       : 5,
+	"flags"       : 0,
+	"help"        : {"file" : ["./README.textile"]}
+}
