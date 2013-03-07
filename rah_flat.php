@@ -6,6 +6,7 @@
  * @author  Jukka Svahn
  * @date    2012-
  * @license GNU GPLv2
+ * @link    https://github.com/gocom/rah_flat
  *
  * Copyright (C) 2013 Jukka Svahn http://rahforum.biz
  * Licensed under GNU Genral Public License version 2
