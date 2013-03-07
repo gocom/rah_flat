@@ -140,7 +140,7 @@ class rah_flat
 
 	protected function is_valid_name($name)
 	{
-		return (bool) preg_match('/^[a-z0-9_\-\.,]+$/i', $name);
+		return (bool) preg_match('/^[a-z0-9_]+[a-z0-9_\-\.,]?$/i', $name);
 	}
 }
 
