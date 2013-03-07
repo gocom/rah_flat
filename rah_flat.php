@@ -100,7 +100,7 @@ class rah_flat
 	{
 		$path = $this->dir . '/forms/' . $data['name'] . '.html';
 
-		if (file_exists($path) && is_file($path) && is_readable($path))
+		if ($this->is_valid_name($name) && file_exists($path) && is_file($path) && is_readable($path))
 		{
 			return file_get_contents($path);
 		}
@@ -121,12 +121,26 @@ class rah_flat
 	{
 		$path = $this->dir . '/pages/' . $data['name'] . '.html';
 
-		if (file_exists($path) && is_file($path) && is_readable($path))
+		if ($this->is_valid_name($name) && file_exists($path) && is_file($path) && is_readable($path))
 		{
 			return file_get_contents($path);
 		}
 
 		return safe_field('user_html', 'txp_page', "name = '".doSlash($data['name'])."'");
+	}
+
+	/**
+	 * Validates the given template name.
+	 *
+	 * This method makes sure the template name
+	 * can be safely used in a filename.
+	 *
+	 * @return bool TRUE if validates
+	 */
+
+	protected function is_valid_name($name)
+	{
+		return (bool) preg_match('/^[a-z0-9_\-\.,]+$/i', $name);
 	}
 }
 
