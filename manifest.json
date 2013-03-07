@@ -2,7 +2,7 @@
 	"name"        : "rah_flat",
 	"description" : "Edit data stored in database tables as flat files.",
 	"version"     : "0.1",
-	"type"        : 1,
+	"type"        : 0,
 	"author"      : "Jukka Svahn",
 	"author_uri"  : "http://rahforum.biz",
 	"order"       : 5,
