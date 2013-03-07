@@ -33,9 +33,58 @@ class rah_flat
 
 	public function __construct()
 	{
-		$this->dir = dirname(txpath).'/rah_templates';
-		register_callback(array($this, 'fetch_form'), 'form.fetch');
-		register_callback(array($this, 'fetch_page'), 'page.fetch');
+		add_privs('prefs.rah_flat', '1');
+		register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+		register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+
+		if ($this->dir = get_pref('rah_flat_path'))
+		{
+			if (strpos($this->dir, './') === 0)
+			{
+				$this->dir = txpath . substr($this->dir, 1);
+			}
+			else if (strpos($this->dir, '../') === 0)
+			{
+				$this->dir = dirname(txpath) . substr($this->dir, 2);
+			}
+
+			register_callback(array($this, 'fetch_form'), 'form.fetch');
+			register_callback(array($this, 'fetch_page'), 'page.fetch');
+		}
+	}
+
+	/**
+	 * Installer.
+	 */
+
+	public function install()
+	{
+		$position = 250;
+
+		foreach (
+			array(
+				'path' => array('text_input', '../rah_templates'),
+			) as $name => $val
+		)
+		{
+			$n =  'rah_flat_'.$name;
+
+			if (get_pref($n, false) === false)
+			{
+				set_pref($n, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
+			}
+
+			$position++;
+		}
+	}
+
+	/**
+	 * Uninstaller.
+	 */
+
+	public function uninstall()
+	{
+		safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
 	}
 
 	/**
