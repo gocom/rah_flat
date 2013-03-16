@@ -6,5 +6,5 @@ h2. Requirements
 
 p. Rah_flat at minimum requires:
 
-* Textpattern v4.6.0-dev or newer.
+* Textpattern 4.6.0-dev or newer.
 * PHP 5.2
