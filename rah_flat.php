@@ -100,7 +100,7 @@ class rah_flat
 	{
 		$path = $this->dir . '/forms/' . $data['name'] . '.html';
 
-		if ($this->is_valid_name($name) && file_exists($path) && is_file($path) && is_readable($path))
+		if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
 		{
 			return file_get_contents($path);
 		}
@@ -121,7 +121,7 @@ class rah_flat
 	{
 		$path = $this->dir . '/pages/' . $data['name'] . '.html';
 
-		if ($this->is_valid_name($name) && file_exists($path) && is_file($path) && is_readable($path))
+		if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
 		{
 			return file_get_contents($path);
 		}
