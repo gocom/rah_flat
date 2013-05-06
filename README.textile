@@ -7,3 +7,9 @@ h2. Requirements
 p. Rah_flat at minimum requires:
 
 * Textpattern 4.6.0-dev or newer.
+
+h2. Installing
+
+p. Using "Composer":http://getcomposer.org:
+
+bc. $ composer.phar require rah/rah_flat
