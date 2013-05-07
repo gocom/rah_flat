@@ -4,7 +4,6 @@
  * Rah_flat plugin for Textpattern CMS.
  *
  * @author  Jukka Svahn
- * @date    2012-
  * @license GNU GPLv2
  * @link    https://github.com/gocom/rah_flat
  *
