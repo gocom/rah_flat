@@ -13,3 +13,9 @@ h2. Installing
 p. Using "Composer":http://getcomposer.org:
 
 bc. $ composer.phar require rah/rah_flat
+
+h2. Changelog
+
+h3. Version 0.1.0 - 2013/05/07
+
+* Initial release.
