@@ -18,129 +18,129 @@
 
 class rah_flat
 {
-	/**
-	 * The directory hosting all template files.
-	 *
-	 * @var string
-	 */
+    /**
+     * The directory hosting all template files.
+     *
+     * @var string
+     */
 
-	protected $dir;
+    protected $dir;
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		add_privs('prefs.rah_flat', '1');
-		register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
-		register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+    public function __construct()
+    {
+        add_privs('prefs.rah_flat', '1');
+        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+        register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
-		if ($this->dir = get_pref('rah_flat_path'))
-		{
-			if (strpos($this->dir, './') === 0)
-			{
-				$this->dir = txpath . substr($this->dir, 1);
-			}
-			else if (strpos($this->dir, '../') === 0)
-			{
-				$this->dir = dirname(txpath) . substr($this->dir, 2);
-			}
+        if ($this->dir = get_pref('rah_flat_path'))
+        {
+            if (strpos($this->dir, './') === 0)
+            {
+                $this->dir = txpath . substr($this->dir, 1);
+            }
+            else if (strpos($this->dir, '../') === 0)
+            {
+                $this->dir = dirname(txpath) . substr($this->dir, 2);
+            }
 
-			register_callback(array($this, 'fetch_form'), 'form.fetch');
-			register_callback(array($this, 'fetch_page'), 'page.fetch');
-		}
-	}
+            register_callback(array($this, 'fetch_form'), 'form.fetch');
+            register_callback(array($this, 'fetch_page'), 'page.fetch');
+        }
+    }
 
-	/**
-	 * Installer.
-	 */
+    /**
+     * Installer.
+     */
 
-	public function install()
-	{
-		$position = 250;
+    public function install()
+    {
+        $position = 250;
 
-		foreach (
-			array(
-				'path' => array('text_input', '../rah_templates'),
-			) as $name => $val
-		)
-		{
-			$n =  'rah_flat_'.$name;
+        foreach (
+            array(
+                'path' => array('text_input', '../rah_templates'),
+            ) as $name => $val
+        )
+        {
+            $n =  'rah_flat_'.$name;
 
-			if (get_pref($n, false) === false)
-			{
-				set_pref($n, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
-			}
+            if (get_pref($n, false) === false)
+            {
+                set_pref($n, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
+            }
 
-			$position++;
-		}
-	}
+            $position++;
+        }
+    }
 
-	/**
-	 * Uninstaller.
-	 */
+    /**
+     * Uninstaller.
+     */
 
-	public function uninstall()
-	{
-		safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
-	}
+    public function uninstall()
+    {
+        safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+    }
 
-	/**
-	 * Fetches a form template from a flat file.
-	 *
-	 * @param  string      $event
-	 * @param  string      $step
-	 * @param  array       $data
-	 * @return string|bool
-	 */
+    /**
+     * Fetches a form template from a flat file.
+     *
+     * @param  string      $event
+     * @param  string      $step
+     * @param  array       $data
+     * @return string|bool
+     */
 
-	public function fetch_form($event, $step, $data)
-	{
-		$path = $this->dir . '/forms/' . $data['name'] . '.html';
+    public function fetch_form($event, $step, $data)
+    {
+        $path = $this->dir . '/forms/' . $data['name'] . '.html';
 
-		if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
-		{
-			return file_get_contents($path);
-		}
+        if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
+        {
+            return file_get_contents($path);
+        }
 
-		return safe_field('Form', 'txp_form', "name = '".doSlash($data['name'])."'");
-	}
+        return safe_field('Form', 'txp_form', "name = '".doSlash($data['name'])."'");
+    }
 
-	/**
-	 * Fetches a page template from a flat file.
-	 *
-	 * @param  string      $event
-	 * @param  string      $step
-	 * @param  array       $data
-	 * @return string|bool
-	 */
+    /**
+     * Fetches a page template from a flat file.
+     *
+     * @param  string      $event
+     * @param  string      $step
+     * @param  array       $data
+     * @return string|bool
+     */
 
-	public function fetch_page($event, $step, $data)
-	{
-		$path = $this->dir . '/pages/' . $data['name'] . '.html';
+    public function fetch_page($event, $step, $data)
+    {
+        $path = $this->dir . '/pages/' . $data['name'] . '.html';
 
-		if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
-		{
-			return file_get_contents($path);
-		}
+        if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
+        {
+            return file_get_contents($path);
+        }
 
-		return safe_field('user_html', 'txp_page', "name = '".doSlash($data['name'])."'");
-	}
+        return safe_field('user_html', 'txp_page', "name = '".doSlash($data['name'])."'");
+    }
 
-	/**
-	 * Validates the given template name.
-	 *
-	 * This method makes sure the template name
-	 * can be safely used in a filename.
-	 *
-	 * @return bool TRUE if validates
-	 */
+    /**
+     * Validates the given template name.
+     *
+     * This method makes sure the template name
+     * can be safely used in a filename.
+     *
+     * @return bool TRUE if validates
+     */
 
-	protected function is_valid_name($name)
-	{
-		return (bool) preg_match('/^[a-z0-9_]+[a-z0-9_\-\.,]?$/i', $name);
-	}
+    protected function is_valid_name($name)
+    {
+        return (bool) preg_match('/^[a-z0-9_]+[a-z0-9_\-\.,]?$/i', $name);
+    }
 }
 
 new rah_flat();
