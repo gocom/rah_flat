@@ -62,15 +62,13 @@ class rah_flat
 
         foreach (
             array(
-                'path' => array('text_input', '../rah_templates'),
+                'rah_flat_path' => array('text_input', '../templates'),
             ) as $name => $val
         )
         {
-            $n =  'rah_flat_'.$name;
-
-            if (get_pref($n, false) === false)
+            if (get_pref($name, false) === false)
             {
-                set_pref($n, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
+                set_pref($name, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
             }
 
             $position++;
