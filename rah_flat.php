@@ -38,15 +38,7 @@ class rah_flat
 
         if ($this->dir = get_pref('rah_flat_path'))
         {
-            if (strpos($this->dir, './') === 0)
-            {
-                $this->dir = txpath . substr($this->dir, 1);
-            }
-            else if (strpos($this->dir, '../') === 0)
-            {
-                $this->dir = dirname(txpath) . substr($this->dir, 2);
-            }
-
+            $this->dir = txpath . '/' . $this->dir;
             register_callback(array($this, 'fetch_form'), 'form.fetch');
             register_callback(array($this, 'fetch_page'), 'page.fetch');
         }
