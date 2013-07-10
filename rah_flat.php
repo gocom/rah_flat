@@ -41,6 +41,11 @@ class rah_flat
             $this->dir = txpath . '/' . $this->dir;
             register_callback(array($this, 'fetch_form'), 'form.fetch');
             register_callback(array($this, 'fetch_page'), 'page.fetch');
+
+            if (get_pref('production_status') !== 'live')
+            {
+                register_callback(array($this, 'importSections'), 'textpattern');
+            }
         }
     }
 
@@ -130,6 +135,58 @@ class rah_flat
     protected function is_valid_name($name)
     {
         return (bool) preg_match('/^[a-z0-9_]+[a-z0-9_\-\.,]?$/i', $name);
+    }
+
+    /**
+     * Imports sections.
+     *
+     * @return bool
+     */
+
+    public function importSections()
+    {
+        return $this->importTable('sections', 'txp_section');
+    }
+
+    /**
+     * Imports a JSON files to a database table.
+     *
+     * @param  string $directory The directory
+     * @param  string $table     The database table
+     * @return bool
+     */
+
+    protected function importTable($directory, $table)
+    {
+        if (is_dir($this->dir . '/' . $directory) && $dir = getcwd() && chdir($this->dir . '/' . $directory))
+        {
+            safe_query('truncate table ' . safe_pfx($table));
+
+            foreach ((array) glob('*') as $file)
+            {
+                if (is_file($file) && is_readable($file) && $content = file_get_contents($file))
+                {
+                    if ($json = json_decode($json, true))
+                    {
+                        $sql = array();
+
+                        foreach ($json as $key => $value)
+                        {
+                            $sql[] = "`{$key}`='".doSlash((string) $value)."'";
+                        }
+
+                        if (safe_insert($table, implode(',', $sql)) === false)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            chdir($dir);
+        }
+
+        return true;
     }
 }
 
