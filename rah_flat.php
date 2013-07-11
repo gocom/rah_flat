@@ -179,7 +179,7 @@ class rah_flat
                         {
                             if (in_array(strtolower((string) $key), $columns, true))
                             {
-                                $sql[] = "`{$key}`='".doSlash((string) $value)."'";
+                                $sql[] = $this->formatStatement($key, $value);
                             }
                         }
 
@@ -195,6 +195,34 @@ class rah_flat
         }
 
         return true;
+    }
+
+    /**
+     * Formats a SQL insert statement value.
+     *
+     * @param  string $field The field
+     * @param  string $value The value
+     * @return mixed
+     */
+
+    protected function formatStatement($field, $value)
+    {
+        if ($value === null)
+        {
+            return "`{$field}` = NULL";
+        }
+
+        if (is_bool($value) || is_int($value))
+        {
+            return "`{$field}` = ".intval($value);
+        }
+
+        if (is_array($value))
+        {
+            $value = implode(', ', $value);
+        }
+
+        return "`{$field}` = '".doSlash((string) $value)."'";
     }
 }
 
