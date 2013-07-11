@@ -167,7 +167,7 @@ class rah_flat
 
             $columns = doArray((array) @getThings('describe '.safe_pfx($table)), 'strtolower');
 
-            foreach ((array) glob('*') as $file)
+            foreach ((array) glob('*.json') as $file)
             {
                 if (is_file($file) && is_readable($file) && $content = file_get_contents($file))
                 {
