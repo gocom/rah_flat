@@ -1,0 +1,10 @@
+{
+    "name": "default",
+    "title": "Default",
+    "page": "default",
+    "css": "default",
+    "is_default": false,
+    "in_rss": true,
+    "on_frontpage": true,
+    "searchable": true
+}

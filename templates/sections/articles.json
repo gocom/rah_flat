@@ -1,0 +1,10 @@
+{
+    "name": "articles",
+    "title": "Articles",
+    "page": "archive",
+    "css": "default",
+    "is_default": true,
+    "in_rss": true,
+    "on_frontpage": true,
+    "searchable": true
+}
