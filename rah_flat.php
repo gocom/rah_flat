@@ -160,7 +160,12 @@ class rah_flat
     {
         if (is_dir($this->dir . '/' . $directory) && $dir = getcwd() && chdir($this->dir . '/' . $directory))
         {
-            safe_query('truncate table ' . safe_pfx($table));
+            if (safe_query('truncate table ' . safe_pfx($table)) === false)
+            {
+                return false;
+            }
+
+            $columns = doArray((array) @getThings('describe '.safe_pfx($table)), 'strtolower');
 
             foreach ((array) glob('*') as $file)
             {
@@ -172,10 +177,13 @@ class rah_flat
 
                         foreach ($json as $key => $value)
                         {
-                            $sql[] = "`{$key}`='".doSlash((string) $value)."'";
+                            if (in_array(strtolower((string) $key), $columns, true))
+                            {
+                                $sql[] = "`{$key}`='".doSlash((string) $value)."'";
+                            }
                         }
 
-                        if (safe_insert($table, implode(',', $sql)) === false)
+                        if ($sql && safe_insert($table, implode(',', $sql)) === false)
                         {
                             return false;
                         }
