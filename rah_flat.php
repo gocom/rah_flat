@@ -92,7 +92,7 @@ class rah_flat
 
     public function fetch_form($event, $step, $data)
     {
-        $path = $this->dir . '/forms/' . $data['name'] . '.html';
+        $path = $this->dir . '/forms/' . $data['name'] . '.txp';
 
         if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
         {
@@ -113,7 +113,7 @@ class rah_flat
 
     public function fetch_page($event, $step, $data)
     {
-        $path = $this->dir . '/pages/' . $data['name'] . '.html';
+        $path = $this->dir . '/pages/' . $data['name'] . '.txp';
 
         if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
         {
