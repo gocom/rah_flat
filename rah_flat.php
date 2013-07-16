@@ -204,18 +204,20 @@ class rah_flat
     protected function getFiles($directory)
     {
         $out = array();
+        $cwd = getcwd();
+        $directory = $this->dir . '/' . $directory;
 
-        if (is_dir($this->dir . '/' . $directory) && $dir = getcwd() && chdir($this->dir . '/' . $directory))
+        if (file_exists($directory) && is_dir($directory) && chdir($directory))
         {
             foreach ((array) glob('*') as $file)
             {
                 if (is_file($file) && is_readable($file))
                 {
-                    $out[] = $this->dir . '/' . $directory . '/' . $file;
+                    $out[] = $directory . '/' . $file;
                 }
             }
 
-            chdir($dir);
+            chdir($cwd);
             return $out;
         }
 
