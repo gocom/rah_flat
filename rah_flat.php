@@ -87,7 +87,7 @@ class rah_flat
 
     public function importForms()
     {
-        if (($files = getFiles('forms')) !== false)
+        if (($files = $this->getFiles('forms')) !== false)
         {
             if (safe_query('truncate table ' . safe_pfx('txp_form')) === false)
             {
@@ -115,7 +115,7 @@ class rah_flat
 
     public function importPages()
     {
-        if (($files = getFiles('pages')) !== false)
+        if (($files = $this->getFiles('pages')) !== false)
         {
             if (safe_query('truncate table ' . safe_pfx('txp_page')) === false)
             {
@@ -157,7 +157,7 @@ class rah_flat
 
     protected function importTable($directory, $table)
     {
-        $files = getFiles($directory);
+        $files = $this->getFiles($directory);
 
         if ($files !== false)
         {
