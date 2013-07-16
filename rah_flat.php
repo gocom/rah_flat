@@ -103,7 +103,7 @@ class rah_flat
                     'txp_form',
                     "name = '".doSlash($name['filename'])."',
                     type = '".doSlash($name['extension'])."',
-                    Form = '".doSlash($name['Form'])."'"
+                    Form = '".doSlash($code)."'"
                 );
             }
         }
