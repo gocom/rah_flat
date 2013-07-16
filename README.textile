@@ -1,6 +1,6 @@
 h1. rah_flat
 
-p. A plugin for "Textpattern CMS":http://www.textpattern.com. Edit template files, forms, pages as flat files. This plugin uses and experiments with the new template reading features included in Textpattern 4.6.0-dev.
+p. A plugin for "Textpattern CMS":http://www.textpattern.com. Edit template files, forms, pages as flat files. *Warning: this plugin will permanently remove your current templates when activated.*
 
 h2. Requirements
 
