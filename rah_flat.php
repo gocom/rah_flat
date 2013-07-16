@@ -188,8 +188,6 @@ class rah_flat
                     }
                 }
             }
-
-            chdir($dir);
         }
 
         return true;
