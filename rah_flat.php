@@ -39,12 +39,12 @@ class rah_flat
         if ($this->dir = get_pref('rah_flat_path'))
         {
             $this->dir = txpath . '/' . $this->dir;
-            register_callback(array($this, 'fetch_form'), 'form.fetch');
-            register_callback(array($this, 'fetch_page'), 'page.fetch');
 
             if (get_pref('production_status') !== 'live')
             {
                 register_callback(array($this, 'importSections'), 'textpattern');
+                register_callback(array($this, 'importForms'), 'textpattern');
+                register_callback(array($this, 'importPages'), 'textpattern');
             }
         }
     }
@@ -82,59 +82,58 @@ class rah_flat
     }
 
     /**
-     * Fetches a form template from a flat file.
-     *
-     * @param  string      $event
-     * @param  string      $step
-     * @param  array       $data
-     * @return string|bool
+     * Imports form partials.
      */
 
-    public function fetch_form($event, $step, $data)
+    public function importForms()
     {
-        $path = $this->dir . '/forms/' . $data['name'] . '.txp';
-
-        if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
+        if (($files = getFiles('forms')) !== false)
         {
-            return file_get_contents($path);
-        }
+            if (safe_query('truncate table ' . safe_pfx('txp_form')) === false)
+            {
+                return false;
+            }
 
-        return safe_field('Form', 'txp_form', "name = '".doSlash($data['name'])."'");
+            foreach ($files as $file)
+            {
+                $name = pathinfo(pathinfo($file, PATHINFO_FILENAME));
+                $code = file_get_contents($file);
+
+                safe_insert(
+                    'txp_form',
+                    "name = '".doSlash($name['filename'])."',
+                    type = '".doSlash($name['extension'])."',
+                    Form = '".doSlash($name['Form'])."'"
+                );
+            }
+        }
     }
 
     /**
-     * Fetches a page template from a flat file.
-     *
-     * @param  string      $event
-     * @param  string      $step
-     * @param  array       $data
-     * @return string|bool
+     * Imports page templates.
      */
 
-    public function fetch_page($event, $step, $data)
+    public function importPages()
     {
-        $path = $this->dir . '/pages/' . $data['name'] . '.txp';
-
-        if ($this->is_valid_name($data['name']) && file_exists($path) && is_file($path) && is_readable($path))
+        if (($files = getFiles('pages')) !== false)
         {
-            return file_get_contents($path);
+            if (safe_query('truncate table ' . safe_pfx('txp_page')) === false)
+            {
+                return false;
+            }
+
+            foreach ($files as $file)
+            {
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $code = file_get_contents($file);
+
+                safe_insert(
+                    'txp_page',
+                    "name = '".doSlash($name)."',
+                    user_html = '".doSlash($code)."'"
+                );
+            }
         }
-
-        return safe_field('user_html', 'txp_page', "name = '".doSlash($data['name'])."'");
-    }
-
-    /**
-     * Validates the given template name.
-     *
-     * This method makes sure the template name
-     * can be safely used in a filename.
-     *
-     * @return bool TRUE if validates
-     */
-
-    protected function is_valid_name($name)
-    {
-        return (bool) preg_match('/^[a-z0-9_]+[a-z0-9_\-\.,]?$/i', $name);
     }
 
     /**
@@ -158,7 +157,9 @@ class rah_flat
 
     protected function importTable($directory, $table)
     {
-        if (is_dir($this->dir . '/' . $directory) && $dir = getcwd() && chdir($this->dir . '/' . $directory))
+        $files = getFiles($directory);
+
+        if ($files !== false)
         {
             if (safe_query('truncate table ' . safe_pfx($table)) === false)
             {
@@ -167,26 +168,23 @@ class rah_flat
 
             $columns = doArray((array) @getThings('describe '.safe_pfx($table)), 'strtolower');
 
-            foreach ((array) glob('*.json') as $file)
+            foreach ($files as $file)
             {
-                if (is_file($file) && is_readable($file) && $content = file_get_contents($file))
+                if (($json = file_get_contents($file)) && $json = @json_decode($json, true))
                 {
-                    if ($json = json_decode($json, true))
+                    $sql = array();
+
+                    foreach ($json as $key => $value)
                     {
-                        $sql = array();
-
-                        foreach ($json as $key => $value)
+                        if (in_array(strtolower((string) $key), $columns, true))
                         {
-                            if (in_array(strtolower((string) $key), $columns, true))
-                            {
-                                $sql[] = $this->formatStatement($key, $value);
-                            }
+                            $sql[] = $this->formatStatement($key, $value);
                         }
+                    }
 
-                        if ($sql && safe_insert($table, implode(',', $sql)) === false)
-                        {
-                            return false;
-                        }
+                    if ($sql && safe_insert($table, implode(',', $sql)) === false)
+                    {
+                        return false;
                     }
                 }
             }
@@ -195,6 +193,33 @@ class rah_flat
         }
 
         return true;
+    }
+
+    /**
+     * Lists files in a directory.
+     *
+     * @return array|bool
+     */
+
+    protected function getFiles($directory)
+    {
+        $out = array();
+
+        if (is_dir($this->dir . '/' . $directory) && $dir = getcwd() && chdir($this->dir . '/' . $directory))
+        {
+            foreach ((array) glob('*') as $file)
+            {
+                if (is_file($file) && is_readable($file))
+                {
+                    $out[] = $this->dir . '/' . $directory . '/' . $file;
+                }
+            }
+
+            chdir($dir);
+            return $out;
+        }
+
+        return false;
     }
 
     /**
