@@ -46,6 +46,13 @@ class rah_flat
                 register_callback(array($this, 'importForms'), 'textpattern');
                 register_callback(array($this, 'importPages'), 'textpattern');
             }
+
+            if (txpinterface === 'admin')
+            {
+                register_callback(array($this, 'importSections'), 'admin_side', 'body_end');
+                register_callback(array($this, 'importForms'), 'admin_side', 'body_end');
+                register_callback(array($this, 'importPages'), 'admin_side', 'body_end');
+            }
         }
     }
 
