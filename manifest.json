@@ -2,7 +2,7 @@
     "name"        : "rah_flat",
     "description" : "Edit templates as flat files",
     "version"     : "0.1.0",
-    "type"        : 5,
+    "type"        : 1,
     "author"      : "Jukka Svahn",
     "author_uri"  : "http://rahforum.biz",
     "order"       : 5,
