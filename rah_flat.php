@@ -215,10 +215,9 @@ class rah_flat
     protected function getFiles($directory)
     {
         $out = array();
-        $cwd = getcwd();
-        $directory = $this->dir . '/' . $directory;
+        $dir = $this->dir . '/' . $directory;
 
-        if (file_exists($directory) && is_dir($directory) && chdir($directory))
+        if (file_exists($dir) && is_dir($dir) && is_readable($dir) && $cwd = getcwd() && chdir($dir))
         {
             foreach ((array) glob('*') as $file)
             {
