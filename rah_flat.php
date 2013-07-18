@@ -49,6 +49,12 @@ class rah_flat
 
             if (txpinterface === 'admin')
             {
+                unset(
+                    $GLOBALS['txp_permissions']['section'],
+                    $GLOBALS['txp_permissions']['form'],
+                    $GLOBALS['txp_permissions']['page']
+                );
+
                 register_callback(array($this, 'importSections'), 'admin_side', 'body_end');
                 register_callback(array($this, 'importForms'), 'admin_side', 'body_end');
                 register_callback(array($this, 'importPages'), 'admin_side', 'body_end');
