@@ -42,9 +42,7 @@ class rah_flat
 
             if (get_pref('production_status') !== 'live')
             {
-                register_callback(array($this, 'importSections'), 'textpattern');
-                register_callback(array($this, 'importForms'), 'textpattern');
-                register_callback(array($this, 'importPages'), 'textpattern');
+                register_callback(array($this, 'import'), 'textpattern');
             }
 
             if (txpinterface === 'admin')
@@ -55,9 +53,7 @@ class rah_flat
                     $GLOBALS['txp_permissions']['page']
                 );
 
-                register_callback(array($this, 'importSections'), 'admin_side', 'body_end');
-                register_callback(array($this, 'importForms'), 'admin_side', 'body_end');
-                register_callback(array($this, 'importPages'), 'admin_side', 'body_end');
+                register_callback(array($this, 'import'), 'admin_side', 'body_end');
             }
         }
     }
@@ -92,6 +88,17 @@ class rah_flat
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+    }
+
+    /**
+     * Imports all assets.
+     */
+
+    public function import()
+    {
+        $this->importSections();
+        $this->importPages();
+        $this->importForms();
     }
 
     /**
