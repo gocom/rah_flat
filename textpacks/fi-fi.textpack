@@ -1,4 +1,5 @@
 #@admin
 #@language fi-fi
 rah_flat => Kiinteät sivupohjatiedostot
+rah_flat_key => Julkisen soittopyyntö-osoitteen käyttämä tietoturva-avain
 rah_flat_path => Tiedostopolku sivupohja-hakemistoon

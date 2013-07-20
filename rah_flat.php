@@ -39,6 +39,7 @@ class rah_flat
         if ($this->dir = get_pref('rah_flat_path'))
         {
             $this->dir = txpath . '/' . $this->dir;
+            register_callback(array($this, 'endpoint'), 'textpattern');
 
             if (get_pref('production_status') !== 'live')
             {
@@ -69,6 +70,7 @@ class rah_flat
         foreach (
             array(
                 'rah_flat_path' => array('text_input', '../templates'),
+                'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
             ) as $name => $val
         )
         {
@@ -106,6 +108,44 @@ class rah_flat
         {
             trigger_error($e->getMessage());
         }
+    }
+
+    /**
+     * Import endpoint.
+     */
+
+    public function endpoint()
+    {
+        extract(gpsa(array(
+            'rah_flat_key',
+        )));
+
+        if (!get_pref('rah_flat_key') || get_pref('rah_flat_key') !== $rah_flat_key)
+        {
+            return;
+        }
+
+        header('Content-Type: application/json; charset=utf-8');
+
+        try
+        {
+            $this->importSections();
+            $this->importPages();
+            $this->importForms();
+        }
+        catch (Exception $e)
+        {
+            txp_status_header('500 Internal Server Error');
+
+            die(json_encode(array(
+                'success' => false,
+                'error'   => $e->getMessage(),
+            )));
+        }
+
+        die(json_encode(array(
+            'success' => true,
+        )));
     }
 
     /**

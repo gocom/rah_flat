@@ -1,3 +1,4 @@
 #@admin
 rah_flat => Flat template files
+rah_flat_key => Security key for the public callback
 rah_flat_path => Path to the templates directory
