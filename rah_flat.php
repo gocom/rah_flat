@@ -278,14 +278,15 @@ class rah_flat
     {
         $out = array();
         $dir = $this->dir . '/' . $directory;
+        $cwd = getcwd();
 
-        if (file_exists($dir) && is_dir($dir) && is_readable($dir) && $cwd = getcwd() && chdir($dir))
+        if (file_exists($dir) && is_dir($dir) && is_readable($dir) && chdir($dir))
         {
             foreach ((array) glob('*') as $file)
             {
                 if (is_file($file) && is_readable($file))
                 {
-                    $out[] = $directory . '/' . $file;
+                    $out[] = $dir . '/' . $file;
                 }
             }
 
