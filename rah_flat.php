@@ -96,13 +96,22 @@ class rah_flat
 
     public function import()
     {
-        $this->importSections();
-        $this->importPages();
-        $this->importForms();
+        try
+        {
+            $this->importSections();
+            $this->importPages();
+            $this->importForms();
+        }
+        catch (Exception $e)
+        {
+            trigger_error($e->getMessage());
+        }
     }
 
     /**
      * Imports form partials.
+     *
+     * @throws Exception
      */
 
     public function importForms()
@@ -111,7 +120,7 @@ class rah_flat
         {
             if (safe_query('truncate table ' . safe_pfx('txp_form')) === false)
             {
-                return false;
+                throw new Exception('Unable to empty txp_form.');
             }
 
             foreach ($files as $file)
@@ -131,6 +140,8 @@ class rah_flat
 
     /**
      * Imports page templates.
+     *
+     * @throws Exception
      */
 
     public function importPages()
@@ -139,7 +150,7 @@ class rah_flat
         {
             if (safe_query('truncate table ' . safe_pfx('txp_page')) === false)
             {
-                return false;
+                throw new Exception('Unable to empty txp_page.');
             }
 
             foreach ($files as $file)
@@ -160,6 +171,7 @@ class rah_flat
      * Imports sections.
      *
      * @return bool
+     * @throws Exception
      */
 
     public function importSections()
@@ -173,6 +185,7 @@ class rah_flat
      * @param  string $directory The directory
      * @param  string $table     The database table
      * @return bool
+     * @throws Exception
      */
 
     protected function importTable($directory, $table)
@@ -183,7 +196,7 @@ class rah_flat
         {
             if (safe_query('truncate table ' . safe_pfx($table)) === false)
             {
-                return false;
+                throw new Exception('Unable to empty '.$table.'.');
             }
 
             $columns = doArray((array) @getThings('describe '.safe_pfx($table)), 'strtolower');
@@ -204,7 +217,7 @@ class rah_flat
 
                     if ($sql && safe_insert($table, implode(',', $sql)) === false)
                     {
-                        return false;
+                        throw new Exception('Unable to to write to '.$table.'.');
                     }
                 }
             }
