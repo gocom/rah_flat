@@ -143,6 +143,8 @@ class rah_flat
             )));
         }
 
+        update_lastmod();
+
         die(json_encode(array(
             'success' => true,
         )));
