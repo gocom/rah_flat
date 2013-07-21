@@ -103,6 +103,7 @@ class rah_flat
             $this->importSections();
             $this->importPages();
             $this->importForms();
+            $this->importPrefs();
         }
         catch (Exception $e)
         {
@@ -132,6 +133,7 @@ class rah_flat
             $this->importSections();
             $this->importPages();
             $this->importForms();
+            $this->importPrefs();
         }
         catch (Exception $e)
         {
@@ -205,6 +207,26 @@ class rah_flat
                     "name = '".doSlash($name)."',
                     user_html = '".doSlash($code)."'"
                 );
+            }
+        }
+    }
+
+    /**
+     * Imports preferences.
+     *
+     * @throws Exception
+     */
+
+    public function importPrefs()
+    {
+        if (($files = $this->getFiles('prefs')) !== false)
+        {
+            foreach ($files as $file)
+            {
+                if (($json = file_get_contents($file)) && $r = @json_decode($json, true))
+                {
+                    set_pref($r['name'], $r['value'], $r['event'], $r['type'], $r['html'], $r['position'], $r['private']);
+                }
             }
         }
     }
