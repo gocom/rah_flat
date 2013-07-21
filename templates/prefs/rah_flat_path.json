@@ -1,6 +1,6 @@
 {
     "name": "rah_flat_path",
-    "value": "../../templates",
+    "value": "../templates",
     "event": "rah_flat",
     "type": 0,
     "html": "text_input",
