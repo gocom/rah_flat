@@ -225,7 +225,16 @@ class rah_flat
             {
                 if (($json = file_get_contents($file)) && $r = @json_decode($json, true))
                 {
-                    set_pref($r['name'], $r['value'], $r['event'], $r['type'], $r['html'], $r['position'], $r['private']);
+                    extract(lAtts(array(
+                        'name'     => '',
+                        'value'    => '',
+                        'event'    => 'publish',
+                        'type'     => 0,
+                        'html'     => 'text_input',
+                        'position' => 80,
+                    ), $r, false));
+
+                    set_pref($name, $value, $event, $type, $html, $position);
                 }
             }
         }
