@@ -171,11 +171,17 @@ class rah_flat
             {
                 $name = pathinfo(pathinfo($file, PATHINFO_FILENAME));
                 $code = file_get_contents($file);
+                $type = 'misc';
+
+                if (!empty($name['extension']))
+                {
+                    $type = $name['extension'];
+                }
 
                 safe_insert(
                     'txp_form',
                     "name = '".doSlash($name['filename'])."',
-                    type = '".doSlash($name['extension'])."',
+                    type = '".doSlash($type)."',
                     Form = '".doSlash($code)."'"
                 );
             }
