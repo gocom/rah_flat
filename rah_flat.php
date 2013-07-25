@@ -44,6 +44,7 @@ class rah_flat
             if (get_pref('production_status') !== 'live')
             {
                 register_callback(array($this, 'import'), 'textpattern');
+                register_callback(array($this, 'import'), 'admin_side', 'body_end');
             }
 
             if (txpinterface === 'admin')
@@ -53,8 +54,6 @@ class rah_flat
                     $GLOBALS['txp_permissions']['form'],
                     $GLOBALS['txp_permissions']['page']
                 );
-
-                register_callback(array($this, 'import'), 'admin_side', 'body_end');
             }
         }
     }
