@@ -52,7 +52,8 @@ class rah_flat
                 unset(
                     $GLOBALS['txp_permissions']['section'],
                     $GLOBALS['txp_permissions']['form'],
-                    $GLOBALS['txp_permissions']['page']
+                    $GLOBALS['txp_permissions']['page'],
+                    $GLOBALS['txp_permissions']['css']
                 );
             }
         }
@@ -101,6 +102,7 @@ class rah_flat
         {
             $this->importSections();
             $this->importPages();
+            $this->importStyles();
             $this->importForms();
             $this->importPrefs();
         }
@@ -131,6 +133,7 @@ class rah_flat
         {
             $this->importSections();
             $this->importPages();
+            $this->importStyles();
             $this->importForms();
             $this->importPrefs();
         }
@@ -211,6 +214,35 @@ class rah_flat
                     'txp_page',
                     "name = '".doSlash($name)."',
                     user_html = '".doSlash($code)."'"
+                );
+            }
+        }
+    }
+
+    /**
+     * Imports styles.
+     *
+     * @throws Exception
+     */
+
+    public function importStyles()
+    {
+        if (($files = $this->getFiles('css')) !== false)
+        {
+            if (safe_query('truncate table ' . safe_pfx('txp_css')) === false)
+            {
+                throw new Exception('Unable to empty txp_css.');
+            }
+
+            foreach ($files as $file)
+            {
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $code = file_get_contents($file);
+
+                safe_insert(
+                    'txp_css',
+                    "name = '".doSlash($name)."',
+                    css = '".doSlash($code)."'"
                 );
             }
         }
