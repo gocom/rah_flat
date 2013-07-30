@@ -98,6 +98,8 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
                     $template->next();
                 }
+
+                $this->dropRemoved();
             }
         }
     }
