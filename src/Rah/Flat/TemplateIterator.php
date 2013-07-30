@@ -16,7 +16,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function getTemplateContents()
     {
-        if (($contents = file_get_contents($this->getPath())) !== false)
+        if (($contents = file_get_contents($this->getPathName())) !== false)
         {
             return $contents;
         }
@@ -76,6 +76,6 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function isValidTemplate()
     {
-        return $this->isFile() && !$this->isDot() && !$this->isLink() && $this->isReadable();
+        return $this->isFile() && !$this->isDot() && $this->isReadable();
     }
 }
