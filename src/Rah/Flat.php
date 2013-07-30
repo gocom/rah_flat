@@ -81,7 +81,7 @@ class Rah_Flat
         new Rah_Flat_Import_Forms('forms');
         new Rah_Flat_Import_Styles('styles');
 
-        safe_query('LOCK TABLES ' . join(' WRITE, ', doArray(Rah_Flat_Import_Base::$tables, 'safe_pfx')).' WRITE');
+        safe_query('LOCK TABLES '.implode(' WRITE, ', getThings('show tables')).' WRITE');
         callback_event('rah_flat.import');
         safe_query('UNLOCK TABLES');
     }
