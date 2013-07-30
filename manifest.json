@@ -7,5 +7,16 @@
     "author_uri"  : "http://rahforum.biz",
     "order"       : 5,
     "flags"       : 2,
-    "help"        : {"file" : ["./README.textile"]}
+    "help"        : {"file" : ["./README.textile"]},
+    "source"      : {"file" : [
+        "./src/Rah/Flat/TemplateIterator.php",
+        "./src/Rah/Flat/Import/Template.php",
+        "./src/Rah/Flat/Import/Base.php",
+        "./src/Rah/Flat/Import/Pages.php",
+        "./src/Rah/Flat/Import/Forms.php",
+        "./src/Rah/Flat/Import/Prefs.php",
+        "./src/Rah/Flat/Import/Sections.php",
+        "./src/Rah/Flat/Import/Styles.php",
+        "./src/Rah/Flat.php"
+    ]}
 }
