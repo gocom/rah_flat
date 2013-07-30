@@ -36,6 +36,12 @@ interface Rah_Flat_Import_Template
     public function dropPermissions();
 
     /**
+     * Drop removes templates.
+     */
+
+    public function dropRemoved(Rah_Flat_TemplateIterator $template);
+
+    /**
      * Gets the panel name.
      *
      * @return string

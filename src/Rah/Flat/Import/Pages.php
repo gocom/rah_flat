@@ -41,16 +41,19 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function dropRemoved()
+    public function dropRemoved(Rah_Flat_TemplateIterator $template)
     {
-        if ($templates = $this->getImportedTemplates())
-        {
-            foreach ($templates as &$template)
-            {
-                $template = "'".doSlash($template->getTemplateName())."'";
-            }
+        $name = array();
 
-            safe_delete($this->getTableName(), 'name not in ('.implode(',', $templates).')');
+        while ($template->valid())
+        {
+            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $template->next();
+        }
+
+        if ($name)
+        {
+            safe_delete($this->getTableName(), 'name not in ('.implode(',', $name).')');
         }
         else
         {

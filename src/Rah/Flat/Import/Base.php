@@ -86,20 +86,16 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
                 while ($template->valid())
                 {
-                    if ($template->isValidTemplate())
+                    if ($this->importTemplate($template) === false)
                     {
-                        if ($this->importTemplate($template) === false)
-                        {
-                            throw new Exception('Unable to import ' . $template->getTemplateName());
-                        }
-
-                        $this->importedTemplates[] = $template;
+                        throw new Exception('Unable to import ' . $template->getTemplateName());
                     }
 
                     $template->next();
                 }
 
-                $this->dropRemoved();
+                $template->rewind();
+                $this->dropRemoved($template);
             }
         }
     }
