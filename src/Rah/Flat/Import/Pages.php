@@ -47,7 +47,7 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
         {
             foreach ($templates as &$template)
             {
-                $template = doSlash($template->getTemplateName());
+                $template = "'".doSlash($template->getTemplateName())."'";
             }
 
             safe_delete($this->getTableName(), 'name not in ('.implode(',', $templates).')');
