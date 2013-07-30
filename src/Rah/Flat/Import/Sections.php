@@ -29,7 +29,7 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
         $sql = array();
         $where = '';
 
-        foreach ($this->getTemplateJSONContents() as $key => $value)
+        foreach ($file->getTemplateJSONContents() as $key => $value)
         {
             if ($key === 'name')
             {
@@ -41,7 +41,7 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
             }
         }
 
-        return $sql && $where && safe_upsert($table, implode(',', $sql), $where);
+        return $sql && $where && safe_upsert($this->getTableName(), implode(',', $sql), $where);
     }
 
     /**
