@@ -76,6 +76,6 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function isValidTemplate()
     {
-        return $this->isFile() && !$this->isDot() && $this->isReadable();
+        return $this->isFile() && !$this->isDot() && $this->isReadable() && preg_match('/[a-z][a-z0-9_\-\.]/i', $this->getTemplateName());
     }
 }
