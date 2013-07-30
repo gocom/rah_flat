@@ -32,7 +32,7 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
     {
         safe_upsert(
             $this->getTableName(),
-            "user_html = '".doSlash($file->getContents())."'",
+            "user_html = '".doSlash($file->getTemplateContents())."'",
             "name = '".doSlash($file->getTemplateName())."'"
         );
     }
