@@ -82,11 +82,11 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
             if (file_exists($directory) && is_dir($directory) && is_readable($directory))
             {
-                $templates = $this->getTemplateIterator($directory);
+                $template = $this->getTemplateIterator($directory);
 
-                while ($templates->valid())
+                while ($template->valid())
                 {
-                    if (($template = $file->current()) && $template->isValidTemplate())
+                    if ($template->isValidTemplate())
                     {
                         if ($this->importTemplate($template) === false)
                         {
@@ -96,7 +96,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
                         $this->importedTemplates[] = $template;
                     }
 
-                    $file->next();
+                    $template->next();
                 }
             }
         }
