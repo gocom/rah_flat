@@ -53,22 +53,6 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
     }
 
     /**
-     * Gets the template type.
-     *
-     * @return string
-     */
-
-    public function getTemplateType()
-    {
-        if ($type = pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_EXTENSION))
-        {
-            return $type;
-        }
-
-        return 'misc';
-    }
-
-    /**
      * Validates a template file.
      *
      * @return bool
