@@ -16,14 +16,6 @@
 abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 {
     /**
-     * Stores an array of affected tables.
-     *
-     * @var array
-     */
-
-    static public $tables = array();
-
-    /**
      * The directory.
      *
      * @var string
@@ -57,7 +49,6 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
         {
             $this->directory = $directory;
             register_callback(array($this, 'init'), 'rah_flat.import');
-            self::$tables[] = $this->getTableName();
         }
     }
 
