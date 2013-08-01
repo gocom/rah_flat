@@ -45,11 +45,8 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
     public function __construct($directory)
     {
-        if (!in_array($this->getTableName(), self::$tables, true))
-        {
-            $this->directory = $directory;
-            register_callback(array($this, 'init'), 'rah_flat.import');
-        }
+        $this->directory = $directory;
+        register_callback(array($this, 'init'), 'rah_flat.import');
     }
 
     /**
