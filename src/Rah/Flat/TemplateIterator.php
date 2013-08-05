@@ -9,7 +9,7 @@
 class Rah_Flat_TemplateIterator extends DirectoryIterator
 {
     /**
-     *  Gets the template contents.
+     * Gets the template contents.
      *
      * @throws Exception
      */
