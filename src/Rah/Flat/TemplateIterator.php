@@ -74,6 +74,12 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
             $this->next();
         }
 
-        return parent::valid();
+        if (parent::valid())
+        {
+            return true;
+        }
+
+        $this->rewind();
+        return false;
     }
 }
