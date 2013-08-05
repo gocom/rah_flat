@@ -24,14 +24,6 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
     protected $directory;
 
     /**
-     * An array of imported templates.
-     *
-     * @var array
-     */
-
-    private $importedTemplates = array();
-
-    /**
      * An array of database table columns.
      *
      * @var array
@@ -95,15 +87,6 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
     public function dropPermissions()
     {
         unset($GLOBALS['txp_permissions'][$this->getPanelName()]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function getImportedTemplates()
-    {
-        return $this->importedTemplates;
     }
 
     /**

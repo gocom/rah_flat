@@ -67,14 +67,6 @@ interface Rah_Flat_Import_Template
     public function importTemplate(Rah_Flat_TemplateIterator $file);
 
     /**
-     * Gets an array of imported templates.
-     *
-     * @return array
-     */
-
-    public function getImportedTemplates();
-
-    /**
      * Gets an array of database columns.
      *
      * @return array
