@@ -24,10 +24,11 @@
 /**
  * Interface for import definition.
  *
- * @example
+ * <code>
  * class MyImportDefinition implements Rah_Import_Template
  * {
  * }
+ * </code>
  */
 
 interface Rah_Flat_Import_Template
@@ -37,9 +38,11 @@ interface Rah_Flat_Import_Template
      *
      * Registers the importer definition when the class is initialized.
      *
-     * @param   string $directory The directory hosting the templates
-     * @example
+     * <code>
      * new Rah_Import_Template('directoryName');
+     * </code>
+     *
+     * @param   string $directory The directory hosting the templates
      */
 
     public function __construct($directory);

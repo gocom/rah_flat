@@ -24,7 +24,7 @@
 /**
  * Base class for import definitions.
  *
- * @example
+ * <code>
  * class MyImportDefinition extends Rah_Flat_Import_Base
  * {
  *     public function getPanelName()
@@ -32,6 +32,7 @@
  *         return 'MyPanel';
  *     }
  * }
+ * </code>
  */
 
 abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
