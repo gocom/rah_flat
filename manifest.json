@@ -8,7 +8,7 @@
     "order"       : 5,
     "flags"       : 2,
     "help"        : {"file" : ["./README.textile"]},
-    "source"      : {"file" : [
+    "code"        : {"file" : [
         "./src/Rah/Flat/TemplateIterator.php",
         "./src/Rah/Flat/FormIterator.php",
         "./src/Rah/Flat/Import/Template.php",
