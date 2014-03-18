@@ -37,8 +37,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function getTemplateContents()
     {
-        if (($contents = file_get_contents($this->getPathName())) !== false)
-        {
+        if (($contents = file_get_contents($this->getPathName())) !== false) {
             return $contents;
         }
 
@@ -54,8 +53,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function getTemplateJSONContents()
     {
-        if (($file = $this->getTemplateContents()) && $file = @json_decode($file))
-        {
+        if (($file = $this->getTemplateContents()) && $file = @json_decode($file)) {
             return $file;
         }
 
@@ -90,13 +88,11 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function valid()
     {
-        while (parent::valid() && !$this->isValidTemplate())
-        {
+        while (parent::valid() && !$this->isValidTemplate()) {
             $this->next();
         }
 
-        if (parent::valid())
-        {
+        if (parent::valid()) {
             return true;
         }
 

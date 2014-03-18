@@ -42,7 +42,7 @@ interface Rah_Flat_Import_Template
      * new Rah_Import_Template('directoryName');
      * </code>
      *
-     * @param   string $directory The directory hosting the templates
+     * @param string $directory The directory hosting the templates
      */
 
     public function __construct($directory);

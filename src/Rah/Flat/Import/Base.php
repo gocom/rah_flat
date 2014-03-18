@@ -78,18 +78,14 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
     public function init()
     {
-        if ($directory = get_pref('rah_flat_path', '', true))
-        {
+        if ($directory = get_pref('rah_flat_path', '', true)) {
             $directory = txpath . '/' . $directory . '/' . $this->directory;
 
-            if (file_exists($directory) && is_dir($directory) && is_readable($directory))
-            {
+            if (file_exists($directory) && is_dir($directory) && is_readable($directory)) {
                 $template = $this->getTemplateIterator($directory);
 
-                while ($template->valid())
-                {
-                    if ($this->importTemplate($template) === false)
-                    {
+                while ($template->valid()) {
+                    if ($this->importTemplate($template) === false) {
                         throw new Exception('Unable to import ' . $template->getTemplateName());
                     }
 
@@ -116,8 +112,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
     public function getTableColumns()
     {
-        if (!$this->columns)
-        {
+        if (!$this->columns) {
             $this->columns = doArray((array) @getThings('describe '.safe_pfx($this->getTableName())), 'strtolower');
         }
 

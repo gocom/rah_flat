@@ -46,8 +46,7 @@ class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator
 
     public function getTemplateType()
     {
-        if ($type = pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_EXTENSION))
-        {
+        if ($type = pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_EXTENSION)) {
             return $type;
         }
 

@@ -37,12 +37,10 @@ class Rah_Flat
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
-        if (get_pref('rah_flat_path'))
-        {
+        if (get_pref('rah_flat_path')) {
             register_callback(array($this, 'endpoint'), 'textpattern');
 
-            if (get_pref('production_status') !== 'live')
-            {
+            if (get_pref('production_status') !== 'live') {
                 register_callback(array($this, 'import'), 'textpattern');
                 register_callback(array($this, 'import'), 'admin_side', 'body_end');
             }
@@ -62,10 +60,8 @@ class Rah_Flat
                 'rah_flat_path' => array('text_input', '../../src/templates'),
                 'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
             ) as $name => $val
-        )
-        {
-            if (get_pref($name, false) === false)
-            {
+        ) {
+            if (get_pref($name, false) === false) {
                 set_pref($name, $val[1], 'rah_flat', PREF_ADVANCED, $val[0], $position);
             }
 
@@ -77,8 +73,7 @@ class Rah_Flat
      * Uninstaller.
      */
 
-    public function uninstall()
-    {
+    public function uninstall() {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
     }
 
@@ -105,12 +100,9 @@ class Rah_Flat
 
     public function import()
     {
-        try
-        {
+        try {
             $this->init();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             trigger_error($e->getMessage());
         }
     }
@@ -125,19 +117,15 @@ class Rah_Flat
             'rah_flat_key',
         )));
 
-        if (!get_pref('rah_flat_key') || get_pref('rah_flat_key') !== $rah_flat_key)
-        {
+        if (!get_pref('rah_flat_key') || get_pref('rah_flat_key') !== $rah_flat_key) {
             return;
         }
 
         header('Content-Type: application/json; charset=utf-8');
 
-        try
-        {
+        try {
             $this->init();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             txp_status_header('500 Internal Server Error');
 
             die(json_encode(array(

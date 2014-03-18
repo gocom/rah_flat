@@ -66,18 +66,14 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
     {
         $name = array();
 
-        while ($template->valid())
-        {
+        while ($template->valid()) {
             $name[] = "'".doSlash($template->getTemplateName())."'";
             $template->next();
         }
 
-        if ($name)
-        {
+        if ($name) {
             safe_delete($this->getTableName(), 'name not in ('.implode(',', $name).')');
-        }
-        else
-        {
+        } else {
             safe_delete($this->getTableName(), '1 = 1');
         }
     }

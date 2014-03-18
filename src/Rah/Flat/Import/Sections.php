@@ -56,12 +56,9 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
 
         foreach ($file->getTemplateJSONContents() as $key => $value)
         {
-            if ($key === 'name')
-            {
+            if ($key === 'name') {
                 $where = "name = '".doSlash($value)."'";
-            }
-            else if (in_array(strtolower((string) $key), $this->getTableColumns(), true))
-            {
+            } else if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
                 $sql[] = $this->formatStatement($key, $value);
             }
         }
@@ -79,18 +76,15 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
 
     protected function formatStatement($field, $value)
     {
-        if ($value === null)
-        {
+        if ($value === null) {
             return "`{$field}` = NULL";
         }
 
-        if (is_bool($value) || is_int($value))
-        {
+        if (is_bool($value) || is_int($value)) {
             return "`{$field}` = ".intval($value);
         }
 
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $value = implode(', ', $value);
         }
 
