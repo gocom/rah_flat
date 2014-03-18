@@ -41,6 +41,18 @@ class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator
     /**
      * Gets the template type.
      *
+     * If the template name doesn't specify a type, it
+     * defaults to 'misc'. The second to last extension
+     * is expected to be the type.
+     *
+     * If the file is named as:
+     *
+     * <code>
+     * filename.red.ext
+     * </code>
+     *
+     * The 'red' would be used as the type.
+     *
      * @return string
      */
 

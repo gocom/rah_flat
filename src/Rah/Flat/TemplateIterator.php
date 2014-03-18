@@ -30,6 +30,14 @@
 class Rah_Flat_TemplateIterator extends DirectoryIterator
 {
     /**
+     * Template name pattern.
+     *
+     * @var string
+     */
+
+    protected $templateNamePattern = '/^[a-z][a-z0-9_\-\.]{0,63}\.[a-z0-9]+$/i';
+
+    /**
      * Gets the template contents.
      *
      * @throws Exception
@@ -37,7 +45,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     public function getTemplateContents()
     {
-        if (($contents = file_get_contents($this->getPathName())) !== false) {
+        if (($contents = file_get_contents($this->getPathname())) !== false) {
             return $contents;
         }
 
@@ -72,14 +80,40 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
     }
 
     /**
-     * Validates a template file.
+     * Validates a template file name and stats.
      *
-     * @return bool
+     * Template file must be a regular file or symbolic links,
+     * readable and the name must be fewer than 64 characters long,
+     * start with an ASCII character, followed by A-z, 0-9, -, _ and
+     * and ends to a file extension.
+     *
+     * Valid template name would include:
+     *
+     * <code>
+     * sitename.json
+     * default.article.txp
+     * form.name.misc.txp
+     * default.txp
+     * error_default.html
+     * </code>
+     *
+     * But the following would be invalid:
+     *
+     * <code>
+     * .sitename
+     * _form.misc.txp
+     * </code>
+     *
+     * @return bool TRUE if the name is valid
      */
 
     public function isValidTemplate()
     {
-        return $this->isFile() && !$this->isDot() && $this->isReadable() && preg_match('/[a-z][a-z0-9_\-\.]/i', $this->getTemplateName());
+        if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
+            return (bool) preg_match($this->templateNamePattern, $this->getTemplateName());
+        }
+
+        return false;
     }
 
     /**
