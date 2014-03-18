@@ -59,7 +59,7 @@ class Rah_Flat
 
         foreach (
             array(
-                'rah_flat_path' => array('text_input', '../templates'),
+                'rah_flat_path' => array('text_input', '../../src/templates'),
                 'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
             ) as $name => $val
         )
