@@ -2,7 +2,9 @@ h1. rah_flat
 
 "Download":https://github.com/gocom/rah_flat/releases | "Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":http://rahforum.biz/donate/rah_flat
 
-A plugin for "Textpattern CMS":http://www.textpattern.com. Edit template files, forms, pages as flat files. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example. *Warning: this plugin will permanently remove your current templates when activated.*
+This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
+
+*Warning: this plugin will permanently remove your current templates when activated.*
 
 h2. Installing
 
@@ -11,6 +13,35 @@ Using "Composer":http://getcomposer.org:
 bc. $ composer require rah/rah_flat:*
 
 Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
+
+h2. Basics
+
+Rah_flat imports normal, flat files from a specified directory to your Textpattern database. This in essence lets you to edit your database contents from any regular editor and store the source as flat files.
+
+Rah_flat comes with build in support for few essential content types: styles, forms, pages, preferences and sections. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example how this all works.
+
+Your flat files are imported to the database:
+
+* Automatically on the background when the site is either in Debugging or Testing mode.
+* When the public callback hook URL is accessed. The URL can be used for deployment.
+
+If you want to exclude certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
+
+h2. Preferences
+
+The plugin has set of preferences you can find on Textpattern's normal preferences panel.
+
+h3. Path to the templates directory
+
+Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For instance a path @../templates@ would point a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
+
+h3. Security key for the public callback
+
+Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
+
+bc. http://example.com/?rah_flat_key={yourKey}
+
+Where @http://example.com/@ is your site's URL and @{yourKey}@ is the security key you specified.
 
 h2. Toolshed notice
 
