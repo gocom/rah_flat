@@ -49,7 +49,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
     public function getTemplateContents()
     {
         if (($contents = file_get_contents($this->getPathname())) !== false) {
-            return $contents;
+            return preg_replace('/[\r|\n]+$/', '', $contents);
         }
 
         throw new Exception('Unable to read.');
