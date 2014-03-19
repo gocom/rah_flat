@@ -32,10 +32,13 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
     /**
      * Template name pattern.
      *
+     * This regular expression pattern is used to
+     * validate template filenames.
+     *
      * @var string
      */
 
-    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}/i';
+    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+/i';
 
     /**
      * Gets the template contents.
@@ -110,7 +113,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
     public function isValidTemplate()
     {
         if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-            return (bool) preg_match($this->templateNamePattern, $this->getTemplateName());
+            return (bool) preg_match($this->templateNamePattern, $this->getFilename());
         }
 
         return false;
