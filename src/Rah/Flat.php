@@ -38,6 +38,13 @@ class Rah_Flat
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
+
+            new Rah_Flat_Import_Prefs('prefs');
+            new Rah_Flat_Import_Sections('sections');
+            new Rah_Flat_Import_Pages('pages');
+            new Rah_Flat_Import_Forms('forms');
+            new Rah_Flat_Import_Styles('styles');
+
             register_callback(array($this, 'endpoint'), 'textpattern');
 
             if (get_pref('production_status') !== 'live') {
@@ -83,12 +90,6 @@ class Rah_Flat
 
     private function init()
     {
-        new Rah_Flat_Import_Prefs('prefs');
-        new Rah_Flat_Import_Sections('sections');
-        new Rah_Flat_Import_Pages('pages');
-        new Rah_Flat_Import_Forms('forms');
-        new Rah_Flat_Import_Styles('styles');
-
         safe_query('LOCK TABLES '.implode(' WRITE, ', getThings('show tables')).' WRITE');
         callback_event('rah_flat.import');
         safe_query('UNLOCK TABLES');
