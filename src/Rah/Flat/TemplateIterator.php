@@ -35,7 +35,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
      * @var string
      */
 
-    protected $templateNamePattern = '/^[a-z][a-z0-9_\-\.]{0,63}\.[a-z0-9]+$/i';
+    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}/i';
 
     /**
      * Gets the template contents.
