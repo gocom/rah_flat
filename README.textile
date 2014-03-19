@@ -1,18 +1,20 @@
 h1. rah_flat
 
-p. A plugin for "Textpattern CMS":http://www.textpattern.com. Edit template files, forms, pages as flat files. *Warning: this plugin will permanently remove your current templates when activated.*
+"Download":https://github.com/gocom/rah_flat/releases | "Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":http://rahforum.biz/donate/rah_flat
 
-h2. Requirements
-
-p. Rah_flat at minimum requires:
-
-* Textpattern 4.6.0-dev or newer.
+A plugin for "Textpattern CMS":http://www.textpattern.com. Edit template files, forms, pages as flat files. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example. *Warning: this plugin will permanently remove your current templates when activated.*
 
 h2. Installing
 
-p. Using "Composer":http://getcomposer.org:
+Using "Composer":http://getcomposer.org:
 
-bc. $ composer require rah/rah_flat
+bc. $ composer require rah/rah_flat:*
+
+Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
+
+h2. Toolshed notice
+
+This is a toolshed project. Experimental and not part of the main supported product line of Rah. Not yet at least. Please use at your own risk.
 
 h2. Changelog
 
