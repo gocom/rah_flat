@@ -24,14 +24,37 @@
 /**
  * Base class for import definitions.
  *
+ * To create a new importable template object, extend
+ * this class or its theriatives.
+ *
+ * For instance the following would create a new import
+ * definition using the Rah_Flat_Import_Pages as the
+ * base:
+ *
  * <code>
- * class MyImportDefinition extends Rah_Flat_Import_Base
+ * class Abc_My_Import_Definition extends Rah_Flat_Import_Pages
  * {
  *     public function getPanelName()
  *     {
- *         return 'MyPanel';
+ *         return 'abc_mypanel';
+ *     }
+ *     public function getTableName()
+ *     {
+ *         return 'abc_mytable';
  *     }
  * }
+ * </code>
+ *
+ * It would automatically disable access to 'abc_mypanel' admin-side panel
+ * and import items to 'abc_mytable' database table, consisting of 'name'
+ * and 'user_html' columns, as with page templates and its txp_page table.
+ *
+ * To initialize the import, just create a new instance of the class. Pass
+ * constructor the directory name the templates reside in the configured
+ * templates directory.
+ *
+ * <code>
+ * new Abc_My_Import_Definition('abc_mydirectory');
  * </code>
  */
 

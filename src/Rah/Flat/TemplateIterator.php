@@ -24,6 +24,16 @@
 /**
  * Template iterator.
  *
+ * This class iterates over template files.
+ *
+ * <code>
+ * $template = new Rah_Flat_TemplateIterator();
+ * while ($template->valid()) {
+ *  $template->getTemplateName();
+ *  $template->getTemplateContents();
+ * }
+ * </code>
+ *
  * @see DirectoryIterator
  */
 

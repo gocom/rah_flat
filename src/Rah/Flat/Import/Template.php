@@ -39,7 +39,7 @@ interface Rah_Flat_Import_Template
      * Registers the importer definition when the class is initialized.
      *
      * <code>
-     * new Rah_Import_Template('directoryName');
+     * new Rah_Flat_Import_Forms('forms');
      * </code>
      *
      * @param string $directory The directory hosting the templates
@@ -49,18 +49,25 @@ interface Rah_Flat_Import_Template
 
     /**
      * Initializes the importer.
+     *
+     * @throws Exception
      */
 
     public function init();
 
     /**
-     * Remove permissions to the panel.
+     * Drops permissions to the panel.
+     *
+     * This makes sure the template items are not
+     * modified through the GUI.
      */
 
     public function dropPermissions();
 
     /**
-     * Drop removes templates.
+     * Drop removed template rows from the database.
+     *
+     * @throws Exception
      */
 
     public function dropRemoved(Rah_Flat_TemplateIterator $template);
@@ -84,6 +91,9 @@ interface Rah_Flat_Import_Template
     /**
      * Imports the template file.
      *
+     * This method executes the SQL statement to import
+     * the template file.
+     *
      * @param  Rah_Flat_TemplateIterator $file The template file
      * @throws Exception
      */
@@ -91,7 +101,7 @@ interface Rah_Flat_Import_Template
     public function importTemplate(Rah_Flat_TemplateIterator $file);
 
     /**
-     * Gets an array of database columns.
+     * Gets an array of database columns in the table.
      *
      * @return array
      */
