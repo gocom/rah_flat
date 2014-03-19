@@ -18,6 +18,10 @@ This is a toolshed project. Experimental and not part of the main supported prod
 
 h2. Changelog
 
+h3. Version 0.2.0 - 2014/03/19
+
+* Reworked.
+
 h3. Version 0.1.0 - 2013/05/07
 
 * Initial release.
