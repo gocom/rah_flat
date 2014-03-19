@@ -33,7 +33,7 @@ class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator
      * {@inheritdoc}
      */
 
-    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+\.[a-z0-9]+/i';
+    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]{1,28}\.[a-z0-9]+/i';
 
     /**
      * {@inheritdoc}
