@@ -100,24 +100,47 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
      * {@inheritdoc}
      */
 
+    public function getDirectoryPath()
+    {
+        if ($this->directory && ($directory = get_pref('rah_flat_path'))) {
+            $directory = txpath . '/' . $directory . '/' . $this->directory;
+            return $directory;
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function isEnabled()
+    {
+        if ($directory = $this->getDirectoryPath()) {
+            return file_exists($directory) && is_dir($directory) && is_readable($directory);
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function init()
     {
-        if ($directory = get_pref('rah_flat_path', '', true)) {
-            $directory = txpath . '/' . $directory . '/' . $this->directory;
+        if ($this->isEnabled()) {
+            $template = $this->getTemplateIterator($this->getDirectoryPath());
 
-            if (file_exists($directory) && is_dir($directory) && is_readable($directory)) {
-                $template = $this->getTemplateIterator($directory);
-
-                while ($template->valid()) {
-                    if ($this->importTemplate($template) === false) {
-                        throw new Exception('Unable to import ' . $template->getTemplateName());
-                    }
-
-                    $template->next();
+            while ($template->valid()) {
+                if ($this->importTemplate($template) === false) {
+                    throw new Exception('Unable to import ' . $template->getTemplateName());
                 }
 
-                $this->dropRemoved($template);
+                $template->next();
             }
+
+            $this->dropRemoved($template);
         }
     }
 
@@ -127,7 +150,9 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
 
     public function dropPermissions()
     {
-        unset($GLOBALS['txp_permissions'][$this->getPanelName()]);
+        if (txpinterface === 'admin' && $this->isEnabled()) {
+            unset($GLOBALS['txp_permissions'][$this->getPanelName()]);
+        }
     }
 
     /**

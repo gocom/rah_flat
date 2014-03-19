@@ -107,4 +107,20 @@ interface Rah_Flat_Import_Template
      */
 
     public function getTableColumns();
+
+    /**
+     * Gets a path to the directory hosting the flat files.
+     *
+     * @return string|bool The path, or FALSE
+     */
+
+    public function getDirectoryPath();
+
+    /**
+     * Whether the content-type is enabled and has a directory.
+     *
+     * @return bool TRUE if its enabled, FALSE otherwise
+     */
+
+    public function isEnabled();
 }
