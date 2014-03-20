@@ -62,6 +62,10 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
             }
         }
 
+        if (!$where) {
+            $where = "name = '".doSlash($file->getTemplateName())."'";
+        }
+
         return $sql && $where && safe_upsert($this->getTableName(), implode(',', $sql), $where);
     }
 
