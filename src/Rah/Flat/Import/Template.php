@@ -22,7 +22,7 @@
  */
 
 /**
- * Interface for import definition.
+ * Interface for import definitions.
  *
  * <code>
  * class MyImportDefinition implements Rah_Import_Template
