@@ -52,21 +52,15 @@ class Rah_Flat_Import_Sections extends Rah_Flat_Import_Pages
     public function importTemplate(Rah_Flat_TemplateIterator $file)
     {
         $sql = array();
-        $where = '';
+        $where = "name = '".doSlash($file->getTemplateName())."'";
 
         foreach ($file->getTemplateJSONContents() as $key => $value) {
-            if ($key === 'name') {
-                $where = "name = '".doSlash($value)."'";
-            } else if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
+            if ($key !== 'name' && in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
                 $sql[] = $this->formatStatement($key, $value);
             }
         }
 
-        if (!$where) {
-            $where = "name = '".doSlash($file->getTemplateName())."'";
-        }
-
-        return $sql && $where && safe_upsert($this->getTableName(), implode(',', $sql), $where);
+        return $sql && safe_upsert($this->getTableName(), implode(',', $sql), $where);
     }
 
     /**
