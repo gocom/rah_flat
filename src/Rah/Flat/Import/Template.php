@@ -50,6 +50,8 @@ interface Rah_Flat_Import_Template
     /**
      * Initializes the importer.
      *
+     * This method is called when the import event is executed.
+     *
      * @throws Exception
      */
 
@@ -60,12 +62,21 @@ interface Rah_Flat_Import_Template
      *
      * This makes sure the template items are not
      * modified through the GUI.
+     *
+     * This method only affects the admin-side interface and doesn't
+     * truly reset permissions application wide. This is to
+     * avoid unneccessary I/O activity that would otherwise have to
+     * take place.
      */
 
     public function dropPermissions();
 
     /**
-     * Drop removed template rows from the database.
+     * Drops removed template rows from the database.
+     *
+     * For most impletations this method removes all rows that aren't
+     * present in the flat directory, but for some it might
+     * not do anything.
      *
      * @throws Exception
      */
@@ -74,6 +85,9 @@ interface Rah_Flat_Import_Template
 
     /**
      * Gets the panel name.
+     *
+     * The panel name is used to recognize the content-types
+     * registered event and remove access to it.
      *
      * @return string
      */
