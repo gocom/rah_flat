@@ -25,7 +25,7 @@
  * Imports preferences.
  */
 
-class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Base
+class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
 {
     /**
      * {@inheritdoc}
@@ -51,20 +51,16 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Base
 
     public function importTemplate(Rah_Flat_TemplateIterator $file)
     {
-        extract(lAtts(array(
-            'name'     => '',
-            'value'    => '',
-            'event'    => 'publish',
-            'type'     => 0,
-            'html'     => 'text_input',
-            'position' => 80,
-        ), $file->getTemplateJSONContents(), false));
+        $sql = array();
+        $where = "name = '".doSlash($file->getTemplateName())."' and user_name = ''";
 
-        if ($name === '') {
-            $name = $file->getTemplateName();
+        foreach ($file->getTemplateJSONContents() as $key => $value) {
+            if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
+                $sql[] = $this->formatStatement($key, $value);
+            }
         }
 
-        set_pref($name, $value, $event, $type, $html, $position);
+        return $sql && safe_update($this->getTableName(), implode(',', $sql), $where);
     }
 
     /**

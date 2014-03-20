@@ -1,7 +1,3 @@
 {
-    "value": "../templates",
-    "event": "rah_flat",
-    "type": 1,
-    "html": "text_input",
-    "position": 250
+    "val": "../templates",
 }
