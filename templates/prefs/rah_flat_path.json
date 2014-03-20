@@ -1,5 +1,4 @@
 {
-    "name": "rah_flat_path",
     "value": "../templates",
     "event": "rah_flat",
     "type": 1,

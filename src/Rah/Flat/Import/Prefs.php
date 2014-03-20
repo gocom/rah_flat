@@ -60,6 +60,10 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Base
             'position' => 80,
         ), $file->getTemplateJSONContents(), false));
 
+        if ($name === '') {
+            $name = $file->getTemplateName();
+        }
+
         set_pref($name, $value, $event, $type, $html, $position);
     }
 
