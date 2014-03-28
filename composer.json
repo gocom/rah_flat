@@ -20,5 +20,8 @@
         "php": ">=5.2.0",
         "textpattern/lock": ">=4.4.1,<4.7.0",
         "textpattern/installer": "*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "1.5.*"
     }
 }
