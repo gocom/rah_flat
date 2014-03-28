@@ -65,12 +65,12 @@ class Rah_Flat
     {
         $position = 250;
 
-        foreach (
-            array(
-                'rah_flat_path' => array('text_input', '../../src/templates'),
-                'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
-            ) as $name => $val
-        ) {
+        $options = array(
+            'rah_flat_path' => array('text_input', '../../src/templates'),
+            'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
+        );
+
+        foreach ($options as $name => $val) {
             if (get_pref($name, false) === false) {
                 set_pref($name, $val[1], 'rah_flat', PREF_ADVANCED, $val[0], $position);
             }
@@ -83,7 +83,8 @@ class Rah_Flat
      * Uninstaller.
      */
 
-    public function uninstall() {
+    public function uninstall()
+    {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
     }
 
@@ -117,11 +118,7 @@ class Rah_Flat
 
     public function endpoint()
     {
-        extract(gpsa(array(
-            'rah_flat_key',
-        )));
-
-        if (!get_pref('rah_flat_key') || get_pref('rah_flat_key') !== $rah_flat_key) {
+        if (!get_pref('rah_flat_key') || get_pref('rah_flat_key') !== gps('rah_flat_key')) {
             return;
         }
 
