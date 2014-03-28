@@ -25,7 +25,7 @@
  * Interface for import definitions.
  *
  * <code>
- * class Abc_Import_Definition implements Rah_Import_Template
+ * class Abc_Import_Definition implements Rah_Flat_Import_Template
  * {
  * }
  * </code>
