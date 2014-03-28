@@ -49,6 +49,16 @@ This is a toolshed project. Experimental and not part of the main supported prod
 
 h2. Changelog
 
+h3. Version 0.3.0 - 2014/03/28
+
+* Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
+* Added: Invokable @rah_flat.import@ callback event.
+* Added: Sections and preferences get their names from the filename.
+* Added: Preferences are always just updated, no strands are created.
+* Added: Preference fields that are not specified in a file, are kept as is in the database.
+* Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
+* Changed: Renamed confusing @Rah_Flat_Import_Template@ interface to @Rah_Flat_Import_ImportInterface@.
+
 h3. Version 0.2.0 - 2014/03/19
 
 * Reworked.
