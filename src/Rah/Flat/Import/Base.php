@@ -83,7 +83,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_Template
     public function __construct($directory)
     {
         $this->directory = $directory;
-        register_callback(array($this, 'init'), 'rah_flat.import');
+        register_callback(array($this, 'init'), 'rah_flat.import_to_database');
         $this->dropPermissions();
     }
 

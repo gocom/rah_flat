@@ -23,6 +23,8 @@
 
 /**
  * Main plugin class.
+ *
+ * @internal
  */
 
 class Rah_Flat
@@ -46,10 +48,11 @@ class Rah_Flat
             new Rah_Flat_Import_Styles('styles');
 
             register_callback(array($this, 'endpoint'), 'textpattern');
+            register_callback(array($this, 'initWrite'), 'rah_flat.import');
 
             if (get_pref('production_status') !== 'live') {
-                register_callback(array($this, 'import'), 'textpattern');
-                register_callback(array($this, 'import'), 'admin_side', 'body_end');
+                register_callback(array($this, 'callbackHandler'), 'textpattern');
+                register_callback(array($this, 'callbackHandler'), 'admin_side', 'body_end');
             }
         }
     }
@@ -88,21 +91,21 @@ class Rah_Flat
      * Initializes the importers.
      */
 
-    private function init()
+    public function initWrite()
     {
         safe_query('LOCK TABLES '.implode(' WRITE, ', getThings('show tables')).' WRITE');
-        callback_event('rah_flat.import');
+        callback_event('rah_flat.import_to_database');
         safe_query('UNLOCK TABLES');
     }
 
     /**
-     * Imports all assets.
+     * Registered callback handler.
      */
 
-    public function import()
+    public function callbackHandler()
     {
         try {
-            $this->init();
+            callback_event('rah_flat.import');
         } catch (Exception $e) {
             trigger_error($e->getMessage());
         }
@@ -125,7 +128,7 @@ class Rah_Flat
         header('Content-Type: application/json; charset=utf-8');
 
         try {
-            $this->init();
+            callback_event('rah_flat.import');
         } catch (Exception $e) {
             txp_status_header('500 Internal Server Error');
 

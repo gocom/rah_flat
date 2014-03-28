@@ -37,6 +37,8 @@ interface Rah_Flat_Import_Template
      * Constructor.
      *
      * Registers the importer definition when the class is initialized.
+     * The used event should be considered private and should not
+     * be accessed manually.
      *
      * <code>
      * new Rah_Flat_Import_Forms('forms');
