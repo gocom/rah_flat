@@ -11,7 +11,7 @@
     "code": {"file" : [
         "./src/Rah/Flat/TemplateIterator.php",
         "./src/Rah/Flat/FormIterator.php",
-        "./src/Rah/Flat/Import/Template.php",
+        "./src/Rah/Flat/Import/ImportInterface.php",
         "./src/Rah/Flat/Import/Base.php",
         "./src/Rah/Flat/Import/Pages.php",
         "./src/Rah/Flat/Import/Forms.php",
