@@ -16,16 +16,16 @@ Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
 
 h2. Basics
 
-Rah_flat imports normal, flat files from a specified directory to your Textpattern database. This in essence lets you to edit your database contents from any regular editor and store the source as flat files.
+Rah_flat imports normal, flat files from a specified directory to your Textpattern database. This, in essence, lets you to edit your database contents from any regular editor and store the source as flat files.
 
-Rah_flat comes with build in support for few essential content types: styles, forms, pages, preferences and sections. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example how this all works.
+Rah_flat comes with built-in support for a few essential content types: styles, forms, pages, preferences and sections. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example how this all works.
 
 Your flat files are imported to the database:
 
 * Automatically on the background when the site is either in Debugging or Testing mode.
 * When the public callback hook URL is accessed. The URL can be used for deployment.
 
-If you want to exclude certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
+If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
 
 h2. Preferences
 
@@ -33,7 +33,7 @@ The plugin has set of preferences you can find on Textpattern's normal preferenc
 
 h3. Path to the templates directory
 
-Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For instance a path @../templates@ would point a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
+Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../templates@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
 
 h3. Security key for the public callback
 
@@ -41,7 +41,7 @@ Security key for the public callback hook URL. Importing is done when the URL is
 
 bc. http://example.com/?rah_flat_key={yourKey}
 
-Where @http://example.com/@ is your site's URL and @{yourKey}@ is the security key you specified.
+Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
 h2. Toolshed notice
 
@@ -55,7 +55,7 @@ h3. Version 0.3.0 - 2014/03/28
 * Added: Invokable @rah_flat.import@ callback event.
 * Added: Sections and preferences get their names from the filename.
 * Added: Preferences are always just updated, no strands are created.
-* Added: Preference fields that are not specified in a file, are kept as is in the database.
+* Added: Preference fields that are not specified in a file are kept as-is in the database.
 * Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
 * Changed: Renamed confusing @Rah_Flat_Import_Template@ interface to @Rah_Flat_Import_ImportInterface@.
 
