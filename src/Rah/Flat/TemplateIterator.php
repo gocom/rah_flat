@@ -50,6 +50,8 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
     protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+/i';
 
+    protected $templateTypes = array('JSON','YAML');
+
     /**
      * Gets the template contents.
      *
@@ -64,6 +66,50 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
 
         throw new Exception('Unable to read.');
     }
+
+    /**
+     * Get content type and parse appropriately
+     *
+     * @return stdClass
+     * @throws Exception
+     */
+
+    public function getTemplateTypeContents()
+    {
+        foreach ($this->templateTypes as $type) {
+            if (substr(
+                    $this->getPathname(),
+                    (strlen($this->getPathname())-(strlen($type)+1)),
+                    strlen($this->getPathname())
+                ) === '.'.strtolower($type)
+                && method_exists(
+                    $this,
+                    'getTemplate'.$type.'Contents'
+                )
+            ) {
+                return $this->{'getTemplate'.$type.'Contents'}();
+            }
+        }
+
+        throw new Exception('No parser for file found.');
+    }
+
+    /**
+     * Get YAML file content as an object
+     */
+
+    public function getTemplateYAMLContents()
+    {
+        $parser = new \Symfony\Component\Yaml\Parser();
+        try {
+            return $parser->parse($this->getTemplateContents());
+        } catch (\Symfony\Component\Yaml\Exception\ParseException $ex) {
+
+            throw new Exception('Invalid YAML file.');
+        }
+    }
+
+
 
     /**
      * Gets JSON file contents as an object.
@@ -104,6 +150,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
      *
      * <code>
      * sitename.json
+     * sitename.yaml
      * default.article.txp
      * form.name.misc.txp
      * default.txp
