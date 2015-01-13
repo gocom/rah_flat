@@ -54,7 +54,7 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
         $sql = array();
         $where = "name = '".doSlash($file->getTemplateName())."' and user_name = ''";
 
-        foreach ($file->getTemplateJSONContents() as $key => $value) {
+        foreach ($file->getTemplateTypeContents() as $key => $value) {
             if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
                 $sql[] = $this->formatStatement($key, $value);
             }
