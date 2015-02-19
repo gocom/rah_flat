@@ -4,7 +4,7 @@
  * rah_flat - Flat templates for Textpattern CMS
  * https://github.com/gocom/rah_flat
  *
- * Copyright (C) 2014 Jukka Svahn
+ * Copyright (C) 2015 Jukka Svahn
  *
  * This file is part of rah_flat.
  *
