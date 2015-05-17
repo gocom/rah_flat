@@ -94,9 +94,7 @@ class Rah_Flat
 
     public function initWrite()
     {
-        safe_query('LOCK TABLES '.implode(' WRITE, ', getThings('show tables')).' WRITE');
         callback_event('rah_flat.import_to_database');
-        safe_query('UNLOCK TABLES');
     }
 
     /**
