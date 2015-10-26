@@ -25,7 +25,7 @@
  * Imports preferences.
  */
 
-class Rah_Flat_Import_Variables extends Rah_Flat_Import_Prefs
+class Rah_Flat_Import_Textpacks extends Rah_Flat_Import_Variables
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class Rah_Flat_Import_Variables extends Rah_Flat_Import_Prefs
 
     public function getTableName()
     {
-        return 'txp_prefs';
+        return 'txp_lang';
     }
 
     /**
@@ -51,25 +51,16 @@ class Rah_Flat_Import_Variables extends Rah_Flat_Import_Prefs
 
     public function importTemplate(Rah_Flat_TemplateIterator $file)
     {
-        extract(lAtts(array(
-            'name'     => '',
-            'value'    => '',
-            'type'     => 0,
-            'html'     => 'text_input',
-            'position' => 80,
-        ), $file->getTemplateJSONContents(), false));
+        $sql = array();
+        $where = "name = '".doSlash($file->getTemplateName())."'";
 
-        $name = $file->getTemplateName();
-
-        set_pref($name, $value, 'rah_flat_var', $type, $html, $position);
-
-	    global $variable;
-			
-		$prefset = safe_rows('name, val', 'txp_prefs', 'event = "rah_flat_var"');
-        foreach ($prefset as $pref) {
-            $variable[$pref['name']] = $pref['val']; 
+        foreach ($file->getTemplateJSONContents() as $key => $value) {
+            if ($key !== 'name' && in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
+                $sql[] = $this->formatStatement($key, $value);
+            }
         }
 
+        return $sql && safe_upsert($this->getTableName(), implode(',', $sql), $where);
     }
 
     /**
@@ -86,7 +77,7 @@ class Rah_Flat_Import_Variables extends Rah_Flat_Import_Prefs
         }
 
         if ($name) {
-            safe_delete($this->getTableName(), 'event = "rah_flat_var" && name not in ('.implode(',', $name).')');
+            safe_delete($this->getTableName(), 'name like "rah\_flat\_%" && name not in ('.implode(',', $name).')');
         }    
     }
 
