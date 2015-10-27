@@ -41,6 +41,8 @@ class Rah_Flat
 
         if (get_pref('rah_flat_path')) {
 
+            new Rah_Flat_Import_Textpacks('textpacks');
+            new Rah_Flat_Import_Variables('variables');
             new Rah_Flat_Import_Prefs('prefs');
             new Rah_Flat_Import_Sections('sections');
             new Rah_Flat_Import_Pages('pages');
