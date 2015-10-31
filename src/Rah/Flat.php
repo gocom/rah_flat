@@ -36,17 +36,20 @@ class Rah_Flat
     public function __construct()
     {
         add_privs('prefs.rah_flat', '1');
+        add_privs('prefs.rah_flat_var', '1');
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
 
+            new Rah_Flat_Import_Variables('variables');
             new Rah_Flat_Import_Prefs('prefs');
             new Rah_Flat_Import_Sections('sections');
             new Rah_Flat_Import_Pages('pages');
             new Rah_Flat_Import_Forms('forms');
             new Rah_Flat_Import_Styles('styles');
 
+            register_callback(array($this, 'injectVars'), 'pretext_end');
             register_callback(array($this, 'endpoint'), 'textpattern');
             register_callback(array($this, 'initWrite'), 'rah_flat.import');
 
@@ -57,6 +60,20 @@ class Rah_Flat
         }
     }
 
+    /**
+     * Inject Variables.
+     */
+
+    public function injectVars()
+    {
+	    global $variable;
+			
+		$prefset = safe_rows('name, val', 'txp_prefs', 'event = "rah_flat_var"');
+        foreach ($prefset as $pref) {
+            $variable[$pref['name']] = $pref['val']; 
+        }
+    }
+    
     /**
      * Installer.
      */
@@ -86,6 +103,7 @@ class Rah_Flat
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+        safe_delete('txp_prefs', "event like 'rah\_flat\_var%'");
     }
 
     /**
