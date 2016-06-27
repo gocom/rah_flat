@@ -947,9 +947,11 @@ class rah_flat
             new rah_flat_Import_Styles('styles');
 
             $formsDir = txpath . '/' . get_pref('rah_flat_path') . '/forms';
-            foreach (scandir($formsDir) as $formtype) {
-                if (is_dir($formsDir . '/' . $formtype)) {
-                    new rah_flat_Import_Forms('forms/'.$formtype);
+            if (is_dir($formsDir)) {
+                foreach (array_diff(scandir($formsDir), array('.', '..')) as $formtype) {
+                    if (is_dir($formsDir . '/' . $formtype)) {
+                        new rah_flat_Import_Forms('forms/'.$formtype);
+                    }
                 }
             }
 
