@@ -944,14 +944,14 @@ class rah_flat
             new rah_flat_Import_Prefs('prefs');
             new rah_flat_Import_Sections('sections');
             new rah_flat_Import_Pages('pages');
-            new rah_flat_Import_Forms('forms/article');
-            new rah_flat_Import_Forms('forms/category');
-            new rah_flat_Import_Forms('forms/comment');
-            new rah_flat_Import_Forms('forms/file');
-            new rah_flat_Import_Forms('forms/link');
-            new rah_flat_Import_Forms('forms/misc');
-            new rah_flat_Import_Forms('forms/section');
             new rah_flat_Import_Styles('styles');
+
+            $formsDir = txpath . '/' . get_pref('rah_flat_path') . '/forms';
+            foreach (scandir($formsDir) as $formtype) {
+                if (is_dir($formsDir . '/' . $formtype)) {
+                    new rah_flat_Import_Forms('forms/'.$formtype);
+                }
+            }
 
             register_callback(array($this, 'injectVars'), 'pretext_end');
             register_callback(array($this, 'endpoint'), 'textpattern');
