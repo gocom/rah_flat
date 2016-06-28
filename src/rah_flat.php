@@ -849,7 +849,7 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
         ), $file->getTemplateJSONContents(), false));
 
 		$event = 'rah_flat_var';
-        $name = $file->getTemplateName();
+        $name = $event."_".$file->getTemplateName();
 
         if (get_pref($name, false) === false) {
             set_pref($name, $value, $event, defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $html, $position);
@@ -865,7 +865,7 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
         $name = array();
 
         while ($template->valid()) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $name[] = "'rah_flat_var_".doSlash($template->getTemplateName())."'";
             $template->next();
         }
 
@@ -1020,7 +1020,9 @@ class rah_flat
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
-        safe_delete('txp_prefs', "event like 'rah\_flat\_var%'");
+        safe_delete('txp_prefs', "name like 'rah\_flat\_var%'");
+        safe_delete('txp_lang', "name like 'rah\_flat\_%'");
+        safe_delete('txp_lang', "name like 'rah\_flat\_var%'");
     }
 
     /**
