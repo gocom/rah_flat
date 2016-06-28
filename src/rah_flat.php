@@ -679,8 +679,12 @@ class rah_flat_Import_Forms extends rah_flat_Import_Base
             $template->next();
         }
 
+        $formtype = substr($this->directory, strrpos($this->directory, '/') + 1);
+
         if ($name) {
-            safe_delete($this->getTableName(), 'type = "'.doSlash(substr($this->directory, strrpos($this->directory, '/') + 1)).'" && name not in ('.implode(',', $name).')');
+            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'" && name not in ('.implode(',', $name).')');
+        } else {
+            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'"');
         }
     }
 }
@@ -1020,9 +1024,9 @@ class rah_flat
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
-        safe_delete('txp_prefs', "name like 'rah\_flat\_var%'");
+        safe_delete('txp_prefs', "name like 'rah\_flat\_var\_%'");
         safe_delete('txp_lang', "name like 'rah\_flat\_%'");
-        safe_delete('txp_lang', "name like 'rah\_flat\_var%'");
+        safe_delete('txp_lang', "name like 'rah\_flat\_var\_%'");
     }
 
     /**
