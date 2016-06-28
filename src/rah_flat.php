@@ -19,8 +19,8 @@
 
 $plugin['version'] = '0.5.0-dev';
 $plugin['author'] = 'Jukka Svahn (modified by Nicolas Morand)';
-$plugin['author_uri'] = 'Edit Textpattern\'s database prefs, contents and page templates as flat files';
-$plugin['description'] = 'Forms';
+$plugin['author_uri'] = '';
+$plugin['description'] = 'Edit Textpattern\'s database prefs, contents and page templates as flat files';
 
 // Plugin load order:
 // The default value of 5 would fit most plugins, while for instance comment
@@ -59,10 +59,12 @@ $plugin['textpack'] = <<< EOT
 rah_flat => Template files (rah_flat)
 rah_flat_path => Templates path
 rah_flat_key => Update key
+rah_flat_var => Template variables (rah_flat)
 #@language fr-fr
 rah_flat => Fichiers du thème (rah_flat)
 rah_flat_path => Chemin vers les fichiers
 rah_flat_key => Clé de mise à jour
+rah_flat_var => Variables du thème (rah_flat)
 EOT;
 // End of textpack
 
@@ -116,14 +118,14 @@ Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security 
 
 h2. Toolshed notice
 
-This is a toolshed project. Experimental and not part of the main supported product line of oui. Not yet at least. Please use at your own risk.
+This is a toolshed project. Experimental and not part of the main supported product line of Rah. Not yet at least. Please use at your own risk.
 
 h2. Changelog
 
-h4. Version 0.5.0-dev - 2016/06/26
+h4. Version 0.5.0-dev - 2016/06/27
 
 To do: Help and comments updates.
-Changed: Forms are stored by types in subfolders.
+Changed: Forms are stored by types in subfolders (custom types can be used).
 Changed: Forms get their type from their parent folder and don't need prefixes anymore.
 
 h4. Version 0.4.0 - 2015/11/29
@@ -850,7 +852,7 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
         $name = $file->getTemplateName();
 
         if (get_pref($name, false) === false) {
-            set_pref($name, $value, $event, PREF_ADVANCED, $html, $position);
+            set_pref($name, $value, $event, defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $html, $position);
         }
     }
 
@@ -936,6 +938,7 @@ class rah_flat
         add_privs('prefs.rah_flat', '1');
         add_privs('prefs.rah_flat_var', '1');
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+        register_callback('rah_flat_options', 'plugin_prefs.rah_flat', null, 1);
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
@@ -948,9 +951,9 @@ class rah_flat
 
             $formsDir = txpath . '/' . get_pref('rah_flat_path') . '/forms';
             if (is_dir($formsDir)) {
-                foreach (array_diff(scandir($formsDir), array('.', '..')) as $formtype) {
-                    if (is_dir($formsDir . '/' . $formtype)) {
-                        new rah_flat_Import_Forms('forms/'.$formtype);
+                foreach (array_diff(scandir($formsDir), array('.', '..')) as $formType) {
+                    if (is_dir($formsDir . '/' . $formType)) {
+                        new rah_flat_Import_Forms('forms/'.$formType);
                     }
                 }
             }
@@ -995,11 +998,19 @@ class rah_flat
 
         foreach ($options as $name => $val) {
             if (get_pref($name, false) === false) {
-                set_pref($name, $val[1], 'rah_flat', PREF_ADVANCED, $val[0], $position);
+                set_pref($name, $val[1], 'rah_flat', defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $val[0], $position);
             }
 
             $position++;
         }
+    }
+
+    /**
+     * Jump to the prefs panel.
+     */
+    function rah_flat_options() {
+        $url = '?event=prefs#prefs_group_rah_flat';
+        header('Location: ' . $url);
     }
 
     /**
@@ -1008,8 +1019,8 @@ class rah_flat
 
     public function uninstall()
     {
-        safe_delete('txp_prefs', "name like 'oui\_flat\_%'");
-        safe_delete('txp_prefs', "event like 'oui\_flat\_var%'");
+        safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+        safe_delete('txp_prefs', "event like 'rah\_flat\_var%'");
     }
 
     /**
