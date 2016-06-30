@@ -87,13 +87,8 @@ h2. Installing
 
 h2. Preferences
 
-h3. Path to the templates directory
-
-Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
-
-h3. Security key for the public callback
-
-Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
+* *Path to the templates directory* - Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
+* *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
 
 bc. http://example.com/?rah_flat_key={yourKey}
 
@@ -136,6 +131,8 @@ h3. Structure
 ** styles
 *** example.css
 
+*Warning: while forms are now organised by types, they all still need to have different names.*
+
 h3. Sections
 
 Here is an example of content for an @about.json@ file.
@@ -150,6 +147,14 @@ bc.. {
     "searchable": true
 }
 
+* title - The title of the section.
+* page - The name of the section.
+* css - The stylesheet used by the section.
+* is_default - ?
+* in_rss - Whether to display section articles in the feeds or not.
+* on_frontpage - Whether to display section articles on the front page or not.
+* searchable - Use false to exclude section articles of the search results.
+
 h3. Preferences
 
 The plugin has set of preferences you can find on Textpattern's normal preferences panel.
@@ -158,6 +163,8 @@ Here is an example of content for a @rah_flat_Path.json@ file.
 bc.. {
     "val": "../my-folder",
 }
+
+* value - The value of the preference.
 
 h3. variables
 
@@ -171,7 +178,15 @@ bc.. {
     "is_private": true
 }
 
-You can then call your custom preference as a Txp variable like so:
+Each data is optional and the default values are the following:
+
+* value - _default: '' (empty)_ - The default value of the preference.
+* type - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_.
+* html - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
+* position _default: 0_ - Use position to sort your prefs.
+* is_private _default: false_ - If _true_, the pref will be user related.
+
+p. You can then call your custom preference as a Txp variable like so:
 
 bc. <txp:variable name="menu-sections" />
 
