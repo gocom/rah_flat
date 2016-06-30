@@ -1,5 +1,7 @@
 {
     "value": "A value",
+    "type": "PREF_HIDDEN",
     "html": "text_input",
-    "position": "10"
+    "position": "10",
+    "is_private": true
 }

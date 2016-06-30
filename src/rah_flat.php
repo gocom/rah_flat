@@ -18,7 +18,7 @@
 # $plugin['allow_html_help'] = 0;
 
 $plugin['version'] = '0.5.0-dev';
-$plugin['author'] = 'Jukka Svahn (modified by Nicolas Morand)';
+$plugin['author'] = 'Jukka Svahn (forked by Nicolas Morand)';
 $plugin['author_uri'] = '';
 $plugin['description'] = 'Edit Textpattern\'s database prefs, contents and page templates as flat files';
 
@@ -85,24 +85,7 @@ h2. Installing
 
 "download":https://github.com/NicolasGraph/rah_flat the plugin, paste it under the textpattern plugin tab, and upload it.
 
-h2. Basics
-
-rah_flat imports normal, flat files from a specified directory to your Textpattern database. This, in essence, lets you to edit your database contents from any regular editor and store the source as flat files.
-
-rah_flat comes with built-in support for a few essential content types: variables (via custom prefs), styles, forms, pages, preferences and sections. See the "templates":https://github.com/nicolasgraph/rah_flat/tree/master/templates directory on GitHub for an example how this all works.
-
-Your flat files are imported to the database:
-
-* Automatically on the background when the site is either in Debugging or Testing mode ^1^.
-* When the public callback hook URL is accessed. The URL can be used for deployment.
-
-1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
-
-If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
-
 h2. Preferences
-
-The plugin has set of preferences you can find on Textpattern's normal preferences panel.
 
 h3. Path to the templates directory
 
@@ -116,20 +99,92 @@ bc. http://example.com/?rah_flat_key={yourKey}
 
 Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
-h2. Toolshed notice
+h2. Basics
 
-This is a toolshed project. Experimental and not part of the main supported product line of Rah. Not yet at least. Please use at your own risk.
+Your flat files are imported to the database:
+
+* Automatically on the background when the site is either in Debugging or Testing mode ^1^.
+* When the public callback hook URL is accessed. The URL can be used for deployment.
+
+1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
+
+If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
+
+h3. Structure
+
+* my-folder
+** sections
+*** my-section.json
+** pages
+**** my-page.txp
+** forms
+*** article
+**** my-article-form.txp
+*** comment
+**** my-comment-form.txp
+*** category
+**** …
+*** section
+*** link
+*** file
+*** misc
+*** custom
+** prefs
+*** example.json
+** variables
+*** example.json
+** styles
+*** example.css
+
+h3. Sections
+
+Here is an example of content for an @about.json@ file.
+
+bc.. {
+    "title": "About",
+    "page": "default",
+    "css": "default",
+    "is_default": false,
+    "in_rss": false,
+    "on_frontpage": false,
+    "searchable": true
+}
+
+h3. Preferences
+
+The plugin has set of preferences you can find on Textpattern's normal preferences panel.
+Here is an example of content for a @rah_flat_Path.json@ file.
+
+bc.. {
+    "val": "../my-folder",
+}
+
+h3. variables
+
+Here is an example of content for a @sections.json@ file.
+
+bc.. {
+    "value": "articles, about, contact",
+    "type": "PREF_HIDDEN",
+    "html": "text_input",
+    "position": "10",
+    "is_private": true
+}
 
 h2. Changelog
 
-h4. Version 0.5.0-dev - 2016/06/27
+h3. Version 0.5.0-dev - 2016/06/30
 
-To do: Help and comments updates.
-Changed: Forms are stored by types in subfolders (custom types can be used).
-Changed: Forms get their type from their parent folder and don't need prefixes anymore.
+* To do: Help and comments updates.
+* Added: Custom prefs (in the variables folder) accept type and is_private.
+* Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
+* Changed: Forms are stored by types in subfolders.
+* Changed: Forms get their type from their parent folder and don't need prefixes anymore.
+* Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
 
-h4. Version 0.4.0 - 2015/11/29
+h3. Version 0.4.0 - 2015/11/29
 
+* Changed: Forked by Nicolas Morand.
 * Added: Custom preferences can be created and use as Txp variables.
 * Changed: Forms naming convention is now @type.name.txp@.
 
@@ -847,16 +902,18 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
     public function importTemplate(rah_flat_TemplateIterator $file)
     {
         extract(lAtts(array(
-            'value'    => '',
-            'html'     => 'text_input',
-            'position' => '',
+            'value'      => '',
+            'type'       => defined('PREF_PLUGIN') ? 'PREF_PLUGIN' : 'PREF_ADVANCED',
+            'html'       => 'text_input',
+            'position'   => '',
+            'is_private' => false,
         ), $file->getTemplateJSONContents(), false));
 
-		$event = 'rah_flat_var';
+        $event = 'rah_flat_var';
         $name = $event."_".$file->getTemplateName();
 
         if (get_pref($name, false) === false) {
-            set_pref($name, $value, $event, defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $html, $position);
+            set_pref($name, $value, $event, constant($type), $html, $position, $is_private);
         }
     }
 
@@ -875,6 +932,8 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
 
         if ($name) {
             safe_delete($this->getTableName(), 'event = "rah_flat_var" && name not in ('.implode(',', $name).')');
+        } else {
+            safe_delete($this->getTableName(), 'event = "rah_flat_var"');
         }
     }
 
@@ -941,8 +1000,9 @@ class rah_flat
     {
         add_privs('prefs.rah_flat', '1');
         add_privs('prefs.rah_flat_var', '1');
-        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback('rah_flat_options', 'plugin_prefs.rah_flat', null, 1);
+        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+        register_callback(array($this, 'disable'), 'plugin_lifecycle.rah_flat', 'disabled');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
@@ -953,10 +1013,10 @@ class rah_flat
             new rah_flat_Import_Pages('pages');
             new rah_flat_Import_Styles('styles');
 
-            $formsDir = txpath . '/' . get_pref('rah_flat_path') . '/forms';
-            if (is_dir($formsDir)) {
-                foreach (array_diff(scandir($formsDir), array('.', '..')) as $formType) {
-                    if (is_dir($formsDir . '/' . $formType)) {
+            $forms = txpath . '/' . get_pref('rah_flat_path') . '/forms';
+            if (file_exists($forms) && is_dir($forms) && is_readable($forms)) {
+                foreach (array_diff(scandir($forms), array('.', '..')) as $formType) {
+                    if (is_dir($forms . '/' . $formType)) {
                         new rah_flat_Import_Forms('forms/'.$formType);
                     }
                 }
@@ -979,11 +1039,11 @@ class rah_flat
 
     public function injectVars()
     {
-	    global $variable;
+        global $variable;
 
-		$prefset = safe_rows('name, val', 'txp_prefs', 'event = "rah_flat_var"');
+        $prefset = safe_rows('name, val', 'txp_prefs', 'event = "rah_flat_var"');
         foreach ($prefset as $pref) {
-            $variable[$pref['name']] = $pref['val'];
+            $variable[substr($pref['name'], strlen('rah_flat_var_'))] = $pref['val'];
         }
     }
 
@@ -1012,9 +1072,18 @@ class rah_flat
     /**
      * Jump to the prefs panel.
      */
-    function rah_flat_options() {
-        $url = '?event=prefs#prefs_group_rah_flat';
+    public function rah_flat_options() {
+        $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
         header('Location: ' . $url);
+    }
+
+    /**
+     * Disabled.
+     */
+
+    public function disable()
+    {
+        safe_update('txp_form', "type = 'misc'", "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')");
     }
 
     /**
