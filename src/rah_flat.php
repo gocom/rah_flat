@@ -161,7 +161,7 @@ bc.. {
 
 h3. variables
 
-Here is an example of content for a @sections.json@ file.
+Here is an example of content for a @menu-sections.json@ file.
 
 bc.. {
     "value": "articles, about, contact",
@@ -170,6 +170,10 @@ bc.. {
     "position": "10",
     "is_private": true
 }
+
+You can then call your custom preference as a Txp variable like so:
+
+bc. <txp:variable name="menu-sections" />
 
 h2. Changelog
 
