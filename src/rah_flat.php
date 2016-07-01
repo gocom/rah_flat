@@ -17,7 +17,7 @@
 // 1 = Plugin help is in raw HTML.  Not recommended.
 # $plugin['allow_html_help'] = 0;
 
-$plugin['version'] = '0.5.0-dev';
+$plugin['version'] = '0.5.0-beta';
 $plugin['author'] = 'Jukka Svahn (forked by Nicolas Morand)';
 $plugin['author_uri'] = '';
 $plugin['description'] = 'Edit Textpattern\'s database prefs, contents and page templates as flat files';
@@ -79,7 +79,7 @@ h1. rah_flat
 
 This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences, variables and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
 
-*Warning: this plugin will permanently remove your current templates when activated.*
+*Warning: this plugin will permanently remove your current templates when a valid path will be saved under the plugin prefs.*
 
 h2. Table of contents
 
@@ -98,7 +98,7 @@ h2. Table of contents
 
 h2(#requirements). Plugin requirements
 
-oui_instagram’s minimum requirements:
+rah_flat’s minimum requirements:
 
 * Textpattern 4.5+
 
@@ -129,7 +129,7 @@ If you want to exclude a certain content type from importing, just don't create 
 
 h3. About variables
 
-This plugin allow to set variables via flat files by setting custom preferences prefixed by _rah_flat_var__.
+This plugin allow to set variables via flat files by setting custom preferences.
 These prefs are visible by default under the _Preferences_ tab to allow users to set or change their value but you can also hide some of them (see "here":#variables) if they don't need to be override. Custom preferences are then injected by the plugin to be used as Txp variables like so: @<txp:variable name="my-variable"/>@ where _my-variable_ is the name of the related .json file.
 
 h2(#structure). Structure
@@ -178,26 +178,26 @@ bc.. {
 
 p. where:
 
-* title - The title of the section.
-* page - The name of the section.
-* css - The stylesheet used by the section.
-* is_default - ?
-* in_rss - Whether to display section articles in the feeds or not.
-* on_frontpage - Whether to display section articles on the front page or not.
-* searchable - Use false to exclude section articles of the search results.
+* @"title": "…"@ - The title of the section.
+* @"page": "…"@ - The name of the section.
+* @"css": "…"@ - The stylesheet used by the section.
+* @"is_default": "…"@ - ?
+* @"in_rss": "…"@ - Whether to display section articles in the feeds or not.
+* @"on_frontpage": "…"@ - Whether to display section articles on the front page or not.
+* @"searchable": "…"@ - Use false to exclude section articles of the search results.
 
 h3(#preferences). Preferences
 
 The plugin has set of preferences you can find on Textpattern's normal preferences panel.
-Here is an example of content for a @rah_flat_Path.json@ file.
+Here is an example of content for a @sitename.json@ file.
 
 bc.. {
-    "value": "../my-folder"
+    "value": "My website"
 }
 
 p. where:
 
-* value - The value of the preference.
+* @"value": "…"@ - The value of the preference.
 
 h3(#variables). variables (through custom prefs)
 
@@ -206,6 +206,7 @@ Here is an example of content for a @menu-sections.json@ file.
 bc.. {
     "value": "articles, about, contact",
     "type": "PREF_HIDDEN",
+    "event": "rah_flat_var",
     "html": "text_input",
     "position": "10",
     "is_private": true
@@ -213,11 +214,12 @@ bc.. {
 
 p. where each data is optional and the default values are the following:
 
-* value - _default: '' (empty)_ - The default value of the preference.
-* type - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_.
-* html - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
-* position _default: 0_ - Use position to sort your prefs.
-* is_private _default: false_ - If _true_, the pref will be user related.
+* @"value": "…"@ - _default: '' (empty)_ - The default value of the preference.
+* @"type": "…"@ - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_, you should probably not use _PREF_CORE_.
+* "event": "…" - _default: 'rah_flat_var'_ - The prefs group name where you want to display your custom pref.
+* @"html": "…"@ - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
+* @"position": "…"@ - _default: 0_ - Use position to sort your prefs.
+* @"is_private": "…"@ - _default: false_ - If _true_, the pref will be user related.
 
 p. You can then call your custom preference as a Txp variable like so:
 
@@ -227,19 +229,26 @@ h2(#author). Author
 
 "Jukka Svahn":http://rahforum.biz/, forked by "Nicolas Morand":https://github.com/ from v0.3.0.
 
+h2(#licence). Licence
+
+This plugin is distributed under "GPLv2":http://www.gnu.org/licenses/gpl-2.0.fr.html.
+
 h2(#Changelog). Changelog
 
-h3. Version 0.5.0-dev - 2016/06/30
+* To do: Improve code comments?
 
-* To do: Help and comments updates.
-* Added: Prefs are hidden in the admin if set via flat files.
-* Added: Custom prefs (in the variables folder) accept type and is_private.
-* Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
-* Changed: Forms are stored by types in subfolders.
-* Changed: Forms get their type from their parent folder and don't need prefixes anymore.
+To do: Fix the _Options_ link
+
+h3. Version 0.5.0-beta - 2016/07/04
+
+* Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
 * Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
+* Changed: Preferences update affects values only.
+* Added: Prefs are hidden in the admin if set via flat files and get back to visible when the plugin is disabled.
+* Added: Custom prefs (in the variables folder) accept more paramters in .json files.
+* Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
 
-h3. Version 0.4.0 - 2015/11/29
+h3. Version 0.4.0 (named oui_flat) - 2015/11/29
 
 * Changed: Forked by Nicolas Morand.
 * Added: Custom preferences can be created and use as Txp variables.
@@ -904,8 +913,8 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
         ), $file->getTemplateJSONContents(), false));
 
         safe_update('txp_prefs', "val = '".doSlash($value)."'", "name = '".doSlash($file->getTemplateName())."' && type = '2'");
-        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '4'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
-        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '3'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
+        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '21'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
+        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '20'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
      }
 
     /**
@@ -922,11 +931,11 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
         }
 
         if ($name) {
-            safe_update($this->getTableName(), "type = '0'", 'type = "3" && name not in ('.implode(',', $name).')');
-            safe_update($this->getTableName(), "type = '1'", 'type = "4" && name not in ('.implode(',', $name).')');
+            safe_update($this->getTableName(), "type = '0'", 'type = "20" && name not in ('.implode(',', $name).')');
+            safe_update($this->getTableName(), "type = '1'", 'type = "21" && name not in ('.implode(',', $name).')');
         } else {
-            safe_update($this->getTableName(), "type = '0'", "type = '3'");
-            safe_update($this->getTableName(), "type = '1'", "type = '4'");
+            safe_update($this->getTableName(), "type = '0'", "type = '20'");
+            safe_update($this->getTableName(), "type = '1'", "type = '21'");
         }
      }
 
@@ -972,13 +981,13 @@ class rah_flat_Import_Variables extends rah_flat_Import_Prefs
         extract(lAtts(array(
             'value'      => '',
             'type'       => defined('PREF_PLUGIN') ? 'PREF_PLUGIN' : 'PREF_ADVANCED',
+            'event'      => 'rah_flat_var',
             'html'       => 'text_input',
             'position'   => '',
             'is_private' => false,
         ), $file->getTemplateJSONContents(), false));
 
-        $event = 'rah_flat_var';
-        $name = $event."_".$file->getTemplateName();
+        $name = 'rah_flat_var_'.$file->getTemplateName();
 
         if (get_pref($name, false) === false) {
             set_pref($name, $value, $event, constant($type), $html, $position, $is_private);
@@ -1116,7 +1125,9 @@ class rah_flat
     }
 
     /**
-     * Installer.
+     * Installer
+     *
+     * Set plugin prefs.
      */
 
     public function install()
@@ -1124,7 +1135,7 @@ class rah_flat
         $position = 250;
 
         $options = array(
-            'rah_flat_path' => array('text_input', '../../src/templates'),
+            'rah_flat_path' => array('text_input', ''),
             'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
         );
 
@@ -1140,32 +1151,37 @@ class rah_flat
     /**
      * Jump to the prefs panel.
      */
+
     public function rah_flat_options() {
         $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
         header('Location: ' . $url);
     }
 
     /**
-     * Disabled.
+     * Disabled event
+     *
+     * Changes custom form types to misc;
+     * restores pref types.
      */
 
     public function disable()
     {
         safe_update('txp_form', "type = 'misc'", "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')");
-        safe_update('txp_prefs', "type = '0'", "type = '3'");
-        safe_update('txp_prefs', "type = '1'", "type = '4'");
+        safe_update('txp_prefs', "type = '0'", "type = '20'");
+        safe_update('txp_prefs', "type = '1'", "type = '21'");
     }
 
     /**
-     * Uninstaller.
+     * Uninstaller
+     *
+     * Removes plugin prefs;
+     * removes textpack strings.
      */
 
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
-        safe_delete('txp_prefs', "name like 'rah\_flat\_var\_%'");
         safe_delete('txp_lang', "name like 'rah\_flat\_%'");
-        safe_delete('txp_lang', "name like 'rah\_flat\_var\_%'");
     }
 
     /**
