@@ -1118,7 +1118,7 @@ class rah_flat
     {
         global $variable;
 
-        $prefset = safe_rows('name, val', 'txp_prefs', 'event = "rah_flat_var"');
+        $prefset = safe_rows('name, val', 'txp_prefs', "name like 'rah\_flat\_var\_%'");
         foreach ($prefset as $pref) {
             $variable[substr($pref['name'], strlen('rah_flat_var_'))] = $pref['val'];
         }
