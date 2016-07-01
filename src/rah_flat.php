@@ -81,11 +81,33 @@ This plugin makes your "Textpattern CMS":http://www.textpattern.com database mor
 
 *Warning: this plugin will permanently remove your current templates when activated.*
 
-h2. Installing
+h2. Table of contents
 
-"download":https://github.com/NicolasGraph/rah_flat the plugin, paste it under the textpattern plugin tab, and upload it.
+* "Plugin requirements":#requirements
+* "Installation":#installation
+* "Preferences":#prefs
+* "Basics":#basics
+* "Stucture":#structure
+* "File examples":#examples
+** "Sections":#sections
+** "Preferences":#preferences
+** "Variables":#variables
+* "Author":#author
+* "Licence":#licence
+* "Changelog":#changelog
 
-h2. Preferences
+h2(#requirements). Plugin requirements
+
+oui_instagram’s minimum requirements:
+
+* Textpattern 4.5+
+
+h2(#installation). Installation
+
+# Paste the content of the plugin file under the *Admin > Plugins*, upload it and install;
+# Visit the *Admin>Preferences* tab to fill the plugin prefs.
+
+h2(#prefs). Preferences / options
 
 * *Path to the templates directory* - Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
 * *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
@@ -94,7 +116,7 @@ bc. http://example.com/?rah_flat_key={yourKey}
 
 Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
-h2. Basics
+h2(#basics). Basics
 
 Your flat files are imported to the database:
 
@@ -105,7 +127,12 @@ Your flat files are imported to the database:
 
 If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
 
-h3. Structure
+h3. About variables
+
+This plugin allow to set variables via flat files by setting custom preferences prefixed by _rah_flat_var__.
+These prefs are visible by default under the _Preferences_ tab to allow users to set or change their value but you can also hide some of them (see "here":#variables) if they don't need to be override. Custom preferences are then injected by the plugin to be used as Txp variables like so: @<txp:variable name="my-variable"/>@ where _my-variable_ is the name of the related .json file.
+
+h2(#structure). Structure
 
 * my-folder
 ** sections
@@ -125,15 +152,17 @@ h3. Structure
 *** misc
 *** custom
 ** prefs
-*** example.json
+*** rah_flat_path.json
 ** variables
-*** example.json
+*** my-variable.json
 ** styles
-*** example.css
+*** my-styles.css
 
 *Warning: while forms are now organised by types, they all still need to have different names.*
 
-h3. Sections
+h2(#examples). File examples
+
+h3(#sections). Sections
 
 Here is an example of content for an @about.json@ file.
 
@@ -147,6 +176,8 @@ bc.. {
     "searchable": true
 }
 
+p. where:
+
 * title - The title of the section.
 * page - The name of the section.
 * css - The stylesheet used by the section.
@@ -155,18 +186,20 @@ bc.. {
 * on_frontpage - Whether to display section articles on the front page or not.
 * searchable - Use false to exclude section articles of the search results.
 
-h3. Preferences
+h3(#preferences). Preferences
 
 The plugin has set of preferences you can find on Textpattern's normal preferences panel.
 Here is an example of content for a @rah_flat_Path.json@ file.
 
 bc.. {
-    "val": "../my-folder",
+    "value": "../my-folder"
 }
+
+p. where:
 
 * value - The value of the preference.
 
-h3. variables
+h3(#variables). variables (through custom prefs)
 
 Here is an example of content for a @menu-sections.json@ file.
 
@@ -178,7 +211,7 @@ bc.. {
     "is_private": true
 }
 
-Each data is optional and the default values are the following:
+p. where each data is optional and the default values are the following:
 
 * value - _default: '' (empty)_ - The default value of the preference.
 * type - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_.
@@ -190,11 +223,16 @@ p. You can then call your custom preference as a Txp variable like so:
 
 bc. <txp:variable name="menu-sections" />
 
-h2. Changelog
+h2(#author). Author
+
+"Jukka Svahn":http://rahforum.biz/, forked by "Nicolas Morand":https://github.com/ from v0.3.0.
+
+h2(#Changelog). Changelog
 
 h3. Version 0.5.0-dev - 2016/06/30
 
 * To do: Help and comments updates.
+* Added: Prefs are hidden in the admin if set via flat files.
 * Added: Custom prefs (in the variables folder) accept type and is_private.
 * Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
 * Changed: Forms are stored by types in subfolders.
@@ -859,27 +897,38 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function importTemplate(rah_flat_TemplateIterator $file)
-    {
-        $sql = array();
-        $where = "name = '".doSlash($file->getTemplateName())."' and user_name = ''";
+     public function importTemplate(rah_flat_TemplateIterator $file)
+     {
+        extract(lAtts(array(
+            'value'      => '',
+        ), $file->getTemplateJSONContents(), false));
 
-        foreach ($file->getTemplateJSONContents() as $key => $value) {
-            if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
-                $sql[] = $this->formatStatement($key, $value);
-            }
-        }
-
-        return $sql && safe_update($this->getTableName(), implode(',', $sql), $where);
-    }
+        safe_update('txp_prefs', "val = '".doSlash($value)."'", "name = '".doSlash($file->getTemplateName())."' && type = '2'");
+        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '4'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
+        safe_update('txp_prefs', "val = '".doSlash($value)."', type = '3'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
+     }
 
     /**
      * {@inheritdoc}
      */
 
-    public function dropRemoved(rah_flat_TemplateIterator $template)
-    {
-    }
+     public function dropRemoved(rah_flat_TemplateIterator $template)
+     {
+        $name = array();
+
+        while ($template->valid()) {
+            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $template->next();
+        }
+
+        if ($name) {
+            safe_update($this->getTableName(), "type = '0'", 'type = "3" && name not in ('.implode(',', $name).')');
+            safe_update($this->getTableName(), "type = '1'", 'type = "4" && name not in ('.implode(',', $name).')');
+        } else {
+            safe_update($this->getTableName(), "type = '0'", "type = '3'");
+            safe_update($this->getTableName(), "type = '1'", "type = '4'");
+        }
+     }
 
     /**
      * {@inheritdoc}
@@ -1103,6 +1152,8 @@ class rah_flat
     public function disable()
     {
         safe_update('txp_form', "type = 'misc'", "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')");
+        safe_update('txp_prefs', "type = '0'", "type = '3'");
+        safe_update('txp_prefs', "type = '1'", "type = '4'");
     }
 
     /**
