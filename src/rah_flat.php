@@ -237,7 +237,7 @@ h2(#Changelog). Changelog
 
 * To do: Improve code comments?
 
-To do: Fix the _Options_ link
+To do: Fix the _Options_ link.
 
 h3. Version 0.5.0-beta - 2016/07/04
 
@@ -1069,6 +1069,8 @@ class rah_flat_Import_Styles extends rah_flat_Import_Pages
 
 class rah_flat
 {
+    protected $deleted;
+
     /**
      * Constructor.
      */
@@ -1077,7 +1079,7 @@ class rah_flat
     {
         add_privs('prefs.rah_flat', '1');
         add_privs('prefs.rah_flat_var', '1');
-        register_callback('rah_flat_options', 'plugin_prefs.rah_flat', null, 1);
+        register_callback(array($this, 'options'), 'plugin_prefs.rah_flat', null, 1);
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback(array($this, 'disable'), 'plugin_lifecycle.rah_flat', 'disabled');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
@@ -1152,7 +1154,7 @@ class rah_flat
      * Jump to the prefs panel.
      */
 
-    public function rah_flat_options() {
+    public function options() {
         $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
         header('Location: ' . $url);
     }
@@ -1182,6 +1184,7 @@ class rah_flat
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
         safe_delete('txp_lang', "name like 'rah\_flat\_%'");
+        $this->deleted = 'skip_reload';
     }
 
     /**
@@ -1199,10 +1202,12 @@ class rah_flat
 
     public function callbackHandler()
     {
-        try {
-            callback_event('rah_flat.import');
-        } catch (Exception $e) {
-            trigger_error($e->getMessage());
+        if ($this->deleted !== 'skip_reload') {
+            try {
+                callback_event('rah_flat.import');
+            } catch (Exception $e) {
+                trigger_error($e->getMessage());
+            }
         }
     }
 
