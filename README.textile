@@ -1,6 +1,6 @@
 h1. rah_flat <img src="https://img.shields.io/badge/Textpattern-4.5+-brightgreen.svg" /> <img src="https://img.shields.io/github/release/NicolasGraph/rah_flat.svg" />
 
-"Download":https://github.com/NicolasGraph/rah_flat/releases" | Donate to the original author":http://rahforum.biz/donate/rah_flat
+"Download":https://github.com/NicolasGraph/rah_flat/releases" | "Donate to the original author":http://rahforum.biz/donate/rah_flat
 
 This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences, variables and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
 
