@@ -1069,7 +1069,7 @@ class rah_flat_Import_Styles extends rah_flat_Import_Pages
 
 class rah_flat
 {
-    protected $deleted;
+    protected $deleting = false;
 
     /**
      * Constructor.
@@ -1077,12 +1077,14 @@ class rah_flat
 
     public function __construct()
     {
-        add_privs('prefs.rah_flat', '1');
-        add_privs('prefs.rah_flat_var', '1');
-        register_callback(array($this, 'options'), 'plugin_prefs.rah_flat', null, 1);
-        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
-        register_callback(array($this, 'disable'), 'plugin_lifecycle.rah_flat', 'disabled');
-        register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+        if (@txpinterface == 'admin') {
+            add_privs('prefs.rah_flat', '1');
+            add_privs('prefs.rah_flat_var', '1');
+            register_callback(array($this, 'options'), 'plugin_prefs.rah_flat', null, 1);
+            register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+            register_callback(array($this, 'disable'), 'plugin_lifecycle.rah_flat', 'disabled');
+            register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+        }
 
         if (get_pref('rah_flat_path')) {
 
@@ -1091,7 +1093,6 @@ class rah_flat
             new rah_flat_Import_Sections('sections');
             new rah_flat_Import_Pages('pages');
             new rah_flat_Import_Styles('styles');
-
             $forms = txpath . '/' . get_pref('rah_flat_path') . '/forms';
             if (file_exists($forms) && is_dir($forms) && is_readable($forms)) {
                 foreach (array_diff(scandir($forms), array('.', '..')) as $formType) {
@@ -1184,7 +1185,7 @@ class rah_flat
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
         safe_delete('txp_lang', "name like 'rah\_flat\_%'");
-        $this->deleted = 'skip_reload';
+        $this->deleting = true;
     }
 
     /**
@@ -1202,7 +1203,7 @@ class rah_flat
 
     public function callbackHandler()
     {
-        if ($this->deleted !== 'skip_reload') {
+        if (!$this->deleting) {
             try {
                 callback_event('rah_flat.import');
             } catch (Exception $e) {
