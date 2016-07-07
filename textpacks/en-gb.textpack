@@ -1,0 +1,6 @@
+#@admin
+#Default language, en-us, en-gb
+rah_flat => Template files (rah_flat)
+rah_flat_path => Templates path
+rah_flat_key => Update key
+rah_flat_var => Template variables (rah_flat)
