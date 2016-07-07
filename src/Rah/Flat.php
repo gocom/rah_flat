@@ -1,52 +1,57 @@
 <?php
 
-/*
- * rah_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/rah_flat
- *
- * Copyright (C) 2015 Jukka Svahn
- *
- * This file is part of rah_flat.
- *
- * rah_flat is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2.
- *
- * rah_flat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
- */
-
 /**
  * Main plugin class.
  *
  * @internal
  */
 
-class Rah_Flat
+class rah_flat
 {
+    protected $deleting = false;
+
     /**
      * Constructor.
      */
 
     public function __construct()
     {
-        add_privs('prefs.rah_flat', '1');
-        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
-        register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+        if (@txpinterface == 'admin') {
+            add_privs('prefs.rah_flat', '1');
+            add_privs('prefs.rah_flat_var', '1');
+            register_callback(array($this, 'options'), 'plugin_prefs.rah_flat', null, 1);
+            register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
+            register_callback(array($this, 'disable'), 'plugin_lifecycle.rah_flat', 'disabled');
+            register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
+        }
 
         if (get_pref('rah_flat_path')) {
 
-            new Rah_Flat_Import_Prefs('prefs');
-            new Rah_Flat_Import_Sections('sections');
-            new Rah_Flat_Import_Pages('pages');
-            new Rah_Flat_Import_Forms('forms');
-            new Rah_Flat_Import_Styles('styles');
+            new rah_flat_Import_Variables('variables');
+            new rah_flat_Import_Prefs('prefs');
+            new rah_flat_Import_Sections('sections');
+            new rah_flat_Import_Pages('pages');
+            new rah_flat_Import_Styles('styles');
+            $forms = txpath . '/' . get_pref('rah_flat_path') . '/forms';
+            if (file_exists($forms) && is_dir($forms) && is_readable($forms)) {
+                foreach (array_diff(scandir($forms), array('.', '..')) as $formType) {
+                    if (is_dir($forms . '/' . $formType)) {
+                        new rah_flat_Import_Forms('forms/'.$formType);
+                    }
+                }
+            }
+            $textpacks = txpath . '/' . get_pref('rah_flat_path') . '/textpacks';
+            if (file_exists($textpacks) && is_dir($textpacks) && is_readable($textpacks)) {
+                foreach (array_diff(scandir($textpacks), array('.', '..')) as $lang) {
+                    if (is_dir($textpacks . '/' . $lang)) {
+                        new rah_flat_Import_Textpacks('textpacks/'.$lang.'/admin');
+                        new rah_flat_Import_Textpacks('textpacks/'.$lang.'/public');
+                        new rah_flat_Import_Textpacks('textpacks/'.$lang.'/common');
+                    }
+                }
+            }
 
+            register_callback(array($this, 'injectVars'), 'pretext_end');
             register_callback(array($this, 'endpoint'), 'textpattern');
             register_callback(array($this, 'initWrite'), 'rah_flat.import');
 
@@ -58,7 +63,23 @@ class Rah_Flat
     }
 
     /**
-     * Installer.
+     * Inject Variables.
+     */
+
+    public function injectVars()
+    {
+        global $variable;
+
+        $prefset = safe_rows('name, val', 'txp_prefs', "name like 'rah\_flat\_var\_%'");
+        foreach ($prefset as $pref) {
+            $variable[substr($pref['name'], strlen('rah_flat_var_'))] = $pref['val'];
+        }
+    }
+
+    /**
+     * Installer
+     *
+     * Set plugin prefs.
      */
 
     public function install()
@@ -66,13 +87,13 @@ class Rah_Flat
         $position = 250;
 
         $options = array(
-            'rah_flat_path' => array('text_input', '../../src/templates'),
+            'rah_flat_path' => array('text_input', ''),
             'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
         );
 
         foreach ($options as $name => $val) {
             if (get_pref($name, false) === false) {
-                set_pref($name, $val[1], 'rah_flat', PREF_ADVANCED, $val[0], $position);
+                set_pref($name, $val[1], 'rah_flat', defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $val[0], $position);
             }
 
             $position++;
@@ -80,12 +101,40 @@ class Rah_Flat
     }
 
     /**
-     * Uninstaller.
+     * Jump to the prefs panel.
+     */
+
+    public function options() {
+        $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
+        header('Location: ' . $url);
+    }
+
+    /**
+     * Disabled event
+     *
+     * Changes custom form types to misc;
+     * restores pref types.
+     */
+
+    public function disable()
+    {
+        safe_update('txp_form', "type = 'misc'", "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')");
+        safe_update('txp_prefs', "type = '0'", "type = '20'");
+        safe_update('txp_prefs', "type = '1'", "type = '21'");
+    }
+
+    /**
+     * Uninstaller
+     *
+     * Removes plugin prefs;
+     * removes textpack strings.
      */
 
     public function uninstall()
     {
         safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+        safe_delete('txp_lang', "owner = 'rah_flat'");
+        $this->deleting = true;
     }
 
     /**
@@ -103,10 +152,12 @@ class Rah_Flat
 
     public function callbackHandler()
     {
-        try {
-            callback_event('rah_flat.import');
-        } catch (Exception $e) {
-            trigger_error($e->getMessage());
+        if (!$this->deleting) {
+            try {
+                callback_event('rah_flat.import');
+            } catch (Exception $e) {
+                trigger_error($e->getMessage());
+            }
         }
     }
 
@@ -141,4 +192,4 @@ class Rah_Flat
     }
 }
 
-new Rah_Flat();
+new rah_flat();

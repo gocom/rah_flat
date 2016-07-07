@@ -1,23 +1,23 @@
 {
-    "name": "rah_flat",
-    "description": "Edit templates as flat files",
-    "version": "0.3.0",
-    "type": 1,
-    "author": "Jukka Svahn",
-    "author_uri": "http://rahforum.biz",
-    "order": 5,
-    "flags": 2,
-    "help": {"file" : ["./README.textile"]},
+    "name"        : "rah_flat",
+    "description" : "Edit Textpattern's database prefs, contents and page templates as flat files",
+    "version"     : "0.5.0-beta",
+    "type"        : 1,
+    "author"      : "Jukka Svahn (forked by Nicolas Morand)",
+    "author_uri"  : "http://github.com/NicolasGraph",
+    "order"       : 5,
+    "flags"       : 3,
+    "help"        : {"file" : ["./README.textile"]},
     "code": {"file" : [
         "./src/Rah/Flat/TemplateIterator.php",
-        "./src/Rah/Flat/FormIterator.php",
         "./src/Rah/Flat/Import/ImportInterface.php",
         "./src/Rah/Flat/Import/Base.php",
         "./src/Rah/Flat/Import/Pages.php",
         "./src/Rah/Flat/Import/Forms.php",
         "./src/Rah/Flat/Import/Sections.php",
         "./src/Rah/Flat/Import/Prefs.php",
+        "./src/Rah/Flat/Import/Variables.php",
         "./src/Rah/Flat/Import/Styles.php",
         "./src/Rah/Flat.php"
-    ]}
+]}
 }

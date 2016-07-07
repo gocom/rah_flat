@@ -27,7 +27,7 @@
  * This class iterates over template files.
  *
  * <code>
- * $template = new Rah_Flat_TemplateIterator();
+ * $template = new rah_flat_TemplateIterator();
  * while ($template->valid()) {
  *  $template->getTemplateName();
  *  $template->getTemplateContents();
@@ -37,7 +37,7 @@
  * @see DirectoryIterator
  */
 
-class Rah_Flat_TemplateIterator extends DirectoryIterator
+class rah_flat_TemplateIterator extends DirectoryIterator
 {
     /**
      * Template name pattern.
