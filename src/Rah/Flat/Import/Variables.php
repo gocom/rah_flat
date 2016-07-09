@@ -22,10 +22,10 @@
  */
 
 /**
- * Imports preferences.
+ * Imports custom preferences (variables).
  */
 
-class rah_flat_Import_Prefs extends rah_flat_Import_Sections
+class rah_flat_Import_Variables extends rah_flat_Import_Prefs
 {
     /**
      * {@inheritdoc}
@@ -49,38 +49,43 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-     public function importTemplate(rah_flat_TemplateIterator $file)
-     {
+    public function importTemplate(rah_flat_TemplateIterator $file)
+    {
         extract(lAtts(array(
             'value'      => '',
+            'type'       => defined('PREF_PLUGIN') ? 'PREF_PLUGIN' : 'PREF_ADVANCED',
+            'event'      => 'rah_flat_var',
+            'html'       => 'text_input',
+            'position'   => '',
+            'is_private' => false,
         ), $file->getTemplateJSONContents(), false));
 
-        safe_update($this->getTableName(), "val = '".doSlash($value)."'", "name = '".doSlash($file->getTemplateName())."' && type = '2'");
-        safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '21'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
-        safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '20'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
-     }
+        $name = 'rah_flat_var_'.$file->getTemplateName();
+
+        if (get_pref($name, false) === false) {
+            set_pref($name, $value, $event, constant($type), $html, $position, $is_private);
+        }
+    }
 
     /**
      * {@inheritdoc}
      */
 
-     public function dropRemoved(rah_flat_TemplateIterator $template)
-     {
+    public function dropRemoved(rah_flat_TemplateIterator $template)
+    {
         $name = array();
 
         while ($template->valid()) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $name[] = "'rah_flat_var_".doSlash($template->getTemplateName())."'";
             $template->next();
         }
 
         if ($name) {
-            safe_update($this->getTableName(), "type = '0'", 'type = "20" && name not in ('.implode(',', $name).')');
-            safe_update($this->getTableName(), "type = '1'", 'type = "21" && name not in ('.implode(',', $name).')');
+            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%" && name not in ('.implode(',', $name).')');
         } else {
-            safe_update($this->getTableName(), "type = '0'", "type = '20'");
-            safe_update($this->getTableName(), "type = '1'", "type = '21'");
+            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%"');
         }
-     }
+    }
 
     /**
      * {@inheritdoc}

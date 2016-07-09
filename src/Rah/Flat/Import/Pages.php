@@ -25,7 +25,7 @@
  * Imports page templates.
  */
 
-class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
+class rah_flat_Import_Pages extends rah_flat_Import_Base
 {
     /**
      * {@inheritdoc}
@@ -49,7 +49,7 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function importTemplate(Rah_Flat_TemplateIterator $file)
+    public function importTemplate(rah_flat_TemplateIterator $file)
     {
         safe_upsert(
             $this->getTableName(),
@@ -62,7 +62,7 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template)
+    public function dropRemoved(rah_flat_TemplateIterator $template)
     {
         $name = array();
 

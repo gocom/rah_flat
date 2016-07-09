@@ -1,55 +1,202 @@
 h1. rah_flat
 
-"Download":https://github.com/gocom/rah_flat/releases | "Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":http://rahforum.biz/donate/rah_flat
+"Download":https://github.com/NicolasGraph/rah_flat/releases | "Donate to the original author":http://rahforum.biz/donate/rah_flat
 
-This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
+This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences, variables and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
 
-*Warning: this plugin will permanently remove your current templates when activated.*
+*Warning: this plugin will permanently remove your current templates when a valid path will be saved under the plugin prefs.*
 
-h2. Installing
+h2. Table of contents
 
-Using "Composer":http://getcomposer.org:
+* "Plugin requirements":#requirements
+* "Installation":#installation
+* "Preferences":#prefs
+* "Basics":#basics
+* "Stucture":#structure
+* "File examples":#examples
+** "Sections":#sections
+** "Preferences":#preferences
+** "Variables":#variables
+** "textpacks":#textpacks
+* "Author":#author
+* "Licence":#licence
+* "Changelog":#changelog
 
-bc. $ composer require rah/rah_flat:*
+h2(#requirements). Plugin requirements
 
-Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
+rah_flat’s minimum requirements:
 
-h2. Basics
+* Textpattern 4.5+
 
-Rah_flat imports normal, flat files from a specified directory to your Textpattern database. This, in essence, lets you to edit your database contents from any regular editor and store the source as flat files.
+h2(#installation). Installation
 
-Rah_flat comes with built-in support for a few essential content types: styles, forms, pages, preferences and sections. See the "templates":https://github.com/gocom/rah_flat/tree/master/templates directory on GitHub for an example how this all works.
+# Paste the content of the plugin file under the *Admin > Plugins*, upload it and install;
+# Visit the *Admin>Preferences* tab to fill the plugin prefs.
 
-Your flat files are imported to the database:
+h2(#prefs). Preferences / options
 
-* Automatically on the background when the site is either in Debugging or Testing mode.
-* When the public callback hook URL is accessed. The URL can be used for deployment.
-
-If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
-
-h2. Preferences
-
-The plugin has set of preferences you can find on Textpattern's normal preferences panel.
-
-h3. Path to the templates directory
-
-Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../templates@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
-
-h3. Security key for the public callback
-
-Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
+* *Path to the templates directory* - Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
+* *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
 
 bc. http://example.com/?rah_flat_key={yourKey}
 
 Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
-h2. Toolshed notice
+h2(#basics). Basics
 
-This is a toolshed project. Experimental and not part of the main supported product line of Rah. Not yet at least. Please use at your own risk.
+Your flat files are imported to the database:
 
-h2. Changelog
+* Automatically on the background when the site is either in Debugging or Testing mode ^1^.
+* When the public callback hook URL is accessed. The URL can be used for deployment.
 
-h3. Version 0.3.0 - 2014/03/28
+1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
+
+If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
+
+h3. About variables
+
+This plugin allow to set variables via flat files by setting custom preferences.
+These prefs are visible by default under the _Preferences_ tab to allow users to set or change their value but you can also hide some of them (see "here":#variables) if they don't need to be override. Custom preferences are then injected by the plugin to be used as Txp variables like so: @<txp:variable name="my-variable"/>@ where _my-variable_ is the name of the related .json file.
+
+h2(#structure). Structure
+
+* my-folder
+** sections
+*** my-section.json
+** pages
+**** my-page.txp
+** forms
+*** article
+**** my-article-form.txp
+*** comment
+**** my-comment-form.txp
+*** category
+**** …
+*** section
+*** link
+*** file
+*** misc
+*** custom
+** prefs
+*** rah_flat_path.json
+** variables
+*** my-variable.json
+** styles
+*** my-styles.css
+
+*Warning: while forms are now organised by types, they all still need to have different names.*
+
+h2(#examples). File examples
+
+h3(#sections). Sections
+
+Here is an example of content for an @about.json@ file.
+
+bc.. {
+    "title": "About",
+    "page": "default",
+    "css": "default",
+    "is_default": false,
+    "in_rss": false,
+    "on_frontpage": false,
+    "searchable": true
+}
+
+p. where:
+
+* @"title": "…"@ - The title of the section.
+* @"page": "…"@ - The name of the section.
+* @"css": "…"@ - The stylesheet used by the section.
+* @"is_default": "…"@ - ?
+* @"in_rss": "…"@ - Whether to display section articles in the feeds or not.
+* @"on_frontpage": "…"@ - Whether to display section articles on the front page or not.
+* @"searchable": "…"@ - Use false to exclude section articles of the search results.
+
+h3(#preferences). Preferences
+
+The plugin has set of preferences you can find on Textpattern's normal preferences panel.
+Here is an example of content for a @sitename.json@ file.
+
+bc.. {
+    "value": "My website"
+}
+
+p. where:
+
+* @"value": "…"@ - The value of the preference.
+
+h3(#variables). Variables (through custom prefs)
+
+Here is an example of content for a @menu-sections.json@ file.
+
+bc.. {
+    "value": "articles, about, contact",
+    "type": "PREF_HIDDEN",
+    "event": "rah_flat_var",
+    "html": "text_input",
+    "position": "10",
+    "is_private": true
+}
+
+p. where each data is optional and the default values are the following:
+
+* @"value": "…"@ - _default: '' (empty)_ - The default value of the preference.
+* @"type": "…"@ - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_, you should probably not use _PREF_CORE_.
+* "event": "…" - _default: 'rah_flat_var'_ - The prefs group name where you want to display your custom pref.
+* @"html": "…"@ - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
+* @"position": "…"@ - _default: 0_ - Use position to sort your prefs.
+* @"is_private": "…"@ - _default: false_ - If _true_, the pref will be user related.
+
+p. You can then call your custom preference as a Txp variable like so:
+
+bc. <txp:variable name="menu-sections" />
+
+h3(#textpacks). Textpacks
+
+Here is an example of content for a @en-gb.json@ file.
+
+bc.. {
+    "admin": {
+        "admin_side_text_item": "An admin side text item"
+    },
+    "common": {
+    },
+    "public": {
+        "public_side_text_item": "A public side text item",
+        "another_text_item": "Another public side text item"
+    }
+}
+
+h2(#author). Author
+
+"Jukka Svahn":http://rahforum.biz/, forked by "Nicolas Morand":https://github.com/ from v0.3.0.
+
+h2(#licence). Licence
+
+This plugin is distributed under "GPLv2":http://www.gnu.org/licenses/gpl-2.0.fr.html.
+
+h2(#Changelog). Changelog
+
+* To do: Improve code comments?
+
+To do: Fix the _Options_ link.
+
+h3. Version 0.5.0-beta - 2016/07/04
+
+* Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
+* Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
+* Changed: Preferences update affects values only.
+* Added: Prefs are hidden in the admin if set via flat files and get back to visible when the plugin is disabled.
+* Added: Custom prefs (in the variables folder) accept more paramters in .json files.
+* Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
+
+h3. Version 0.4.0 (named oui_flat) - 2015/11/29
+
+* Changed: Forked by Nicolas Morand.
+* Added: Custom preferences can be created and use as Txp variables.
+* Changed: Forms naming convention is now @type.name.txp@.
+
+h3. Version 0.3.0 (rah_flat) - 2014/03/28
 
 * Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
 * Added: Invokable @rah_flat.import@ callback event.
@@ -57,12 +204,12 @@ h3. Version 0.3.0 - 2014/03/28
 * Added: Preferences are always just updated, no strands are created.
 * Added: Preference fields that are not specified in a file are kept as-is in the database.
 * Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
-* Changed: Renamed confusing @Rah_Flat_Import_Template@ interface to @Rah_Flat_Import_ImportInterface@.
+* Changed: Renamed confusing @rah_flat_Import_Template@ interface to @rah_flat_Import_ImportInterface@.
 
-h3. Version 0.2.0 - 2014/03/19
+h3. Version 0.2.0 (rah_flat) - 2014/03/19
 
 * Reworked.
 
-h3. Version 0.1.0 - 2013/05/07
+h3. Version 0.1.0 (rah_flat) - 2013/05/07
 
 * Initial release.

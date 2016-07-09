@@ -25,7 +25,7 @@
  * Imports template styles.
  */
 
-class Rah_Flat_Import_Styles extends Rah_Flat_Import_Pages
+class rah_flat_Import_Styles extends rah_flat_Import_Pages
 {
     /**
      * {@inheritdoc}
@@ -49,7 +49,7 @@ class Rah_Flat_Import_Styles extends Rah_Flat_Import_Pages
      * {@inheritdoc}
      */
 
-    public function importTemplate(Rah_Flat_TemplateIterator $file)
+    public function importTemplate(rah_flat_TemplateIterator $file)
     {
         safe_upsert(
             $this->getTableName(),

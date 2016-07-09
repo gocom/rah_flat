@@ -1,37 +1,16 @@
 <?php
 
-/*
- * rah_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/rah_flat
- *
- * Copyright (C) 2015 Jukka Svahn
- *
- * This file is part of rah_flat.
- *
- * rah_flat is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2.
- *
- * rah_flat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
- */
-
 /**
  * Interface for import definitions.
  *
  * <code>
- * class Abc_Import_Definition implements Rah_Flat_Import_ImportInterface
+ * class Abc_Import_Definition implements rah_flat_Import_ImportInterface
  * {
  * }
  * </code>
  */
 
-interface Rah_Flat_Import_ImportInterface
+interface rah_flat_Import_ImportInterface
 {
     /**
      * Constructor.
@@ -41,7 +20,7 @@ interface Rah_Flat_Import_ImportInterface
      * be accessed manually.
      *
      * <code>
-     * new Rah_Flat_Import_Forms('forms');
+     * new rah_flat_Import_Forms('forms');
      * </code>
      *
      * @param string $directory The directory hosting the templates
@@ -83,7 +62,7 @@ interface Rah_Flat_Import_ImportInterface
      * @throws Exception
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template);
+    public function dropRemoved(rah_flat_TemplateIterator $template);
 
     /**
      * Gets the panel name.
@@ -110,11 +89,11 @@ interface Rah_Flat_Import_ImportInterface
      * This method executes the SQL statement to import
      * the template file.
      *
-     * @param  Rah_Flat_TemplateIterator $file The template file
+     * @param  rah_flat_TemplateIterator $file The template file
      * @throws Exception
      */
 
-    public function importTemplate(Rah_Flat_TemplateIterator $file);
+    public function importTemplate(rah_flat_TemplateIterator $file);
 
     /**
      * Gets an array of database columns in the table.
