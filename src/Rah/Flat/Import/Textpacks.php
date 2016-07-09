@@ -54,13 +54,15 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
     {
 
         foreach ($file->getTemplateJSONContents() as $event => $array) {
-            $sql = array();
-            $sql[] = $this->formatStatement('event', $event);
-            foreach ($array as $key => $value) {
-                $sql[] = $this->formatStatement('data', $value);
-                $where = "lang = '".doSlash($file->getTemplateName())."'";
-                $where .= " AND ".$this->formatStatement('name', $key);
-                safe_upsert($this->getTableName(), implode(',', $sql), $where);
+            if ($event) {
+                foreach ($array as $key => $value) {
+                    $sql = array();
+                    $sql[] = $this->formatStatement('event', $event);
+                    $sql[] = $this->formatStatement('data', $value);
+                    $where = "lang = '".doSlash($file->getTemplateName())."'";
+                    $where .= " AND ".$this->formatStatement('name', $key);
+                    safe_upsert($this->getTableName(), implode(',', $sql), $where);
+                }
             }
         }
 
