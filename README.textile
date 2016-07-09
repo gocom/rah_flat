@@ -167,6 +167,8 @@ bc.. {
     }
 }
 
+Text strings are only updated if they already exist, otherwise, they can be inserted, updated or removed.
+
 h2(#author). Author
 
 "Jukka Svahn":http://rahforum.biz/, forked by "Nicolas Morand":https://github.com/ from v0.3.0.

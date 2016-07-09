@@ -52,6 +52,7 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
 
     public function importTemplate(rah_flat_TemplateIterator $file)
     {
+        global $DB;
 
         foreach ($file->getTemplateJSONContents() as $event => $array) {
             if ($event) {
@@ -61,7 +62,17 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
                     $sql[] = $this->formatStatement('data', $value);
                     $where = "lang = '".doSlash($file->getTemplateName())."'";
                     $where .= " AND ".$this->formatStatement('name', $key);
-                    safe_upsert($this->getTableName(), implode(',', $sql), $where);
+
+                    $r = safe_update($this->getTableName(), implode(',', $sql), $where);
+                    if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
+                        $r;
+                    } else {
+                        $sql[] = "owner = 'rah_flat_lang'";
+                        $sql = implode(', ', $sql);
+                        $where = implode(', ', (preg_split( "/ AND /", $where)));
+                        safe_insert($this->getTableName(), join(', ', array($where, $sql)));
+                    }
+
                 }
             }
         }
