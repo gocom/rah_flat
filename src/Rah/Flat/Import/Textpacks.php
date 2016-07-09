@@ -55,28 +55,23 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
         global $DB;
 
         foreach ($file->getTemplateJSONContents() as $event => $array) {
-            if ($event) {
-                foreach ($array as $key => $value) {
-                    $sql = array();
-                    $sql[] = $this->formatStatement('event', $event);
-                    $sql[] = $this->formatStatement('data', $value);
-                    $where = "lang = '".doSlash($file->getTemplateName())."'";
-                    $where .= " AND ".$this->formatStatement('name', $key);
+            foreach ($array as $key => $value) {
+                $set = array();
+                $set[] = $this->formatStatement('event', $event);
+                $set[] = $this->formatStatement('data', $value);
+                $where = "lang = '".doSlash($file->getTemplateName())."' AND ".$this->formatStatement('name', $key);
 
-                    $r = safe_update($this->getTableName(), implode(',', $sql), $where);
-                    if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
-                        $r;
-                    } else {
-                        $sql[] = "owner = 'rah_flat_lang'";
-                        $sql = implode(', ', $sql);
-                        $where = implode(', ', (preg_split( "/ AND /", $where)));
-                        safe_insert($this->getTableName(), join(', ', array($where, $sql)));
-                    }
-
+                $r = safe_update($this->getTableName(), implode(',', $set), $where);
+                if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
+                    $r;
+                } else {
+                    $set[] = "owner = 'rah_flat_lang'";
+                    $set = implode(', ', $set);
+                    $where = implode(', ', (preg_split( "/ AND /", $where)));
+                    safe_insert($this->getTableName(), join(', ', array($where, $set)));
                 }
             }
         }
-
         return;
     }
 
