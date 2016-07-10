@@ -78,7 +78,7 @@ h2(#structure). Structure
 *** misc
 *** custom
 ** prefs
-*** rah_flat_path.json
+*** sitename.json
 ** variables
 *** my-variable.json
 ** styles
@@ -127,7 +127,7 @@ p. where:
 
 h3(#variables). Variables (through custom prefs)
 
-Here is an example of content for a @menu-sections.json@ file.
+Here is an example of content for a @menu_sections.json@ file.
 
 bc.. {
     "value": "articles, about, contact",
@@ -147,9 +147,7 @@ p. where each data is optional and the default values are the following:
 * @"position": "…"@ - _default: 0_ - Use position to sort your prefs.
 * @"is_private": "…"@ - _default: false_ - If _true_, the pref will be user related.
 
-p. You can then call your custom preference as a Txp variable like so:
-
-bc. <txp:variable name="menu-sections" />
+p. While you can call your custom preference as a Txp variable like so: @<txp:variable name="menu_sections" />@; they will be prefixed with @rah_flat_var_@ under the preferences tab and you will need to use the textpack as below to add user friendly titles.
 
 h3(#textpacks). Textpacks
 
@@ -157,7 +155,7 @@ Here is an example of content for a @en-gb.json@ file.
 
 bc.. {
     "admin": {
-        "admin_side_text_item": "An admin side text item"
+        "rah_flat_var_menu_sections": "Sections used in menu"
     },
     "common": {
     },
@@ -167,7 +165,7 @@ bc.. {
     }
 }
 
-Text strings are only updated if they already exist, otherwise, they can be inserted, updated or removed.
+p. Text strings are only updated if they already exist, otherwise, they can be inserted, updated or removed.
 
 h2(#author). Author
 
@@ -180,8 +178,7 @@ This plugin is distributed under "GPLv2":http://www.gnu.org/licenses/gpl-2.0.fr.
 h2(#Changelog). Changelog
 
 * To do: Improve code comments?
-
-To do: Fix the _Options_ link.
+* To do: Fix the _Options_ link.
 
 h3. Version 0.5.0-beta - 2016/07/04
 
