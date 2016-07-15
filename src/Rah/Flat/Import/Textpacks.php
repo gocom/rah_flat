@@ -56,17 +56,14 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
 
         foreach ($file->getTemplateJSONContents() as $event => $array) {
             foreach ($array as $key => $value) {
-                $set = array();
-                $set[] = $this->formatStatement('event', $event);
-                $set[] = $this->formatStatement('data', $value);
+                $set = $this->formatStatement('event', $event).', '.$this->formatStatement('data', $value);
                 $where = "lang = '".doSlash($file->getTemplateName())."' AND ".$this->formatStatement('name', $key);
 
-                $r = safe_update($this->getTableName(), implode(',', $set), $where);
+                $r = safe_update($this->getTableName(), $set, $where);
                 if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
                     $r;
                 } else {
-                    $set[] = "owner = 'rah_flat_lang'";
-                    $set = implode(', ', $set);
+                    $set .= ", owner = 'rah_flat_lang'";
                     $where = implode(', ', (preg_split( "/ AND /", $where)));
                     safe_insert($this->getTableName(), join(', ', array($where, $set)));
                 }
