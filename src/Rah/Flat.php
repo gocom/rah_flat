@@ -67,7 +67,7 @@ class rah_flat
             register_callback(array($this, 'endpoint'), 'textpattern');
             register_callback(array($this, 'initWrite'), 'rah_flat.import');
 
-            if (get_pref('production_status') !== 'live') {
+            if (in_list(get_pref('production_status'), get_pref('rah_flat_upload_levels'))) {
                 register_callback(array($this, 'callbackHandler'), 'textpattern');
                 register_callback(array($this, 'callbackHandler'), 'admin_side', 'body_end');
             }
@@ -101,6 +101,7 @@ class rah_flat
         $options = array(
             'rah_flat_path' => array('text_input', ''),
             'rah_flat_key'  => array('text_input', md5(uniqid(mt_rand(), true))),
+            'rah_flat_upload_levels'  => array('upload_levels', 'debug, testing'),
         );
 
         foreach ($options as $name => $val) {
@@ -204,5 +205,20 @@ class rah_flat
         )));
     }
 }
+
+/**
+ * Set upload_levels pref
+ * To do: move in rah_flat class?
+ */
+ function upload_levels($name, $val)
+ {
+     $vals = array(
+         'debug'   => gTxt('production_debug'),
+         'testing' => gTxt('production_test'),
+         'debug, testing' => gTxt('production_debug').', '.lcfirst(gTxt('production_test')),
+     );
+
+     return selectInput($name, $vals, $val, true, '', $name);
+ }
 
 new rah_flat();

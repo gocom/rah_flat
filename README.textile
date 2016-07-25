@@ -37,6 +37,7 @@ h2(#prefs). Preferences / options
 
 * *Path to the templates directory* - Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
 * *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
+* *Production status for the systematic upload* - The site production status for which you want to activate the systematic templates upload (see "Basics":#basics).
 
 bc. http://example.com/?rah_flat_key={yourKey}
 
@@ -46,7 +47,7 @@ h2(#basics). Basics
 
 Your flat files are imported to the database:
 
-* Automatically on the background when the site is either in Debugging or Testing mode ^1^.
+* Automatically on the background when the site is in the production status selected in the related plugin preference.
 * When the public callback hook URL is accessed. The URL can be used for deployment.
 
 1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
@@ -155,7 +156,7 @@ Here is an example of content for a @en-gb.json@ file.
 
 bc.. {
     "admin": {
-        "rah_flat_var_menu_sections": "Sections used in menu"
+        "rah_flat_var_menu_sections": "Sections used in the menu"
     },
     "common": {
     },
@@ -180,7 +181,7 @@ h2(#Changelog). Changelog
 * To do: Improve code comments?
 * To do: Fix the _Options_ link.
 
-h3. Version 0.5.0-beta - 2016/07/04
+h3. Version 0.5.0-beta - 2016/07/10
 
 * Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
 * Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.

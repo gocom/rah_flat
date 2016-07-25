@@ -3,4 +3,5 @@
 rah_flat => Fichiers du thème (rah_flat)
 rah_flat_path => Chemin vers les fichiers
 rah_flat_key => Clé de mise à jour
+rah_flat_upload_levels => Statut(s) de production pour le téléchargement systématique
 rah_flat_var => Variables du thème (rah_flat)
