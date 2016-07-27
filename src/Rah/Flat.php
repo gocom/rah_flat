@@ -27,7 +27,7 @@
  * @internal
  */
 
-class rah_flat
+class Rah_Flat
 {
     protected $deleting = false;
 
@@ -47,7 +47,6 @@ class rah_flat
         }
 
         if (get_pref('rah_flat_path')) {
-
             new rah_flat_Import_Variables('variables');
             new rah_flat_Import_Prefs('prefs');
             new rah_flat_Import_Sections('sections');
@@ -117,7 +116,8 @@ class rah_flat
      * Jump to the prefs panel.
      */
 
-    public function options() {
+    public function options()
+    {
         $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
         header('Location: ' . $url);
     }
@@ -210,15 +210,15 @@ class rah_flat
  * Set upload_levels pref
  * To do: move in rah_flat class?
  */
- function upload_levels($name, $val)
- {
-     $vals = array(
-         'debug'   => gTxt('production_debug'),
-         'testing' => gTxt('production_test'),
-         'debug, testing' => gTxt('production_debug').', '.lcfirst(gTxt('production_test')),
-     );
+function upload_levels($name, $val)
+{
+    $vals = array(
+        'debug'   => gTxt('production_debug'),
+        'testing' => gTxt('production_test'),
+        'debug, testing' => gTxt('production_debug').', '.lcfirst(gTxt('production_test')),
+    );
 
-     return selectInput($name, $vals, $val, true, '', $name);
- }
+    return selectInput($name, $vals, $val, true, '', $name);
+}
 
 new rah_flat();

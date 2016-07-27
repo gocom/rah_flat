@@ -31,7 +31,7 @@
  * </code>
  */
 
-interface rah_flat_Import_ImportInterface
+interface Rah_Flat_Import_ImportInterface
 {
     /**
      * Constructor.

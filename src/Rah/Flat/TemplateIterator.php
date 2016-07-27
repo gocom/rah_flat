@@ -37,7 +37,7 @@
  * @see DirectoryIterator
  */
 
-class rah_flat_TemplateIterator extends DirectoryIterator
+class Rah_Flat_TemplateIterator extends DirectoryIterator
 {
     /**
      * Template name pattern.

@@ -25,7 +25,7 @@
  * Imports custom preferences (variables).
  */
 
-class rah_flat_Import_Variables extends rah_flat_Import_Prefs
+class Rah_Flat_Import_Variables extends rah_flat_Import_Prefs
 {
     /**
      * {@inheritdoc}

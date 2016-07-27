@@ -25,7 +25,7 @@
  * Imports form partials.
  */
 
-class rah_flat_Import_Forms extends rah_flat_Import_Base
+class Rah_Flat_Import_Forms extends rah_flat_Import_Base
 {
 
     /**

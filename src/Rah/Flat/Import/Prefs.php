@@ -25,7 +25,7 @@
  * Imports preferences.
  */
 
-class rah_flat_Import_Prefs extends rah_flat_Import_Sections
+class Rah_Flat_Import_Prefs extends rah_flat_Import_Sections
 {
     /**
      * {@inheritdoc}
@@ -49,8 +49,8 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-     public function importTemplate(rah_flat_TemplateIterator $file)
-     {
+    public function importTemplate(rah_flat_TemplateIterator $file)
+    {
         extract(lAtts(array(
             'value'      => '',
         ), $file->getTemplateJSONContents(), false));
@@ -58,14 +58,14 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
         safe_update($this->getTableName(), "val = '".doSlash($value)."'", "name = '".doSlash($file->getTemplateName())."' && type = '2'");
         safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '21'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
         safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '20'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
-     }
+    }
 
     /**
      * {@inheritdoc}
      */
 
-     public function dropRemoved(rah_flat_TemplateIterator $template)
-     {
+    public function dropRemoved(rah_flat_TemplateIterator $template)
+    {
         $name = array();
 
         while ($template->valid()) {
@@ -80,7 +80,7 @@ class rah_flat_Import_Prefs extends rah_flat_Import_Sections
             safe_update($this->getTableName(), "type = '0'", "type = '20'");
             safe_update($this->getTableName(), "type = '1'", "type = '21'");
         }
-     }
+    }
 
     /**
      * {@inheritdoc}

@@ -25,7 +25,7 @@
  * Imports sections.
  */
 
-class rah_flat_Import_Sections extends rah_flat_Import_Pages
+class Rah_Flat_Import_Sections extends rah_flat_Import_Pages
 {
     /**
      * {@inheritdoc}

@@ -25,7 +25,7 @@
  * Imports Textpacks.
  */
 
-class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
+class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
 {
 
     /**
@@ -58,13 +58,12 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
             foreach ($array as $key => $value) {
                 $set = $this->formatStatement('event', $event).', '.$this->formatStatement('data', $value);
                 $where = "lang = '".doSlash($file->getTemplateName())."' AND ".$this->formatStatement('name', $key);
-
                 $r = safe_update($this->getTableName(), $set, $where);
                 if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
                     $r;
                 } else {
                     $set .= ", owner = 'rah_flat_lang'";
-                    $where = implode(', ', (preg_split( "/ AND /", $where)));
+                    $where = implode(', ', (preg_split("/ AND /", $where)));
                     safe_insert($this->getTableName(), join(', ', array($where, $set)));
                 }
             }
@@ -101,8 +100,8 @@ class rah_flat_Import_Textpacks extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-     public function dropRemoved(rah_flat_TemplateIterator $template)
-     {
+    public function dropRemoved(rah_flat_TemplateIterator $template)
+    {
 
         while ($template->valid()) {
             $lang = "lang = '".doSlash($template->getTemplateName())."'";

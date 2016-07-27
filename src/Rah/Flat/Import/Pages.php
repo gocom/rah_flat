@@ -25,7 +25,7 @@
  * Imports page templates.
  */
 
-class rah_flat_Import_Pages extends rah_flat_Import_Base
+class Rah_Flat_Import_Pages extends rah_flat_Import_Base
 {
     /**
      * {@inheritdoc}

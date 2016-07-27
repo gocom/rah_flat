@@ -58,7 +58,7 @@
  * </code>
  */
 
-abstract class rah_flat_Import_Base implements rah_flat_Import_ImportInterface
+abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
 {
     /**
      * The directory.
