@@ -62,7 +62,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
             return preg_replace('/[\r|\n]+$/', '', $contents);
         }
 
-        throw new Exception('Unable to read.');
+        throw new Exception('Unable to read ' . $this->getFilename() . '.');
     }
 
     /**
@@ -78,7 +78,7 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
             return $file;
         }
 
-        throw new Exception('Invalid JSON file.');
+        throw new Exception('Invalid JSON file ' . $this->getFilename() . '.');
     }
 
     /**
