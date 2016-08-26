@@ -105,7 +105,14 @@ class Rah_Flat
 
         foreach ($options as $name => $val) {
             if (get_pref($name, false) === false) {
-                set_pref($name, $val[1], 'rah_flat', defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED, $val[0], $position);
+                set_pref(
+                    $name,
+                    $val[1],
+                    'rah_flat',
+                    defined('PREF_PLUGIN') ? PREF_PLUGIN : PREF_ADVANCED,
+                    $val[0],
+                    $position
+                );
             }
 
             $position++;
@@ -118,7 +125,9 @@ class Rah_Flat
 
     public function options()
     {
-        $url = defined('PREF_PLUGIN') ? '?event=prefs#prefs_group_rah_flat' : '?event=prefs&step=advanced_prefs';
+        $url = defined('PREF_PLUGIN')
+               ? '?event=prefs#prefs_group_rah_flat'
+               : '?event=prefs&step=advanced_prefs';
         header('Location: ' . $url);
     }
 
@@ -131,7 +140,11 @@ class Rah_Flat
 
     public function disable()
     {
-        safe_update('txp_form', "type = 'misc'", "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')");
+        safe_update(
+            'txp_form',
+            "type = 'misc'",
+            "type not in ('article', 'category', 'comment', 'file', 'link', 'misc', 'section')"
+        );
         safe_update('txp_prefs', "type = '0'", "type = '20'");
         safe_update('txp_prefs', "type = '1'", "type = '21'");
     }
@@ -212,8 +225,8 @@ class Rah_Flat
  */
 function upload_levels($name, $val)
 {
-    $vals = array(
-        'debug'   => gTxt('production_debug'),
+     $vals = array(
+         'debug'   => gTxt('production_debug'),
         'testing' => gTxt('production_test'),
         'debug, testing' => gTxt('production_debug').', '.lcfirst(gTxt('production_test')),
     );
