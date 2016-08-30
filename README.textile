@@ -100,7 +100,8 @@ bc.. {
     "is_default": false,
     "in_rss": false,
     "on_frontpage": false,
-    "searchable": true
+    "searchable": true,
+    "description": "Informations about this website."
 }
 
 p. where:
@@ -112,6 +113,7 @@ p. where:
 * @"in_rss": "…"@ - Whether to display section articles in the feeds or not.
 * @"on_frontpage": "…"@ - Whether to display section articles on the front page or not.
 * @"searchable": "…"@ - Use false to exclude section articles of the search results.
+* @"description": "…"@ - The description of the section.
 
 h3(#preferences). Preferences
 
@@ -178,10 +180,9 @@ This plugin is distributed under "GPLv2":http://www.gnu.org/licenses/gpl-2.0.fr.
 
 h2(#Changelog). Changelog
 
-* To do: Improve code comments?
 * To do: Fix the _Options_ link.
 
-h3. Version 0.5.0-beta - 2016/07/10
+h3. Version 0.5.0- 2016/08/26
 
 * Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
 * Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
@@ -190,13 +191,13 @@ h3. Version 0.5.0-beta - 2016/07/10
 * Added: Custom prefs (in the variables folder) accept more paramters in .json files.
 * Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
 
-h3. Version 0.4.0 (named oui_flat) - 2015/11/29
+h3. Version 0.4.0 (oui_flat) - 2015/11/29
 
 * Changed: Forked by Nicolas Morand.
 * Added: Custom preferences can be created and use as Txp variables.
 * Changed: Forms naming convention is now @type.name.txp@.
 
-h3. Version 0.3.0 (rah_flat) - 2014/03/28
+h3. Version 0.3.0 - 2014/03/28
 
 * Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
 * Added: Invokable @rah_flat.import@ callback event.
@@ -206,10 +207,10 @@ h3. Version 0.3.0 (rah_flat) - 2014/03/28
 * Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
 * Changed: Renamed confusing @rah_flat_Import_Template@ interface to @rah_flat_Import_ImportInterface@.
 
-h3. Version 0.2.0 (rah_flat) - 2014/03/19
+h3. Version 0.2.0 - 2014/03/19
 
 * Reworked.
 
-h3. Version 0.1.0 (rah_flat) - 2013/05/07
+h3. Version 0.1.0 - 2013/05/07
 
 * Initial release.
