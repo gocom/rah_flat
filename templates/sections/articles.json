@@ -5,5 +5,6 @@
     "is_default": true,
     "in_rss": true,
     "on_frontpage": true,
-    "searchable": true
+    "searchable": true,
+    "description": "My blog posts."
 }

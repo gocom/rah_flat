@@ -1,0 +1,11 @@
+{
+    "admin": {
+        "admin_side_text_item": "An admin side text item"
+    },
+    "common": {
+    },
+    "public": {
+        "public_side_text_item": "A public side text item",
+        "another_text_item": "Another public side text item"
+    }
+}

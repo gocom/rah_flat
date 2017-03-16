@@ -22,19 +22,18 @@
  */
 
 /**
- * Imports form partials.
+ * Imports custom preferences (variables).
  */
 
-class Rah_Flat_Import_Forms extends rah_flat_Import_Base
+class Rah_Flat_Import_Variables extends rah_flat_Import_Prefs
 {
-
     /**
      * {@inheritdoc}
      */
 
     public function getPanelName()
     {
-        return 'form';
+        return 'prefs';
     }
 
     /**
@@ -43,7 +42,7 @@ class Rah_Flat_Import_Forms extends rah_flat_Import_Base
 
     public function getTableName()
     {
-        return 'txp_form';
+        return 'txp_prefs';
     }
 
     /**
@@ -52,29 +51,47 @@ class Rah_Flat_Import_Forms extends rah_flat_Import_Base
 
     public function importTemplate(rah_flat_TemplateIterator $file)
     {
-        safe_upsert(
-            $this->getTableName(),
-            "Form = '".doSlash($file->getTemplateContents())."',
-            type = '".doSlash(substr($this->directory, strrpos($this->directory, '/') + 1))."'",
-            "name = '".doSlash($file->getTemplateName())."'"
-        );
+        extract(lAtts(array(
+            'value'      => '',
+            'type'       => defined('PREF_PLUGIN') ? 'PREF_PLUGIN' : 'PREF_ADVANCED',
+            'event'      => 'rah_flat_var',
+            'html'       => 'text_input',
+            'position'   => '',
+            'is_private' => false,
+        ), $file->getTemplateJSONContents(), false));
+
+        $name = 'rah_flat_var_'.$file->getTemplateName();
+
+        if (get_pref($name, false) === false) {
+            set_pref($name, $value, $event, constant($type), $html, $position, $is_private);
+        }
     }
+
+    /**
+     * {@inheritdoc}
+     */
 
     public function dropRemoved(rah_flat_TemplateIterator $template)
     {
         $name = array();
 
         while ($template->valid()) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $name[] = "'rah_flat_var_".doSlash($template->getTemplateName())."'";
             $template->next();
         }
 
-        $formtype = substr($this->directory, strrpos($this->directory, '/') + 1);
-
         if ($name) {
-            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'" && name not in ('.implode(',', $name).')');
+            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%" && name not in ('.implode(',', $name).')');
         } else {
-            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'"');
+            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%"');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function dropPermissions()
+    {
     }
 }

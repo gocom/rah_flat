@@ -25,7 +25,7 @@
  * Imports preferences.
  */
 
-class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
+class Rah_Flat_Import_Prefs extends rah_flat_Import_Sections
 {
     /**
      * {@inheritdoc}
@@ -49,26 +49,37 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function importTemplate(Rah_Flat_TemplateIterator $file)
+    public function importTemplate(rah_flat_TemplateIterator $file)
     {
-        $sql = array();
-        $where = "name = '".doSlash($file->getTemplateName())."' and user_name = ''";
+        extract(lAtts(array(
+            'value'      => '',
+        ), $file->getTemplateJSONContents(), false));
 
-        foreach ($file->getTemplateJSONContents() as $key => $value) {
-            if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
-                $sql[] = $this->formatStatement($key, $value);
-            }
-        }
-
-        return $sql && safe_update($this->getTableName(), implode(',', $sql), $where);
+        safe_update($this->getTableName(), "val = '".doSlash($value)."'", "name = '".doSlash($file->getTemplateName())."' && type = '2'");
+        safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '21'", "name = '".doSlash($file->getTemplateName())."' && type = '1'");
+        safe_update($this->getTableName(), "val = '".doSlash($value)."', type = '20'", "name = '".doSlash($file->getTemplateName())."' && type = '0'");
     }
 
     /**
      * {@inheritdoc}
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template)
+    public function dropRemoved(rah_flat_TemplateIterator $template)
     {
+        $name = array();
+
+        while ($template->valid()) {
+            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $template->next();
+        }
+
+        if ($name) {
+            safe_update($this->getTableName(), "type = '0'", 'type = "20" && name not in ('.implode(',', $name).')');
+            safe_update($this->getTableName(), "type = '1'", 'type = "21" && name not in ('.implode(',', $name).')');
+        } else {
+            safe_update($this->getTableName(), "type = '0'", "type = '20'");
+            safe_update($this->getTableName(), "type = '1'", "type = '21'");
+        }
     }
 
     /**

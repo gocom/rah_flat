@@ -28,11 +28,11 @@
  * this class or its theriatives.
  *
  * For instance the following would create a new import
- * definition using the Rah_Flat_Import_Pages as the
+ * definition using the rah_flat_Import_Pages as the
  * base:
  *
  * <code>
- * class Abc_My_Import_Definition extends Rah_Flat_Import_Pages
+ * class Abc_My_Import_Definition extends rah_flat_Import_Pages
  * {
  *     public function getPanelName()
  *     {
@@ -58,7 +58,7 @@
  * </code>
  */
 
-abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
+abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
 {
     /**
      * The directory.
@@ -93,7 +93,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
 
     public function getTemplateIterator($directory)
     {
-        return new Rah_Flat_TemplateIterator($directory);
+        return new rah_flat_TemplateIterator($directory);
     }
 
     /**

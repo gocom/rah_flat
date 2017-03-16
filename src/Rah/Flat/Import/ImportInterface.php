@@ -25,7 +25,7 @@
  * Interface for import definitions.
  *
  * <code>
- * class Abc_Import_Definition implements Rah_Flat_Import_ImportInterface
+ * class Abc_Import_Definition implements rah_flat_Import_ImportInterface
  * {
  * }
  * </code>
@@ -41,7 +41,7 @@ interface Rah_Flat_Import_ImportInterface
      * be accessed manually.
      *
      * <code>
-     * new Rah_Flat_Import_Forms('forms');
+     * new rah_flat_Import_Forms('forms');
      * </code>
      *
      * @param string $directory The directory hosting the templates
@@ -83,7 +83,7 @@ interface Rah_Flat_Import_ImportInterface
      * @throws Exception
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template);
+    public function dropRemoved(rah_flat_TemplateIterator $template);
 
     /**
      * Gets the panel name.
@@ -110,11 +110,11 @@ interface Rah_Flat_Import_ImportInterface
      * This method executes the SQL statement to import
      * the template file.
      *
-     * @param  Rah_Flat_TemplateIterator $file The template file
+     * @param  rah_flat_TemplateIterator $file The template file
      * @throws Exception
      */
 
-    public function importTemplate(Rah_Flat_TemplateIterator $file);
+    public function importTemplate(rah_flat_TemplateIterator $file);
 
     /**
      * Gets an array of database columns in the table.
