@@ -67,7 +67,7 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template)
+    public function dropRemoved(Iterator $template)
     {
     }
 

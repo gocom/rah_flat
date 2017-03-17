@@ -51,7 +51,11 @@ class Rah_Flat_Import_Forms extends Rah_Flat_Import_Pages
 
     public function getTemplateIterator($directory)
     {
-        return new Rah_Flat_FormIterator($directory);
+        return new RecursiveIteratorIterator(
+            new Rah_Flat_FilterIterator(
+                new Rah_Flat_FormIterator($directory)
+            )
+        );
     }
 
     /**

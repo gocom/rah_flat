@@ -50,6 +50,15 @@ interface Rah_Flat_Import_ImportInterface
     public function __construct($directory);
 
     /**
+     * Gets a new template iterator instance.
+     *
+     * @param string $directory The directory hosting the templates
+     * @return \RecursiveIteratorIterator
+     */
+
+    public function getTemplateIterator($directory);
+
+    /**
      * Initializes the importer.
      *
      * This method is called when the import event is executed.
@@ -80,10 +89,11 @@ interface Rah_Flat_Import_ImportInterface
      * present in the flat directory, but for some it might
      * not do anything.
      *
+     * @param Iterator $templates
      * @throws Exception
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template);
+    public function dropRemoved(Iterator $templates);
 
     /**
      * Gets the panel name.

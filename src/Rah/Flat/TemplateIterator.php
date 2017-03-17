@@ -27,17 +27,19 @@
  * This class iterates over template files.
  *
  * <code>
- * $template = new Rah_Flat_TemplateIterator();
- * while ($template->valid()) {
+ * $templates = new RecursiveIteratorIterator(
+ *    new Rah_Flat_TemplateIterator('/path/to/dir')
+ * );
+ * foreach ($templates as $template) {
  *  $template->getTemplateName();
  *  $template->getTemplateContents();
  * }
  * </code>
  *
- * @see DirectoryIterator
+ * @see \RecursiveDirectoryIterator
  */
 
-class Rah_Flat_TemplateIterator extends DirectoryIterator
+class Rah_Flat_TemplateIterator extends RecursiveDirectoryIterator
 {
     /**
      * Template name pattern.
@@ -49,6 +51,21 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
      */
 
     protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+/i';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function __construct($path, $flags = null)
+    {
+        if ($flags === null) {
+            $flags = FilesystemIterator::FOLLOW_SYMLINKS |
+                FilesystemIterator::CURRENT_AS_SELF |
+                FilesystemIterator::SKIP_DOTS;
+        }
+
+        parent::__construct($path, $flags);
+    }
 
     /**
      * Gets the template contents.
@@ -126,24 +143,6 @@ class Rah_Flat_TemplateIterator extends DirectoryIterator
             return (bool) preg_match($this->templateNamePattern, $this->getFilename());
         }
 
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function valid()
-    {
-        while (parent::valid() && !$this->isValidTemplate()) {
-            $this->next();
-        }
-
-        if (parent::valid()) {
-            return true;
-        }
-
-        $this->rewind();
         return false;
     }
 }

@@ -10,6 +10,7 @@
     "help": {"file" : ["./README.textile"]},
     "code": {"file" : [
         "./src/Rah/Flat/TemplateIterator.php",
+        "./src/Rah/Flat/FilterIterator.php",
         "./src/Rah/Flat/FormIterator.php",
         "./src/Rah/Flat/Import/ImportInterface.php",
         "./src/Rah/Flat/Import/Base.php",

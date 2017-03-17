@@ -62,13 +62,12 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function dropRemoved(Rah_Flat_TemplateIterator $template)
+    public function dropRemoved(Iterator $templates)
     {
         $name = array();
 
-        while ($template->valid()) {
+        foreach ($templates as $template) {
             $name[] = "'".doSlash($template->getTemplateName())."'";
-            $template->next();
         }
 
         if ($name) {

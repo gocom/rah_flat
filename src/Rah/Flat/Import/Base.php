@@ -93,7 +93,11 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
 
     public function getTemplateIterator($directory)
     {
-        return new Rah_Flat_TemplateIterator($directory);
+        return new RecursiveIteratorIterator(
+            new Rah_Flat_FilterIterator(
+                new Rah_Flat_TemplateIterator($directory)
+            )
+        );
     }
 
     /**
@@ -130,17 +134,15 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
     public function init()
     {
         if ($this->isEnabled()) {
-            $template = $this->getTemplateIterator($this->getDirectoryPath());
+            $templates = $this->getTemplateIterator($this->getDirectoryPath());
 
-            while ($template->valid()) {
+            foreach ($templates as $template) {
                 if ($this->importTemplate($template) === false) {
                     throw new Exception('Unable to import ' . $template->getTemplateName());
                 }
-
-                $template->next();
             }
 
-            $this->dropRemoved($template);
+            $this->dropRemoved($templates);
         }
     }
 
