@@ -115,6 +115,18 @@ interface Rah_Flat_Import_ImportInterface
     public function getTableName();
 
     /**
+     * Gets essential items that should not be removed from the database.
+     *
+     * This method needs to either return an array, or an iterator
+     * that implements toString().
+     *
+     * @return array|Iterator
+     * @since 0.4.0
+     */
+
+    public function getEssential();
+
+    /**
      * Imports the template file.
      *
      * This method executes the SQL statement to import

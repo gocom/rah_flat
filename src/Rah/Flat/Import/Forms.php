@@ -49,6 +49,15 @@ class Rah_Flat_Import_Forms extends Rah_Flat_Import_Pages
      * {@inheritdoc}
      */
 
+    public function getEssential()
+    {
+        return get_essential_forms();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function getTemplateIterator($directory)
     {
         return new RecursiveIteratorIterator(
@@ -70,26 +79,5 @@ class Rah_Flat_Import_Forms extends Rah_Flat_Import_Pages
             type = '".doSlash($file->getTemplateType())."'",
             "name = '".doSlash($file->getTemplateName())."'"
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function dropRemoved(Iterator $templates)
-    {
-        $name = array();
-
-        foreach ($templates as $template) {
-            $name[] = $template->getTemplateName();
-        }
-
-        $name = quote_list(array_merge($name, get_essential_forms()));
-
-        if ($name) {
-            safe_delete($this->getTableName(), 'name not in (' . implode(',', $name) . ')');
-        } else {
-            safe_delete($this->getTableName(), '1 = 1');
-        }
     }
 }

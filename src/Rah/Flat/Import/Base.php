@@ -161,6 +161,15 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
      * {@inheritdoc}
      */
 
+    public function getEssential()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function getTableColumns()
     {
         if (!$this->columns) {
@@ -168,5 +177,28 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
         }
 
         return $this->columns;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function dropRemoved(Iterator $templates)
+    {
+        $name = array();
+
+        foreach ($templates as $template) {
+            $name[] = "'".doSlash($template->getTemplateName())."'";
+        }
+
+        foreach ($this->getEssential() as $template) {
+            $name[] = "'".doSlash((string) $template)."'";
+        }
+
+        if ($name) {
+            safe_delete($this->getTableName(), 'name not in ('.implode(',', $name).')');
+        } else {
+            safe_delete($this->getTableName(), '1 = 1');
+        }
     }
 }
