@@ -49,6 +49,15 @@ class Rah_Flat_Import_Pages extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
+    public function getEssentials()
+    {
+        return safe_column('page', 'txp_section', '1 = 1');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function importTemplate(Rah_Flat_TemplateIterator $file)
     {
         safe_upsert(
