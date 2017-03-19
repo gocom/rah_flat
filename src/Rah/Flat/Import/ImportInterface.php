@@ -124,7 +124,7 @@ interface Rah_Flat_Import_ImportInterface
      * @since 0.4.0
      */
 
-    public function getEssential();
+    public function getEssentials();
 
     /**
      * Imports the template file.

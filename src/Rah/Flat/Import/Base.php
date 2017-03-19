@@ -161,7 +161,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
      * {@inheritdoc}
      */
 
-    public function getEssential()
+    public function getEssentials()
     {
         return array();
     }
@@ -191,7 +191,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
             $name[] = "'".doSlash($template->getTemplateName())."'";
         }
 
-        foreach ($this->getEssential() as $template) {
+        foreach ($this->getEssentials() as $template) {
             $name[] = "'".doSlash((string) $template)."'";
         }
 

@@ -49,7 +49,7 @@ class Rah_Flat_Import_Forms extends Rah_Flat_Import_Pages
      * {@inheritdoc}
      */
 
-    public function getEssential()
+    public function getEssentials()
     {
         return get_essential_forms();
     }
