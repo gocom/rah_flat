@@ -59,6 +59,7 @@ h3. Version 0.4.0 - upcoming
 * Added: Reads template files recursively, allowing the use of organizational sub-directories.
 * Added: Use the parent directory as the form type, if it's not specified in the filename itself.
 * Added: Do not delete essential forms from the database.
+* Added: Do not delete pages or styles that are used by a section.
 * Now requires Textpattern 4.6.0 or newer.
 
 h3. Version 0.3.0 - 2014/03/28
