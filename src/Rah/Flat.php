@@ -35,12 +35,13 @@ class Rah_Flat
 
     public function __construct()
     {
+        global $event;
+
         add_privs('prefs.rah_flat', '1');
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
-
             new Rah_Flat_Import_Prefs('prefs');
             new Rah_Flat_Import_Sections('sections');
             new Rah_Flat_Import_Pages('pages');
@@ -50,7 +51,7 @@ class Rah_Flat
             register_callback(array($this, 'endpoint'), 'textpattern');
             register_callback(array($this, 'initWrite'), 'rah_flat.import');
 
-            if (get_pref('production_status') !== 'live') {
+            if (get_pref('production_status') !== 'live' && $event !== 'plugin') {
                 register_callback(array($this, 'callbackHandler'), 'textpattern');
                 register_callback(array($this, 'callbackHandler'), 'admin_side', 'body_end');
             }
