@@ -47,24 +47,40 @@ class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator
     /**
      * Gets the template type.
      *
-     * If the template name doesn't specify a type, it
-     * defaults to 'misc'. The second to last extension
-     * is expected to be the type.
-     *
      * If the file is named as:
      *
      * <code>
-     * filename.red.ext
+     * filename.misc.ext
      * </code>
      *
-     * The 'red' would be used as the type.
+     * The 'misc' would be used as the type. Alternatively, the type can be
+     * left out from the name and set with the parent directory name:
+     *
+     * <code>
+     * misc/filenname.ext
+     * </code>
+     *
+     * The 'misc' would be used as the type.
+     *
+     * If no type is specified at all, or it's not a valid type recognized by
+     * Textpattern, it defaults to 'misc'.
      *
      * @return string
      */
 
     public function getTemplateType()
     {
-        if ($type = pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_EXTENSION)) {
+        $types = get_form_types();
+        $types = array_keys($types);
+        $type = pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_EXTENSION);
+
+        if (in_array($type, $types)) {
+            return $type;
+        }
+
+        $type = basename($this->getPath());
+
+        if (in_array($type, $types)) {
             return $type;
         }
 
