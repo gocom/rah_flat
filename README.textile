@@ -14,6 +14,11 @@ bc. $ composer require rah/rah_flat:*
 
 Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
 
+h2. Requirements
+
+* Textpattern 4.6.0 or newer.
+* PHP 5.3.0 or newer.
+
 h2. Basics
 
 Rah_flat imports normal, flat files from a specified directory to your Textpattern database. This, in essence, lets you to edit your database contents from any regular editor and store the source as flat files.
@@ -52,6 +57,7 @@ h2. Changelog
 h3. Version 0.4.0 - upcoming
 
 * Added: Reads template files recursively, allowing the use of organizational sub-directories.
+* Now requires Textpattern 4.6.0 or newer.
 
 h3. Version 0.3.0 - 2014/03/28
 
