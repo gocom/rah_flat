@@ -17,8 +17,8 @@
         "source": "https://github.com/gocom/rah_flat"
     },
     "require": {
-        "php": ">=5.2.0",
-        "textpattern/lock": ">=4.4.1",
+        "php": ">=5.3.0",
+        "textpattern/lock": ">=4.6.0",
         "textpattern/installer": "*"
     },
     "require-dev": {
