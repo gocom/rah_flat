@@ -173,7 +173,7 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
     public function getTableColumns()
     {
         if (!$this->columns) {
-            $this->columns = doArray((array) @getThings('describe '.safe_pfx($this->getTableName())), 'strtolower');
+            $this->columns = doArray((array) @getThings('describe ' . safe_pfx($this->getTableName())), 'strtolower');
         }
 
         return $this->columns;
@@ -188,15 +188,15 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
         $name = array();
 
         foreach ($templates as $template) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
+            $name[] = "'" . doSlash($template->getTemplateName()) . "'";
         }
 
         foreach ($this->getEssentials() as $template) {
-            $name[] = "'".doSlash((string) $template)."'";
+            $name[] = "'" . doSlash((string) $template) . "'";
         }
 
         if ($name) {
-            safe_delete($this->getTableName(), 'name not in ('.implode(',', $name).')');
+            safe_delete($this->getTableName(), 'name not in (' . implode(',', $name) . ')');
         } else {
             safe_delete($this->getTableName(), '1 = 1');
         }
