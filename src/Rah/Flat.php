@@ -38,11 +38,13 @@ class Rah_Flat
         global $event;
 
         add_privs('prefs.rah_flat', '1');
+        add_privs('prefs.rah_flat_variables', '1');
         register_callback(array($this, 'install'), 'plugin_lifecycle.rah_flat', 'installed');
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_flat', 'deleted');
 
         if (get_pref('rah_flat_path')) {
             new Rah_Flat_Import_Prefs('prefs');
+            new Rah_Flat_Import_Variables('variables');
             new Rah_Flat_Import_Sections('sections');
             new Rah_Flat_Import_Pages('pages');
             new Rah_Flat_Import_Forms('forms');
@@ -54,6 +56,7 @@ class Rah_Flat
             if (get_pref('production_status') !== 'live' && $event !== 'plugin') {
                 register_callback(array($this, 'callbackHandler'), 'textpattern');
                 register_callback(array($this, 'callbackHandler'), 'admin_side', 'body_end');
+                register_callback(array($this, 'setVariables'), 'textpattern');
             }
         }
     }
@@ -73,7 +76,7 @@ class Rah_Flat
 
         foreach ($options as $name => $val) {
             if (get_pref($name, false) === false) {
-                set_pref($name, $val[1], 'rah_flat', PREF_ADVANCED, $val[0], $position);
+                set_pref($name, $val[1], 'rah_flat', PREF_PLUGIN, $val[0], $position);
             }
 
             $position++;
@@ -86,7 +89,8 @@ class Rah_Flat
 
     public function uninstall()
     {
-        safe_delete('txp_prefs', "name like 'rah\_flat\_%'");
+        remove_pref(null, 'rah_flat');
+        remove_pref(null, 'rah_flat_variables');
     }
 
     /**
@@ -96,6 +100,24 @@ class Rah_Flat
     public function initWrite()
     {
         callback_event('rah_flat.import_to_database');
+    }
+
+    /**
+     * Initializes template variables.
+     */
+
+    public function setVariables()
+    {
+        global $prefs, $variable;
+
+        $prefix = 'rah_flat_variable_';
+        $offset = strlen($prefix);
+
+        foreach ($prefs as $name => $value) {
+            if (strpos($name, $prefix) === 0) {
+                $variable[substr($name, $offset)] = $value;
+            }
+        }
     }
 
     /**

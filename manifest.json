@@ -18,6 +18,7 @@
         "./src/Rah/Flat/Import/Forms.php",
         "./src/Rah/Flat/Import/Sections.php",
         "./src/Rah/Flat/Import/Prefs.php",
+        "./src/Rah/Flat/Import/Variables.php",
         "./src/Rah/Flat/Import/Styles.php",
         "./src/Rah/Flat.php"
     ]}
