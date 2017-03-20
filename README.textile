@@ -17,7 +17,7 @@ Or "download":https://github.com/gocom/rah_flat/releases a plugin package.
 h2. Requirements
 
 * Textpattern 4.6.0 or newer.
-* PHP 5.3.0 or newer.
+* PHP 5.3.6 or newer.
 
 h2. Basics
 
