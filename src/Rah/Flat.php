@@ -49,6 +49,7 @@ class Rah_Flat
             new Rah_Flat_Import_Pages('pages');
             new Rah_Flat_Import_Forms('forms');
             new Rah_Flat_Import_Styles('styles');
+            new Rah_Flat_Import_Textpacks('textpacks');
 
             register_callback(array($this, 'endpoint'), 'textpattern');
             register_callback(array($this, 'initWrite'), 'rah_flat.import');

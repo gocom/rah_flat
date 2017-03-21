@@ -20,6 +20,7 @@
         "./src/Rah/Flat/Import/Prefs.php",
         "./src/Rah/Flat/Import/Variables.php",
         "./src/Rah/Flat/Import/Styles.php",
+        "./src/Rah/Flat/Import/Textpacks.php",
         "./src/Rah/Flat.php"
     ]}
 }
