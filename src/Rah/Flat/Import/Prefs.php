@@ -31,15 +31,6 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function getPanelName()
-    {
-        return 'prefs';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
     public function getTableName()
     {
         return 'txp_prefs';
@@ -72,14 +63,6 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
      */
 
     public function dropRemoved(Iterator $template)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function dropPermissions()
     {
     }
 }
