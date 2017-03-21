@@ -56,6 +56,8 @@ h2. Changelog
 
 h3. Version 0.4.0 - upcoming
 
+* Added: Import template variables.
+* Added: Import translation strings.
 * Added: Reads template files recursively, allowing the use of organizational sub-directories.
 * Added: Use the parent directory as the form type, if it's not specified in the filename itself.
 * Added: Do not delete essential forms from the database.
