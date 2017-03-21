@@ -24,7 +24,7 @@
 /**
  * Form partial iterator.
  *
- * @see DirectoryIterator
+ * @see Rah_Flat_TemplateIterator
  */
 
 class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator

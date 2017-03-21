@@ -28,11 +28,13 @@
  *
  * <code>
  * $templates = new RecursiveIteratorIterator(
- *    new Rah_Flat_TemplateIterator('/path/to/dir')
+ *     new Rah_Flat_FilterIterator(
+ *         new Rah_Flat_TemplateIterator('/path/to/dir')
+ *     )
  * );
  * foreach ($templates as $template) {
- *  $template->getTemplateName();
- *  $template->getTemplateContents();
+ *     $template->getTemplateName();
+ *     $template->getTemplateContents();
  * }
  * </code>
  *
@@ -112,10 +114,10 @@ class Rah_Flat_TemplateIterator extends RecursiveDirectoryIterator
     /**
      * Validates a template file name and stats.
      *
-     * Template file must be a regular file or symbolic links,
-     * readable and the name must be fewer than 64 characters long,
-     * start with an ASCII character, followed by A-z, 0-9, -, _ and
-     * and ends to a file extension.
+     * Template file must be a regular file or a symbolic link,
+     * readable and the name must be fewer than 65 characters long,
+     * start with an ASCII character (A-z), followed by A-z, 0-9, -, _ and
+     * and end to a file extension.
      *
      * Valid template name would include:
      *
@@ -132,6 +134,7 @@ class Rah_Flat_TemplateIterator extends RecursiveDirectoryIterator
      * <code>
      * .sitename
      * _form.misc.txp
+     * 0template.html
      * </code>
      *
      * @return bool TRUE if the name is valid
