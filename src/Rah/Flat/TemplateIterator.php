@@ -50,7 +50,7 @@ class Rah_Flat_TemplateIterator extends RecursiveDirectoryIterator
      * @var string
      */
 
-    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+/i';
+    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{0,63}\.[a-z0-9]+/i';
 
     /**
      * {@inheritdoc}
