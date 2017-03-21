@@ -31,22 +31,6 @@ class Rah_Flat_Import_Textpacks extends Rah_Flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function getPanelName()
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function getTableName()
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
     public function importTemplate(Rah_Flat_TemplateIterator $file)
     {
         install_textpack('#@owner rah_flat' . n . $file->getTemplateContents());

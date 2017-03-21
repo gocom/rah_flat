@@ -80,6 +80,24 @@ abstract class Rah_Flat_Import_Base implements Rah_Flat_Import_ImportInterface
      * {@inheritdoc}
      */
 
+    public function getPanelName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function getTableName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function __construct($directory)
     {
         $this->directory = $directory;
