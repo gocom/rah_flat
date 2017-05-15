@@ -57,8 +57,9 @@ class Rah_Flat
             if (get_pref('production_status') !== 'live' && $event !== 'plugin') {
                 register_callback(array($this, 'callbackHandler'), 'textpattern');
                 register_callback(array($this, 'callbackHandler'), 'admin_side', 'body_end');
-                register_callback(array($this, 'setVariables'), 'textpattern');
             }
+
+            register_callback(array($this, 'setVariables'), 'textpattern');
         }
     }
 
