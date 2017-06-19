@@ -1,5 +1,6 @@
 {
     "title": "Default",
+    "description": "Website homepage.",
     "page": "default",
     "css": "default",
     "is_default": false,

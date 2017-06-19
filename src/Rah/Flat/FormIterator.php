@@ -33,12 +33,6 @@ class Rah_Flat_FormIterator extends Rah_Flat_TemplateIterator
      * {@inheritdoc}
      */
 
-    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]{1,28}\.[a-z0-9]+/i';
-
-    /**
-     * {@inheritdoc}
-     */
-
     public function getTemplateName()
     {
         return pathinfo(pathinfo($this->getFilename(), PATHINFO_FILENAME), PATHINFO_FILENAME);

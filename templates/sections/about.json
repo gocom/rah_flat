@@ -1,5 +1,6 @@
 {
     "title": "About",
+    "description": "Website infos and credits.",
     "page": "default",
     "css": "default",
     "is_default": false,

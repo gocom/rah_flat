@@ -31,6 +31,14 @@ class Rah_Flat_Import_Prefs extends Rah_Flat_Import_Sections
      * {@inheritdoc}
      */
 
+    public function getPanelName()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function getTableName()
     {
         return 'txp_prefs';
