@@ -1,5 +1,6 @@
 {
     "title": "Articles",
+    "description": "Website articles.",
     "page": "archive",
     "css": "default",
     "is_default": true,
