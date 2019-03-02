@@ -2,8 +2,6 @@ h1. rah_flat
 
 "Download":https://github.com/gocom/rah_flat/releases | "Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":https://rahforum.biz/donate/rah_flat
 
-Runs theme imp
-
 This plugin makes your "Textpattern CMS":https://textpattern.com import flat frontend themes automatically to the database while your installation is in debugging or testing mode.
 
 *Warning: this plugin will permanently remove your current templates when activated.*
