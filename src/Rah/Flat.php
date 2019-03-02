@@ -42,7 +42,7 @@ class Rah_Flat
     }
 
     /**
-     * Imports a theme named 'main'.
+     * Imports themes.
      *
      * @return void
      */
