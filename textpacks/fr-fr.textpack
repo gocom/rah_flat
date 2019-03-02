@@ -1,6 +1,0 @@
-#@admin
-#@language fr-fr
-rah_flat => Fichiers du modèle
-rah_flat_key => Clé sécurisée pour l'accès public
-rah_flat_path => Chemin vers le répertoire modèles
-rah_flat_variables => Variables de modèle

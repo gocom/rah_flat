@@ -6,21 +6,9 @@
     "author": "Jukka Svahn",
     "author_uri": "http://rahforum.biz",
     "order": 5,
-    "flags": 2,
+    "flags": 0,
     "help": {"file" : ["./README.textile"]},
     "code": {"file" : [
-        "./src/Rah/Flat/TemplateIterator.php",
-        "./src/Rah/Flat/FilterIterator.php",
-        "./src/Rah/Flat/FormIterator.php",
-        "./src/Rah/Flat/Import/ImportInterface.php",
-        "./src/Rah/Flat/Import/Base.php",
-        "./src/Rah/Flat/Import/Pages.php",
-        "./src/Rah/Flat/Import/Forms.php",
-        "./src/Rah/Flat/Import/Sections.php",
-        "./src/Rah/Flat/Import/Prefs.php",
-        "./src/Rah/Flat/Import/Variables.php",
-        "./src/Rah/Flat/Import/Styles.php",
-        "./src/Rah/Flat/Import/Textpacks.php",
         "./src/Rah/Flat.php"
     ]}
 }

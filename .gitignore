@@ -1,3 +1,5 @@
-.DS_Store
+.*
+!.editorconfig
+!.gitignore
 /composer.lock
 /vendor
