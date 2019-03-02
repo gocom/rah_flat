@@ -49,7 +49,7 @@ class Rah_Flat
     public function import()
     {
         $skin = \Txp::get('\Textpattern\Skin\Skin');
-        $skin->setNames(array_keys((array)$skin->getUploaded()))->import();
+        $skin->setNames(array_keys((array)$skin->getUploaded()))->import(true, true);
     }
 }
 
