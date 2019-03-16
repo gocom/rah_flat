@@ -17,7 +17,7 @@ Make sure to use an email address that is linked to your GitHub account. It can 
 
 h2. Dependencies
 
-Dependencies are managed using "Composer":http://getcomposer.org. After you have cloned the repository, run composer install:
+Dependencies are managed using "Composer":https://getcomposer.org. After you have cloned the repository, run composer install:
 
 bc. $ composer install
 
@@ -33,4 +33,4 @@ bc. $ ./vendor/bin/phpcs --standard=phpcs.xml src
 
 h2. Versioning
 
-"Semantic Versioning":http://semver.org/ and major.minor.path format.
+"Semantic Versioning":https://semver.org/ and major.minor.path format.
