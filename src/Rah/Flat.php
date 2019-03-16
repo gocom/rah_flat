@@ -33,11 +33,11 @@ class Rah_Flat
      */
     public function __construct()
     {
-        register_callback(array($this, 'import'), 'rah_flat.import');
+        register_callback([$this, 'import'], 'rah_flat.import');
 
         if (get_pref('production_status') !== 'live') {
-            register_callback(array($this, 'import'), 'textpattern');
-            register_callback(array($this, 'import'), 'admin_side', 'body_end');
+            register_callback([$this, 'import'], 'textpattern');
+            register_callback([$this, 'import'], 'admin_side', 'body_end');
         }
     }
 
