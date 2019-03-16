@@ -21,34 +21,4 @@
  * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Main plugin class.
- *
- * @internal
- */
-class Rah_Flat
-{
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        register_callback([$this, 'import'], 'rah_flat.import');
-
-        if (get_pref('production_status') !== 'live') {
-            register_callback([$this, 'import'], 'textpattern');
-            register_callback([$this, 'import'], 'admin_side', 'body_end');
-        }
-    }
-
-    /**
-     * Imports themes.
-     *
-     * @return void
-     */
-    public function import()
-    {
-        $skin = \Txp::get('\Textpattern\Skin\Skin');
-        $skin->setNames(array_keys((array)$skin->getUploaded()))->import(true, true);
-    }
-}
+new Rah_Flat();
