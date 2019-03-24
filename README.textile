@@ -19,7 +19,7 @@ h2. Requirements
 
 h2. Changelog
 
-h3. Version 0.4.0 - upcoming
+h3. Version 0.4.0 - 2019/03/24
 
 * Use core Textpattern >= 4.7.0 frontend theme functionality.
 * Now requires Textpattern 4.7.0 or newer.
