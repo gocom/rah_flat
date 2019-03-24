@@ -10,7 +10,7 @@ h2. Install
 
 Using "Composer":https://getcomposer.org:
 
-bc. $ composer require rah/rah_flat:*
+bc. $ composer require rah/rah_flat
 
 h2. Requirements
 
