@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - '*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Build
+        uses: gocom/action-textpattern-package-plugin@master
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Compressed Plugin Installer
+        uses: actions/upload-release-asset@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/packages/default/compressed
+          asset_name: installer_v${{ github.ref }}_zip.txt
+          asset_content_type: text/plain
+
+      - name: Upload Uncompressed Plugin Installer
+        uses: actions/upload-release-asset@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/packages/default/uncompressed
+          asset_name: installer_v${{ github.ref }}.txt
+          asset_content_type: text/plain
