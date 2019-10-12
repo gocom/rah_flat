@@ -7,11 +7,12 @@ on:
 
 jobs:
   build:
+    name: Create Release
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v1
 
       - name: Build
