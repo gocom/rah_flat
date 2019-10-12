@@ -1,10 +1,10 @@
 {
     "name": "rah_flat",
     "description": "Edit templates as flat files",
-    "version": "0.3.0",
+    "version": "0.4.1",
     "type": 1,
     "author": "Jukka Svahn",
-    "author_uri": "http://rahforum.biz",
+    "author_uri": "https://github.com/gocom/rah_flat",
     "order": 5,
     "flags": 0,
     "help": {"file" : ["./README.textile"]},

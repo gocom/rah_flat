@@ -19,6 +19,10 @@ h2. Requirements
 
 h2. Changelog
 
+h3. Version 0.4.1 - 2019/10/13
+
+* Correct version number in manifest file.
+
 h3. Version 0.4.0 - 2019/03/24
 
 * Use core Textpattern >= 4.7.0 frontend theme functionality.
