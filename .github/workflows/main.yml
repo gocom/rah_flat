@@ -1,0 +1,22 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build
+      uses: gocom/action-textpattern-package-plugin@master
+
+    - name: Upload Compressed Plugin Installer Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: rah_flat_compressed.txt
+        path: ${{ steps.build.outputs.compressed }}
