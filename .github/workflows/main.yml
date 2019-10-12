@@ -19,4 +19,4 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: compressed.txt
-        path: ${{ github.workflow }}/packages/default/compressed
+        path: ${{ github.workspace }}/packages/default/compressed
