@@ -19,10 +19,10 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}_zip.txt
-        path: ${{ steps.build.outputs.compressed }}
+        path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
 
     - name: Upload Uncompressed Plugin Installer Artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}.txt
-        path: ${{ steps.build.outputs.uncompressed }}
+        path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}
