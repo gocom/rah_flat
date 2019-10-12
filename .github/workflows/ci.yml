@@ -15,18 +15,14 @@ jobs:
       id: build
       uses: gocom/action-textpattern-package-plugin@master
 
-    - name: Test
-      run: |
-        echo ${{ steps.build.outputs.compressed }}
-
     - name: Upload Compressed Plugin Installer Artifact
       uses: actions/upload-artifact@master
       with:
         name: installer_zip.txt
-        path: ${{ github.workspace }}/packages/default/compressed
+        path: ${{ steps.build.outputs.compressed }}
 
     - name: Upload Uncompressed Plugin Installer Artifact
       uses: actions/upload-artifact@master
       with:
         name: installer.txt
-        path: ${{ github.workspace }}/packages/default/uncompressed
+        path: ${{ steps.build.outputs.uncompressed }}
