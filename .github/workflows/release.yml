@@ -31,7 +31,7 @@ jobs:
           prerelease: false
 
       - name: Upload Compressed Plugin Installer
-        uses: actions/upload-release-asset@v1.0.0
+        uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -41,7 +41,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload Uncompressed Plugin Installer
-        uses: actions/upload-release-asset@v1.0.0
+        uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -21,6 +21,10 @@ h2. Requirements
 
 h2. Changelog
 
+h3. Version 0.4.3 - 2019/10/13
+
+* Re-publish.
+
 h3. Version 0.4.2 - 2019/10/13
 
 * Re-publish and add download links to the README.
