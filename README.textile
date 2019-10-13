@@ -1,6 +1,6 @@
 h1. rah_flat
 
-"Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":https://rahforum.biz/donate/rah_flat
+"Download":":https://github.com/gocom/rah_flat/releases | "Packagist":https://packagist.org/packages/rah/rah_flat | "Donate":https://rahforum.biz/donate/rah_flat
 
 This "Textpattern CMS":https://textpattern.com plugin imports flat "frontend themes":https://docs.textpattern.com/themes/front-end-themes automatically to the database while the site is set in debugging or testing mode.
 
@@ -12,12 +12,18 @@ Using "Composer":https://getcomposer.org:
 
 bc. $ composer require rah/rah_flat
 
+Or "download":https://github.com/gocom/rah_flat/releases an installer.
+
 h2. Requirements
 
 * Textpattern 4.7.0 or newer.
 * PHP 5.6.0 or newer.
 
 h2. Changelog
+
+h3. Version 0.4.2 - 2019/10/13
+
+* Re-publish and add download links to the README.
 
 h3. Version 0.4.1 - 2019/10/13
 

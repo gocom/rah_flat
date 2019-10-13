@@ -14,7 +14,7 @@ jobs:
 
     - name: Build
       id: build
-      uses: gocom/action-textpattern-package-plugin@master
+      uses: gocom/action-textpattern-package-plugin@0.1
 
     - name: Upload Compressed Plugin Installer Artifact
       uses: actions/upload-artifact@master

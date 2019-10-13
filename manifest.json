@@ -1,7 +1,7 @@
 {
     "name": "rah_flat",
     "description": "Edit templates as flat files",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "type": 1,
     "author": "Jukka Svahn",
     "author_uri": "https://github.com/gocom/rah_flat",
