@@ -4,7 +4,7 @@ Please take a quick look at this document before to make contribution process ea
 
 h2. License
 
-"GNU General Public License, version 2":https://github.com/gocom/rah_flat/blob/master/LICENSE. By contributing code, you agree to license your additions under the GPLv2 license.
+"GNU General Public License, version 2":https://github.com/gocom/rah_flat/blob/master/LICENSE.
 
 h2. Configure git
 
@@ -15,22 +15,18 @@ $ git config --global user.email john.doe@example.com
 
 Make sure to use an email address that is linked to your GitHub account. It can be a throwaway address or you can use GitHub's email protection features. We don't want your emails, but this is to make sure we know who did what. All commits nicely link to their author, instead of them coming from foobar@invalid.tld.
 
-h2. Dependencies
+h2. Development
 
-Dependencies are managed using "Composer":https://getcomposer.org. After you have cloned the repository, run composer install:
+For list of available commands, run:
 
-bc. $ composer install
-
-And update before testing and committing:
-
-bc. $ composer update
+bc. $ make help
 
 h2. Coding standard
 
 The project follows the "PSR-0":https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md and "PSR-2":https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide-meta.md standards with PHP 5.2 style namespacing. You can use PHP_CodeSniffer to make sure your additions follow them too:
 
-bc. $ composer cs
+bc. $ make lint
 
 h2. Versioning
 
-"Semantic Versioning":https://semver.org/ and major.minor.path format.
+"Semantic Versioning":https://semver.org/.
