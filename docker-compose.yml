@@ -1,13 +1,14 @@
-version: '3.2'
-
 services:
     php:
-        image: composer:2.3
+        image: composer:2.8
         volumes:
             - .:/app
-            - ${COMPOSER_HOME:-$HOME/.composer}:/tmp
+            - ${COMPOSER_HOME:-$HOME/.composer}:/composer
         networks:
             - app
+        environment:
+            - COMPOSER_ROOT_VERSION=dev-master
+            - COMPOSER_HOME=/composer
 
 networks:
     app:

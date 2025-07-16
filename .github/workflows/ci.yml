@@ -3,34 +3,31 @@ name: CI
 on: [push]
 
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        env:
-            COMPOSER_HOME: ./.composer
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      COMPOSER_HOME: ./.composer
 
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            -   name: Setup
-                run: mkdir -p "$COMPOSER_HOME"
+      - name: Lint
+        run: make lint
 
-            -   name: Lint
-                run: make lint
+      - name: Build
+        id: build
+        uses: gocom/action-textpattern-package-plugin@master
 
-            -   name: Build
-                id: build
-                uses: gocom/action-textpattern-package-plugin@master
+      - name: Upload Compressed Plugin Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}_zip.txt
+          path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
 
-            -   name: Upload Compressed Plugin Installer Artifact
-                uses: actions/upload-artifact@master
-                with:
-                    name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}_zip.txt
-                    path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
-
-            -   name: Upload Uncompressed Plugin Installer Artifact
-                uses: actions/upload-artifact@master
-                with:
-                    name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}.txt
-                    path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}
+      - name: Upload Uncompressed Plugin Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}.txt
+          path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}

@@ -1,60 +1,48 @@
 name: Release
 
 on:
-    push:
-        tags:
-            - '*.*.*'
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
-    build:
-        name: Create Release
-        runs-on: ubuntu-latest
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
 
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            -   name: Build
-                id: build
-                uses: gocom/action-textpattern-package-plugin@master
+      - name: Build
+        id: build
+        uses: gocom/action-textpattern-package-plugin@master
 
-            -   name: Changelog
-                id: changelog
-                run: |
-                    contents="$(sed -e '1,/h2. Changelog/d' README.textile | sed -e '1,/h3./d' -e '/h3./,$d')"
-                    contents="${contents//'%'/'%25'}"
-                    contents="${contents//$'\n'/'%0A'}"
-                    contents="${contents//$'\r'/'%0D'}"
-                    echo "::set-output name=contents::$contents"
+      - name: Changelog
+        id: changelog
+        run: |
+          echo "contents<<CHANGELOGEOF" >> $GITHUB_OUTPUT
+          sed -e '1,/h2. Changelog/d' README.textile | sed -e '1,/h3./d' -e '/h3./,$d' | sed 's/@/`/g' >> $GITHUB_OUTPUT
+          echo "CHANGELOGEOF" >> $GITHUB_OUTPUT
 
-            -   name: Create Release
-                id: create_release
-                uses: actions/create-release@master
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                    tag_name: ${{ github.ref }}
-                    release_name: ${{ github.ref }}
-                    body: ${{ steps.changelog.outputs.contents }}
-                    draft: false
-                    prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: shogo82148/actions-create-release@v1
+        with:
+          body: ${{ steps.changelog.outputs.contents }}
 
-            -   name: Upload Compressed Plugin Installer
-                uses: actions/upload-release-asset@v1.0.1
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                    upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
-                    asset_name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}_zip.txt
-                    asset_content_type: text/plain
+      - name: Upload Compressed Plugin Installer
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
+          asset_name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}_zip.txt
+          asset_content_type: text/plain
 
-            -   name: Upload Uncompressed Plugin Installer
-                uses: actions/upload-release-asset@v1.0.1
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                    upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}
-                    asset_name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}.txt
-                    asset_content_type: text/plain
+      - name: Upload Uncompressed Plugin Installer
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}
+          asset_name: ${{ steps.build.outputs.name }}_v${{ steps.build.outputs.version }}.txt
+          asset_content_type: text/plain
